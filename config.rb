@@ -27,6 +27,7 @@ ready do
   require './lib/multilang.rb'
 end
 
+activate :i18n, :langs => [:es, :en], :mount_at_root => :es
 activate :sprockets
 
 activate :autoprefixer do |config|
