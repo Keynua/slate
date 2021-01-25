@@ -68,7 +68,7 @@ Authorization | Token único de autorización.
 <aside class="notice">Si ya estás listo para integrar en producción, por favor contacta al equipo de <code>Keynua</code></aside>
 
 # Contratos
-
+El API de Contratos permite crear, ver y eliminar un contrato
 ## Propiedades de un Contrato
 
 ```json
@@ -232,7 +232,7 @@ require 'uri'
 require 'net/http'
 require 'openssl'
 
-url = URI("https://api.dev.keynua.com/contracts/v1")
+url = URI("https://api.stg.keynua.com/contracts/v1")
 
 http = Net::HTTP.new(url.host, url.port)
 http.use_ssl = true
@@ -242,7 +242,7 @@ request = Net::HTTP::Put.new(url)
 request["authorization"] = 'YOUR-API-TOKEN-HERE'
 request["x-api-key"] = 'YOUR-API-KEY-HERE'
 request["content-type"] = 'application/json'
-request.body = "{\n  \"title\": \"Contract created by API\",\n  \"language\": \"es\",\n  \"start\": true,\n  \"userEmailNotifications\": false,\n\t\"templateId\": \"keynua-peru-default\",\n  \"documents\": [\n    {\n      \"name\": \"DocumentPdf.pdf\",\n      \"base64\": \"YOUR-BASE64-PDF-HERE\"\n    }\n  ],\n  \"users\": [\n    {\n      \"name\": \"Manuel Silva\",\n      \"email\": \"msilva@keynua.com\",\n\t\t\"groups\": [ \"signers\" ]\n    }\n  ]\n}\n"
+request.body = "{\n  \"title\": \"Contract created by API\",\n  \"language\": \"es\",\n  \"userEmailNotifications\": true,\n\t\"templateId\": \"keynua-peru-default\",\n  \"documents\": [\n    {\n      \"name\": \"DocumentPdf.pdf\",\n      \"base64\": \"YOUR-BASE64-PDF-HERE\"\n    }\n  ],\n  \"users\": [\n    {\n      \"name\": \"Manuel Silva\",\n      \"email\": \"msilva@keynua.com\",\n\t\t\"groups\": [ \"signers\" ]\n    }\n  ]\n}\n"
 
 response = http.request(request)
 puts response.read_body
@@ -251,9 +251,9 @@ puts response.read_body
 ```python
 import http.client
 
-conn = http.client.HTTPSConnection("api.dev.keynua.com")
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
 
-payload = "{\n  \"title\": \"Contract created by API\",\n  \"language\": \"es\",\n  \"start\": true,\n  \"userEmailNotifications\": false,\n\t\"templateId\": \"keynua-peru-default\",\n  \"documents\": [\n    {\n      \"name\": \"DocumentPdf.pdf\",\n      \"base64\": \"YOUR-BASE64-PDF-HERE\"\n    }\n  ],\n  \"users\": [\n    {\n      \"name\": \"Manuel Silva\",\n      \"email\": \"msilva@keynua.com\",\n\t\t\"groups\": [ \"signers\" ]\n    }\n  ]\n}\n"
+payload = "{\n  \"title\": \"Contract created by API\",\n  \"language\": \"es\",\n  \"userEmailNotifications\": false,\n\t\"templateId\": \"keynua-peru-default\",\n  \"documents\": [\n    {\n      \"name\": \"DocumentPdf.pdf\",\n      \"base64\": \"YOUR-BASE64-PDF-HERE\"\n    }\n  ],\n  \"users\": [\n    {\n      \"name\": \"Manuel Silva\",\n      \"email\": \"msilva@keynua.com\",\n\t\t\"groups\": [ \"signers\" ]\n    }\n  ]\n}\n"
 
 headers = {
     'x-api-key': "YOUR-API-KEY-HERE",
@@ -271,16 +271,15 @@ print(data.decode("utf-8"))
 
 ```shell
 curl --request PUT \
-  --url https://api.dev.keynua.com/contracts/v1 \
+  --url https://api.stg.keynua.com/contracts/v1 \
   --header 'x-api-key: YOUR-API-KEY-HERE' \
   --header 'authorization: YOUR-API-TOKEN-HERE' \
   --header 'content-type: application/json' \
   --data '{
   "title": "Contract created by API",
   "language": "es",
-  "start": true,
-  "userEmailNotifications": false,
-	"templateId": "keynua-peru-default",
+  "userEmailNotifications": true,
+  "templateId": "keynua-peru-default",
   "documents": [
     {
       "name": "DocumentPdf.pdf",
@@ -291,7 +290,7 @@ curl --request PUT \
     {
       "name": "Manuel Silva",
       "email": "msilva@keynua.com",
-		"groups": [ "signers" ]
+	  "groups": [ "signers" ]
     }
   ]
 }'
@@ -303,8 +302,7 @@ const https = require("https");
 const data = JSON.stringify({
   title: 'Contract created by API',
   language: 'es',
-  start: true,
-  userEmailNotifications: false,
+  userEmailNotifications: true,
   templateId: 'keynua-peru-default',
   documents: [
     {
@@ -322,8 +320,8 @@ const options = {
   hostname: "api.stg.keynua.com",
   path: "/contracts/v1",
   headers: {
-    "authorization": "YOUR-API-TOKEN-HERE",
     "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE",
     "content-type": "application/json",
     "content-length": data.length
   }
@@ -351,9 +349,7 @@ req.write(data);
 req.end();
 ```
 
-> El comando de arriba retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
-
-El API de Contratos permite crear, ver y eliminar un contrato
+> Si el contrato fue creado satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
 
 ### HTTP Request
 
@@ -371,107 +367,199 @@ Content-Type | application/json
 
 Para crear el contrato, se tiene que enviar la data como un solo objeto JSON
 
-## Get a Specific Kitten
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+title | string | Título del contrato
+language | string | Idioma del contrato. Default `es`
+userEmailNotifications | boolea | Indica si los usuarios serán notificados por email cuando hay un error o finaliza un contrato. Default `false`
+templateId | string | Id del template a usar. Puedes usar uno de los template públicos de Keynua como `keynua-peru-default`. Si es un proceso customizado, el equipo de Keynua te enviará este valor
+documents | array | Arreglo de los documentos PDFs encodificados en base64 que van a ser firmados. Mínimo 1 y máximo 10. El peso máximo en total no debe ser mayor a 4.5 MB
+users | array | Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en **groups** depende del templateId a usar. Para el caso de `keynua-peru-default`, el valor en groups debe ser `signers`. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario
+## Obtener un Contrato
 
 ```ruby
-require 'kittn'
+require 'uri'
+require 'net/http'
+require 'openssl'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
+url = URI("https://api.stg.keynua.com/contracts/v1/{contractId}")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Get.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+
+response = http.request(request)
+puts response.read_body
 ```
 
 ```python
-import kittn
+import http.client
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
+
+headers = {
+    'x-api-key': "YOUR-API-KEY-HERE",
+    'authorization': "YOUR-API-TOKEN-HERE"
+    }
+
+conn.request("GET", "/contracts/v1/{contractId}", "", headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
 ```
 
 ```shell
-curl "http://example.com/api/kittens/2" \
-  -H "Authorization: meowmeowmeow"
+curl --request GET \
+  --url 'https://api.stg.keynua.com/contracts/v1/{contractId}' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
 ```
 
 ```javascript
-const kittn = require('kittn');
+const http = require("https");
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
+const options = {
+  "method": "GET",
+  "hostname": "api.stg.keynua.com",
+  "path": "/contracts/v1/{contractId}",
+  "headers": {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE",
+    "content-length": "0"
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.end();
 ```
 
-> The above command returns JSON structured like this:
+> Si el contrato fue obtenido satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
 
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>t(:title)</code> blocks to denote code.</aside>
+Este API obtiene un contrato específico
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET /contracts/v1/{contractId}`
 
 ### URL Parameters
 
-Parameter | Description
+Parámetro | Descripción
 --------- | -----------
-ID | The ID of the kitten to retrieve
+contractId | El ID del Contrato a obtener
 
-## Delete a Specific Kitten
+## Eliminar un Contrato
 
 ```ruby
-require 'kittn'
+require 'uri'
+require 'net/http'
+require 'openssl'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
+url = URI("https://api.stg.keynua.com/contracts/v1/{contractId}")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Delete.new(url)
+request["authorization"] =
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+
+response = http.request(request)
+puts response.read_body
 ```
 
 ```python
-import kittn
+import http.client
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
+
+headers = {
+    'x-api-key': "YOUR-API-KEY-HERE",
+    'authorization': "YOUR-API-TOKEN-HERE"
+    }
+
+conn.request("DELETE", "/contracts/v1/{contractId}", "", headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
 ```
 
 ```shell
-curl "http://example.com/api/kittens/2" \
-  -X DELETE \
-  -H "Authorization: meowmeowmeow"
+curl --request DELETE \
+  --url https://api.dev.keynua.com/contracts/v1/{contractId} \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
 ```
 
 ```javascript
-const kittn = require('kittn');
+const https = require("https");
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
+const options = {
+  method: "DELETE",
+  hostname: "api.stg.keynua.com",
+  path: "/contracts/v1/{contractId}",
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE"
+  }
+};
+
+const req = https.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.end();
 ```
 
-> The above command returns JSON structured like this:
+> Si el contrato fue eliminado, el API retornará un JSON como el siguiente:
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+  "deletedAt": "2021-01-25T21:38:50.055Z"
 }
 ```
 
-This endpoint deletes a specific kitten.
+Este API elimina un Contrato
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`DELETE /contracts/v1/{contractId}`
 
 ### URL Parameters
 
-Parameter | Description
+Parámetro | Descripción
 --------- | -----------
-ID | The ID of the kitten to delete
+contractId | El ID del Contrato a eliminar
+
+<aside class="warning">No se puede eliminar un contrato que su estado es <code>done</code>. Si eliminas un contrato que aún no ha sido iniciado por el firmante, la transacción utilizada será reintegrada a tu saldo. Si el contrato ya fue iniciado por el firmante, se tomará como una transacción utilizada.</aside>
 
