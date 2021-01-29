@@ -19,7 +19,7 @@ search: true
 code_clipboard: true
 ---
 
-# Introduction
+# Introducción
 
 > La URL base de nuestra API es distintia por ambiente:
 
@@ -50,7 +50,7 @@ Algunas características de nuestra API:
 * Está basada en REST: los payload para los `request` y `response` deben estar en formato `JSON`
 * Solo soporta `HTTPS`
 
-# Authentication
+# Autenticación
 
 ```shell
 curl 'https://api.stg.keynua.com' \
@@ -117,7 +117,7 @@ status | string | Estado actual del contrato
 users | array | [Usuarios](#propiedades-de-usuarios-de-un-contrato) del contrato
 groups | array | [Grupos](#propiedades-de-grupos-de-un-contrato) del contrato
 documents | array | [Documentos](#propiedades-de-documentos-de-un-contrato) del contrato
-items | array | [Items](#propiedades-de-items-de-un-contrato) del contrato
+items | array | [Items](#items-del-contrato) del contrato
 
 ### Propiedades de Usuarios de un Contrato
 
@@ -193,37 +193,85 @@ size | integer | Tamaño en bytes del documento
 type | string | Tipo del documento
 url | string | La URL para poder visualizar el documento
 
-### Propiedades de Items de un Contrato
+## Cavali
 
 ```json
 {
-	"id": 4,
-	"version": 1,
-	"state": "success",
-	"userId": null,
-	"reference": "pdf",
-	"title": "Certificado y documentos",
-	"type": "pdf",
-	"stageIndex": 1,
-	"value": {
-		"url": "signed-url"
-	}
+	"banking": 6,
+	"product": 3,
+	"uniqueCode": 5478700,
+	"issuedDate": "2020-09-20",
+	"issuedPlace": "Lima",
+	"client": {
+	  "userId": 0,
+	  "civilStatus": 2,
+	  "domicile": "Lima"
+	},
+	"representatives": [
+	  {
+		"userId": 1
+	  }
+	]
 }
 ```
 
-Para llevar a cabo el flujo de firma de un contrato, cada uno de los usuarios deberá ingresar la información necesaria para firmar. Por ejemplo: la foto de su DNI, el video diciendo el código corto o el número de su DNI. También hace referencia a los procesos internos llevados a cabo por Keynua, por ejemplo la generación del PDF final o validación biométrica. A cada uno de estos elementos los llamamos **Item**
+Cavali permite crear un Pagaré y asociarlo a la firma de un contrato. Para crear un contrato, el proceso debe tener un Item Cavali y Item de tipo text con el id `documentNumber`
+
+<aside class="warning">Si quieres crear contratos con Pagarés electrónicos, debes contactar al equipo de soporte de Keynua</aside>
+
+El Pagaré esta compuesto por lo siguiente:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-id | integer | Identificador del item
-version | integer | Versión del item. Siempre se mostrará la última versión disponible
-state | string | El estado del item. Puede tener los siguientes valores: `success`, `pending`, `working`, `error`
-userId | integer | El identificador del usuario al que está relacionado este item
-reference | string | La referencia del item (está relacionado con la plantilla del contrato)
-title | string | Un título referente al item
-type | string | El tipo del item
-stageIndex | integer | El índice del nivel al que pertenece el item
-value | object | El valor del item. La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key **url** el cual contiene la URL firmada para poder descargar el archivo. **Esta URL firmada tiene una duración máxima de 12 horas**
+banking | integer | Código de banca
+product | integer | Código de producto
+uniqueCode | integer | Código único del cliente
+issuedDate | string | Fecha de emisión. Formato: YYYY-MM-dd
+conditionJustSign | integer | Condición del pagaré. Puede tener los siguientes valores: 1 (si) | 2 (no)
+special | integer | Indicador de pagaré especial. Puede tener los siguientes valores: 1 (si) | 2 (no)
+issuedPlace | string | Lugar de emisión
+expirationDate | string | Fecha de caducidad. Formato: YYYY-MM-dd
+amount | double | Monto del pagaré
+currency | integer | Moneda del pagaré. Puede tener los siguientes valores: 1 (S/) | 2 (US$)
+compensatoryInterestAmount | double | El interés compensatorio sobre el monto
+periodOne | integer | El período de capitalización 1
+compensatoryInterestArrears | double | El interés compensatorio por el período de morosidad
+periodTwo | integer | El período de capitalización 2
+interestArrears | double | Interés moratorio del periodo
+periodTwo | integer | El período de capitalización 3
+specialClauses | string | Las Cláusulas especiales que pueda contener el Pagaré
+token | string | El token de validación de firmas para proveedores
+additionalField1 | string | Campo adicional 1
+additionalField2 | string | Campo adicional 2
+client | object | [Cliente](#cliente-cavali) del Pagaré
+representatives | array | Arreglo de [Representantes](#representantes-cavali) del cliente
+guarantees | array | Arreglo de [Garantías](#garantías-cavali) del cliente
+
+### Cliente Cavali
+El cliente del pagaré. El elemento está compuesto por:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+userId | integer | Id del firmante
+civilStatus | integer |  Estado civil del cliente. Puede tener los siguientes valores: `1 (SOLTERO)`, `2 (CASADO)`, `3 (DIVORCIADO)`, `4 (VIUDO)`
+domicile | string | Domicilio del cliente `Máximo 100 de longitud`
+
+### Representantes Cavali
+Representante del cliente. El elemento está compuesto por:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+userId | integer | Id del firmante
+
+### Garantías Cavali
+Garantía del cliente. El elemento está compuesto por:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+userId | integer | Id del firmante
+civilStatus | integer | Estado civil. Puede tener los siguientes valores: `1 (SOLTERO)`, `2 (CASADO)`, `3 (DIVORCIADO)`, `4 (VIUDO)`
+domicile | string | Domicilio `Máximo 100 de longitud`
+representative | array | Arreglo de [Representantes](#representantes-cavali)
 
 ## Crear un Contrato
 
@@ -375,6 +423,7 @@ userEmailNotifications | boolea | Indica si los usuarios serán notificados por 
 templateId | string | Id del template a usar. Puedes usar uno de los template públicos de Keynua como `keynua-peru-default`. Si es un proceso customizado, el equipo de Keynua te enviará este valor
 documents | array | Arreglo de los documentos PDFs encodificados en base64 que van a ser firmados. Mínimo 1 y máximo 10. El peso máximo en total no debe ser mayor a 4.5 MB
 users | array | Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en **groups** depende del templateId a usar. Para el caso de `keynua-peru-default`, el valor en groups debe ser `signers`. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario
+flags | object | Se podrá enviar información adicional para crear un contrato. Por ejemplo la información de [Cavali](#cavali) para crear un contrato con Pagaré Electrónico se enviará con el key `cavaliData`
 ## Obtener un Contrato
 
 ```ruby
@@ -430,8 +479,7 @@ const options = {
   "path": "/contracts/v1/{contractId}",
   "headers": {
     "x-api-key": "YOUR-API-KEY-HERE",
-    "authorization": "YOUR-API-TOKEN-HERE",
-    "content-length": "0"
+    "authorization": "YOUR-API-TOKEN-HERE"
   }
 };
 
@@ -563,3 +611,233 @@ contractId | El ID del Contrato a eliminar
 
 <aside class="warning">No se puede eliminar un contrato que su estado es <code>done</code>. Si eliminas un contrato que aún no ha sido iniciado por el firmante, la transacción utilizada será reintegrada a tu saldo. Si el contrato ya fue iniciado por el firmante, se tomará como una transacción utilizada.</aside>
 
+# Items del Contrato
+Para llevar a cabo el flujo de firma de un contrato, cada uno de los usuarios deberá ingresar la información necesaria para firmar. Por ejemplo: la foto de su DNI, el video diciendo el código corto o el número de su DNI. También hace referencia a los procesos internos llevados a cabo por Keynua, por ejemplo la generación del PDF final o validación biométrica. A cada uno de estos elementos los llamamos **Item**
+## Propiedades de un Item
+
+```json
+{
+	"id": 4,
+	"version": 1,
+	"state": "success",
+	"userId": null,
+	"reference": "pdf",
+	"title": "Certificado y documentos",
+	"type": "pdf",
+	"stageIndex": 1,
+	"value": {
+		"url": "signed-url"
+	}
+}
+```
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+id | integer | Identificador del item
+version | integer | Versión del item. Siempre se mostrará la última versión disponible
+state | string | El estado del item. Puede tener los siguientes valores: `success`, `pending`, `working`, `error`
+userId | integer | El identificador del usuario al que está relacionado este item
+reference | string | La referencia del item (está relacionado con la plantilla del contrato)
+title | string | Un título referente al item
+type | string | El tipo del item
+stageIndex | integer | El índice del nivel al que pertenece el item
+value | object | El valor del item. La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key **url** el cual contiene la URL firmada para poder descargar el archivo. **Las URLs firmadas tienen una duración máxima de 12 horas**
+
+## Actualizar el valor de un item
+
+<aside class="notice">Este procedimiento sólo será realizado en caso quieran construir su propio proceso de firma. Keynua ofrece el proceso de firmar sin costo adicional bajo el propio dominio de Keynua o la posibilidad de incrustar el proceso de firma bajo tu dominio o App móvil mediante nuestro <code>Keynua Widget</code></aside>
+
+Para poder actualizar el valor de cada item, se debe utilizar la información que se obtiene luego de crear un certificado o de obtener un certificado por id. Así, podemos saber los tipos (type) de cada item y seguir los siguientes pasos para realizar la actualización.
+
+<aside class="warning">Este procedimiento solo aplica para los items del tipo <code>image</code> y <code>video</code></aside>
+
+### Paso 1: solicitar la información antes de subir un archivo
+
+> Body payload
+
+```json
+{
+  "token": "some:user:token",
+  "name": "some_file.pdf",
+  "md5": "9a333cae630cf48165d18a9b1d33f5dd"
+}
+```
+
+> Si la solicitud fue satisfactoria, la respuesta tendrá la información para que puedas subir el contenido del archivo
+
+```json
+{
+  "linkId": "some:id",
+  "url": "https://some:url:for:upload",
+  "method": "PUT",
+  "headers": {
+    "Content-Type": "image/jpeg",
+    "Content-MD5": "solo si se envió md5"
+  }
+}
+```
+
+### HTTP Request
+
+`POST /contracts/v1/sign/upload`
+
+### Headers
+
+Key | Value
+--------- | -----------
+Content-Type | application/json
+
+### Body
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+token | string | El token del usuario del cual se actualizará el item
+name | string | El nombre del archivo que se va a subir. Debe incluir su extensión
+md5 | string | `opcional` El valor md5 del archivo
+
+### Paso 2: subir el contenido del archivo
+
+```
+curl --request PUT \
+  --url 'https://some:url:for:upload' \
+  --header 'content-type: image/jpeg' \
+  --header 'Content-MD5: contentMD5' \
+  --data some_file.jpeg
+```
+
+> Si no hubo errores al subir el archivo, se retornará el código de estado 200
+
+Con la información obtenida en el paso 1, se subirá el archivo.
+
+### HTTP Request
+
+`POST {URL-STEP-1}`
+
+### Headers
+
+Key | Value
+--------- | -----------
+Content-Type | {Content-Type-Step-1}
+Content-MD5 | contentMD5
+### Body
+
+El archivo en Base64
+
+### Paso 3: actualizar el valor del item
+
+```shell
+curl --request PUT \
+  --url https://api.stg.keynua.com/contracts/v1/sign \
+  --header 'content-type: application/json' \
+  --data '{
+	"token": "USER-TOKEN-HERE",
+	"itemId": 2,
+	"version": 8,
+	"value": {
+		"linkId": "LINK-ID-HERE"
+	}
+}'
+```
+
+```javascript
+const http = require("https");
+
+const data = JSON.stringify({
+  token: 'USER-TOKEN-HERE',
+  itemId: 2,
+  version: 8,
+  value: {
+    linkId: 'LINK-ID-HERE'
+  }
+});
+
+const options = {
+  method: "PUT",
+  hostname: "api.stg.keynua.com",
+  path: "/contracts/v1/sign",
+  headers: {
+    "content-type": "application/json",
+    "content-length": data.length
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.on('error', (error) => {
+  console.error(error)
+});
+
+req.write(data);
+req.end();
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
+
+payload = "{\n\t\"token\": \"USER-TOKEN-HERE\",\n\t\"itemId\": 2,\n\t\"version\": 8,\n\t\"value\": {\n\t\t\"linkId\": \"LINK-ID-HERE\"\n\t}\n}"
+
+headers = { 'content-type': "application/json" }
+
+conn.request("PUT", "/contracts/v1/sign", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'openssl'
+
+url = URI("https://api.stg.keynua.com/contracts/v1/sign")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Put.new(url)
+request["content-type"] = 'application/json'
+request.body = "{\n\t\"token\": \"USER-TOKEN-HERE\",\n\t\"itemId\": 2,\n\t\"version\": 8,\n\t\"value\": {\n\t\t\"linkId\": \"LINK-ID-HERE\"\n\t}\n}"
+
+response = http.request(request)
+puts response.read_body
+```
+
+> Si la actualización fue exitosa, se devolverá el cuerpo del [item](#items-del-contrato) actualizado
+
+En este paso se realizará la actualización de la imagen o el video del item.
+### HTTP Request
+
+`PUT /contracts/v1/sign`
+
+### Headers
+
+Key | Value
+--------- | -----------
+Content-Type | application/json
+
+### Body
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+token | string | El token del usuario del cual se actualizará el item
+itemId | integer | El identificador del item del que se actualizará el valor
+version | integer | La versión del item del que se actualizará el valor
+value | object | Dentro del objeto value debes enviar el linkId obtenido en el paso 1 con el key `linkId`
+
+<aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
