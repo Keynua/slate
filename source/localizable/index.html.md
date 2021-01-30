@@ -109,17 +109,17 @@ description | string | Descripción del contrato
 finishedAt | string | Fecha de finalización del proceso de firma del contrato
 deletedAt | string | Fecha de eliminación del contrato
 language | string | Lenguaje del contrato
-metadata | object | Metadata del contrato. Puedes enviar información en este campo como key-value para poder identificar el contrato creado por Keynua con algún Identificador interno de tu sistema.
+metadata | object | Metadata del contrato
 reference | string | Referencia del contrato. Este campo es usado como clave de búsqueda en la plataforma web de Keynua.
 shortCode | string | Código corto del contrato para facilitar su identificación
 expirationInHours | integer | Expiración del contrato en horas, a partir de la fecha de inicio del contrato
 status | string | Estado actual del contrato
-users | array | [Usuarios](#propiedades-de-usuarios-de-un-contrato) del contrato
-groups | array | [Grupos](#propiedades-de-grupos-de-un-contrato) del contrato
-documents | array | [Documentos](#propiedades-de-documentos-de-un-contrato) del contrato
+users | array | [Usuarios](#propiedades-de-un-usuario) del contrato
+groups | array | [Grupos](#propiedades-de-un-grupo) del contrato
+documents | array | [Documentos](#propiedades-de-un-documento) del contrato
 items | array | [Items](#items-del-contrato) del contrato
 
-### Propiedades de Usuarios de un Contrato
+### Propiedades de un Usuario
 
 ```json
 {
@@ -143,9 +143,9 @@ name | string | El nombre del usuario
 email | string | El correo electrónico del usuario
 phone | string | El teléfono del usuario
 groups | array | Nombre de los grupos a los que pertenece el usuario, normalmente siempre pertenece a un sólo grupo. El identificador del grupo será asignado por el equipo de Keynua
-token | string | El token del usuario que se utilizará para realizar la firma (actualizar los valores de cada item)
+token | string | El token del usuario que se utilizará para realizar la firma. Por ejemplo para [actualizar los valores de cada item](#actualizar-el-valor-de-un-item)
 
-### Propiedades de Grupos de un Contrato
+### Propiedades de un Grupo
 
 ```json
 {
@@ -167,7 +167,7 @@ description | string | Descripción del grupo
 digitalSignature | boolean | Flag que indica si el grupo realizará firma digital o no
 bulk | boolean | Flag que indica si el grupo pertenece a Firma Múltiple o no
 
-### Propiedades de Documentos de un Contrato
+### Propiedades de un Documento
 
 ```json
 {
@@ -418,12 +418,16 @@ Para crear el contrato, se tiene que enviar la data como un solo objeto JSON
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 title | string | Título del contrato
-language | string | Idioma del contrato. Default `es`
-userEmailNotifications | boolea | Indica si los usuarios serán notificados por email cuando hay un error o finaliza un contrato. Default `false`
+description | string | `optional` Descripción del contrato
+reference | string | `optional` Referencia del contrato. Este campo es usado como clave de búsqueda en la plataforma web de Keynua
+language | string |  `Default "es"` Idioma del contrato. Puede ser `en` o `es`
+userEmailNotifications | boolean | `Default "false"` Indica si los usuarios serán notificados por email cuando hay un error o finaliza un contrato
+expirationInHours | integer | `optional` Expiración del contrato en horas, a partir de la fecha de inicio del contrato. Mínimo uno (1)
 templateId | string | Id del template a usar. Puedes usar uno de los template públicos de Keynua como `keynua-peru-default`. Si es un proceso customizado, el equipo de Keynua te enviará este valor
 documents | array | Arreglo de los documentos PDFs encodificados en base64 que van a ser firmados. Mínimo 1 y máximo 10. El peso máximo en total no debe ser mayor a 4.5 MB
 users | array | Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en **groups** depende del templateId a usar. Para el caso de `keynua-peru-default`, el valor en groups debe ser `signers`. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario
-flags | object | Se podrá enviar información adicional para crear un contrato. Por ejemplo la información de [Cavali](#cavali) para crear un contrato con Pagaré Electrónico se enviará con el key `cavaliData`
+metadata | object | `optional` Metadata del contrato. Puedes enviar información en este campo como key-value para poder identificar el contrato creado por Keynua con algún Identificador interno de tu sistema.
+flags | object | `optional` Se podrá enviar información adicional para crear un contrato. Por ejemplo la información de [Cavali](#cavali) para crear un contrato con Pagaré Electrónico se enviará con el key `cavaliData`
 ## Obtener un Contrato
 
 ```ruby
@@ -841,3 +845,368 @@ version | integer | La versión del item del que se actualizará el valor
 value | object | Dentro del objeto value debes enviar el linkId obtenido en el paso 1 con el key `linkId`
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
+
+# Webhooks
+
+Los Webhooks permiten suscribirte a ciertos eventos del Contrato, por ejemplo cuando un contrato es creado, cuando ocurre un error en el proceso de firma o el contrato ha sido firmado satisfactoriamente. Cuando ocurre uno de estos eventos, enviaremos un request **HTTP POST** a la API configurada en el webhook.
+
+## Configuración del Webhook
+
+<aside class="warning">Para poder configurar tu Webhook debes contactar al equipo de Keynua</aside>
+
+Una vez ya tengas una cuenta en el ambiente de pruebas de Keynua, puedes acceder a la sección [Developers](https://app.stg.keynua.com/developers) y configurar tu Webhook.
+
+Si tu API necesita unos headers específicos, puedes agregarlo en la configuración del Webhook y nosotros lo enviaremos en cada request.
+
+Entre los eventos que puedes escoger están:
+
+Evento | Descripción
+--------- | -----------
+Created | Serás notificado cuando un contrato fue creado satisfactoriamente
+Started | Serás notificado cuando un contrato fue creado satisfactoriamente y está listo para ser firmado. **Recomendamos usar este evento en lugar del evento Created ya que este evento te notificará cuando el contrato está listo para comenzar el proceso de firma**
+Finished | Serás notificado cuando el contrato ha sido firmado por todos y finalizó correctamente
+ItemWorking | Serás notificado cada vez que se comienza a procesar un [Item](#propiedades-de-un-item)
+ItemSuccess | Serás notificado cada vez que un [Item](#propiedades-de-un-item) ha concluído satisactoriamente
+ItemError | Serás notificado cada vez que ocurre un error en un [Item](#propiedades-de-un-item)
+
+Una vez configurado el Webhook, te llegará un email de confirmación al correo que ingresaste. Luego, debes seleccionar la opción **Habilitar** para poder activar el Webhook. Keynua enviará un HTTP POST al API configurado y será activado si cumple estos requisitos:
+
+* El API debe ser de acceso público
+* El API debe ser HTTPS
+* El API debe retornar status code 200 y el body del response debe ser `KEYNUA`
+
+Una vez tengas habilitado tu Webhook, puedes comenzar a escuchar las notificaciones de tus contratos siguiendo la siguiente [especificación](#especificación-del-webhook).
+
+<aside class="notice">Si ya estás listo para integrar en producción, por favor contacta al equipo de <code>Keynua</code></aside>
+
+## Especificación del Webhook
+
+El request tendrá la siguiente estructura
+
+### Headers
+
+```json
+{
+	"headers": {
+		"Content-Type": "application/json",
+		"X-Keynua-Webhook-Type": "ContractFinished",
+		"X-Keynua-Webhook-TS": "1604957455847",
+		"X-Keynua-Webhook-Sig": "ec7584cb..."
+	}
+}
+```
+
+Key | Value
+--------- | -----------
+Content-Type | application/json
+x-keynua-webhook-sig | Firma del request para el control de la manipulacion de la peticion
+x-keynua-webhook-ts | Numero de millisegundos desde UNIX Epoch (01/01/1970) cuando se envio el evento
+x-keynua-webhook-type | Nombre del evento emitido
+
+### Body
+
+```json
+{
+	"type": "ContractFinished",
+	"accountId": "d6c5ce27-fa63-4fb8-8f0f-83278c6b7985",
+	"payload": { ... }
+}
+```
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+type | string | Nombre del [tipo de evento](#tipos-de-eventos-webhook) emitido. Puede ser `ContractCreated`, `ContractStarted`, `ContractItemUpdated`, `ContractFinished`
+accountId | string | Codigo de la cuenta propietaria del webhook
+payload | object | Datos del evento que varian segun el valor de [type](#tipos-de-eventos-webhook)
+
+## Tipos de Eventos Webhook
+Keynua enviará un request a tu API configurado por cada Evento registrado. En esta tabla podrás ver la relación que existe entre cada evento registrado y los tipos de eventos disponibles
+
+Evento del Webhook | Tipo de Evento
+--------| ----------
+Created | [ContractCreated](#propiedades-de-contractcreated)
+Started | [ContractStarted](#propiedades-de-contractstarted)
+Finished | [ContractFinished](#propiedades-de-contractfinished)
+ItemWorking | [ContractItemUpdated](#propiedades-de-contractitemupdated). Item.state `working`
+ItemSuccess | [ContractItemUpdated](#propiedades-de-contractitemupdated). Item.state `success`
+ItemError | [ContractItemUpdated](#propiedades-de-contractitemupdated). Item.state `error`
+
+### Propiedades de ContractCreated
+
+> Ejemplo de Body
+
+```json
+{
+	"type": "ContractCreated",
+	"accountId": "00000000-0000-0000-0000-000000000000",
+	"payload": {
+		"contractId": "00000000-0000-0000-0000-000000000001",
+		"reference": "",
+		"title": "Mi primer webhook",
+		"description": "Ejemplo de mi primer webhook",
+		"language": "es",
+		"createdAt": "2020-01-01T00:00:00.000Z",
+		"docCount": 0,
+		"itemCount": 0,
+		"userCount": 1,
+		"metadata": {}
+	}
+}
+```
+
+Se emite cuando el contrato ha sido creado.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+contractId | string | Codigo del contrato
+reference | string | Referencia del contrato
+title | string | Titulo del contrato
+templateId | string | Identificador del Template
+description | string | Descripcion del contrato
+language | string | Idima del contrato
+createdAt | string | Fecha de creacion del contrato
+docCount | integer | Cantidad de documentos que tiene el contrato
+itemCount | integer | Cantidad de items que tiene el contrato
+userCount | integer | Cantidad de usuarios que tiene el contrato
+metadata | integer | Metada del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
+
+### Propiedades de ContractStarted
+
+> Ejemplo de Body
+
+```json
+{
+	"type": "ContractStarted",
+	"accountId": "00000000-0000-0000-0000-000000000000",
+	"payload": {
+		"contractId": "00000000-0000-0000-0000-000000000001",
+		"reference": null,
+		"title": "Mi primer webhook",
+		"language": "es",
+		"createdAt": "2020-01-01T00:00:00.000Z",
+		"startedAt": "2020-01-01T01:00:00.000Z",
+		"docCount": 1,
+		"itemCount": 14,
+		"userCount": 1,
+		"longCode": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
+		"shortCode": "123456",
+		"metadata": {},
+		"users": [
+			{
+				"id": 0,
+				"name": "John Doe",
+				"email": "example@keynua.com",
+				"phone": null,
+				"ref": null,
+				"groups": [
+					"signers"
+				]
+			}
+		],
+		"documents": [
+			{
+				"name": "sample.pdf",
+				"type": "application/pdf",
+				"size": 3028,
+				"url": "https..."
+			}
+		]
+	}
+}
+```
+
+Se emite cuando el contrato está listo para ser firmado.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+contractId | string | Codigo del contrato
+reference | string | Referencia del contrato
+title | string | Titulo del contrato
+templateId | string | Identificador del Template
+description | string | Descripcion del contrato
+language | string | Idima del contrato
+createdAt | string | Fecha de creacion del contrato
+startedAt | string | Fecha de inicio del proceso de firma del contrato
+docCount | integer | Cantidad de documentos que tiene el contrato
+itemCount | integer | Cantidad de items que tiene el contrato
+userCount | integer | Cantidad de usuarios que tiene el contrato
+metadata | integer | Metada del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
+longCode | string | Código largo del contrato
+shortCode | string | Código corto del contrato para facilitar su identificación
+users | array | Arreglo de [Usuarios](#propiedades-de-un-usuario-webhook) del Contrato
+documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook) del contrato
+
+### Propiedades de ContractFinished
+
+> Ejemplo de Body
+
+```json
+{
+	"type": "ContractFinished",
+	"accountId": "00000000-0000-0000-0000-000000000000",
+	"payload": {
+		"contractId": "00000000-0000-0000-0000-000000000001",
+		"reference": null,
+		"title": "Testing WH CC",
+		"language": "es",
+		"createdAt": "2020-01-01T00:00:00.000Z",
+		"startedAt": "2020-01-01T01:00:00.000Z",
+		"finishedAt": "2020-01-01T02:00:00.000Z",
+		"docCount": 1,
+		"itemCount": 14,
+		"userCount": 1,
+		"longCode": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
+		"shortCode": "123456",
+		"metadata": {},
+		"users": [
+			{
+				"id": 0,
+				"name": "John Doe",
+				"email": "example@keynua.com",
+				"phone": null,
+				"ref": null,
+				"groups": [
+					"signers"
+				]
+			}
+		],
+		"documents": [
+			{
+				"name": "sample.pdf",
+				"type": "application/pdf",
+				"size": 3028,
+				"url": "https..."
+			}
+		]
+	}
+}
+```
+
+Se emite cuando el contrato ha sido firmado por todos y ha finalizado correctamente.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+contractId | string | Codigo del contrato
+reference | string | Referencia del contrato
+title | string | Titulo del contrato
+templateId | string | Identificador del Template
+description | string | Descripcion del contrato
+language | string | Idima del contrato
+createdAt | string | Fecha de creacion del contrato
+startedAt | string | Fecha de inicio del proceso de firma del contrato
+finishedAt | string | Fecha de finalización del proceso de firma del contrato
+docCount | integer | Cantidad de documentos que tiene el contrato
+itemCount | integer | Cantidad de items que tiene el contrato
+userCount | integer | Cantidad de usuarios que tiene el contrato
+metadata | integer | Metada del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
+longCode | string | Código largo del contrato
+shortCode | string | Código corto del contrato para facilitar su identificación
+users | array | Arreglo de [Usuarios](#propiedades-de-un-usuario-webhook) del Contrato
+documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook) del contrato. Acá encontrarás los **documentos originales del contrato**, NO el documento final de firma. Si lo que quieres es el documento final de firma, podrás obtenerlo desde el [Item](#propiedades-de-un-item) **PDF** en [ContractItemUpdated](#propiedades-de-contractitemupdated)
+
+### Propiedades de ContractItemUpdated
+
+> Ejemplo de Body
+
+```json
+{
+	"type": "ContractItemUpdated",
+	"accountId": "00000000-0000-0000-0000-000000000000",
+	"payload": {
+		"contractId": "00000000-0000-0000-0000-000000000001",
+		"reference": null,
+		"title": "Testing WH CC",
+		"language": "es",
+		"createdAt": "2020-01-01T00:00:00.000Z",
+		"startedAt": "2020-01-01T01:00:00.000Z",
+		"docCount": 1,
+		"itemCount": 14,
+		"userCount": 1,
+		"longCode": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
+		"shortCode": "123456",
+		"metadata": {},
+		"item": {
+			"id": 0,
+			"refId": "signersemail",
+			"state": "working",
+			"version": 1,
+			"stageIndex": 0,
+			"type": "email",
+			"title": "Mail de inicio de firma",
+			"value": null
+		},
+		"user": {
+			"id": 0,
+			"name": "John Doe",
+			"email": "example@keynua.com",
+			"phone": null,
+			"ref": null,
+			"groups": [
+				"signers"
+			]
+		}
+	}
+}
+```
+
+Se emite cuando un elemento del contrato ha cambiado de estado. Los estados pueden ser `working`, `success`, `error`
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+contractId | string | Codigo del contrato
+reference | string | Referencia del contrato
+title | string | Titulo del contrato
+templateId | string | Identificador del Template
+description | string | Descripcion del contrato
+language | string | Idima del contrato
+createdAt | string | Fecha de creacion del contrato
+startedAt | string | Fecha de inicio del proceso de firma del contrato
+docCount | integer | Cantidad de documentos que tiene el contrato
+itemCount | integer | Cantidad de items que tiene el contrato
+userCount | integer | Cantidad de usuarios que tiene el contrato
+metadata | integer | Metada del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
+longCode | string | Código largo del contrato
+shortCode | string | Código corto del contrato para facilitar su identificación
+item | object | [Item](#propiedades-de-un-item) del contrato que ha cambiado de estado
+user | object | [Usuario](#propiedades-de-un-usuario-webhook) al que pertence el elemento modificado. Si el valor es null el elemento le pertenece a todos los usuarios
+
+### Propiedades de un Usuario Webhook
+
+```json
+{
+	"id": 0,
+	"name": "John Doe",
+	"email": "example@keynua.com",
+	"phone": null,
+	"ref": null,
+	"groups": [
+		"signers"
+	]
+}
+```
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+id | integer | Identificador único del usuario en el contrato
+name | string | El nombre del usuario
+email | string | El correo electrónico del usuario
+phone | string | El teléfono del usuario
+groups | array | Nombre de los grupos a los que pertenece el usuario
+
+### Propiedades de un Documento Webhook
+
+```json
+{
+	"name": "sample.pdf",
+	"type": "application/pdf",
+	"size": 3028,
+	"url": "https..."
+}
+```
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+name | string | Nombre del documento
+type | string | Tipo del documento en formato MIME
+size | integer | Peso del documento en bytes
+url | integer | Link del documento. **Expira en 12 horas**
