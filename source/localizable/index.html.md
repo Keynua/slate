@@ -643,10 +643,37 @@ state | string | El estado del item. Puede tener los siguientes valores: `succes
 userId | integer | El identificador del usuario al que está relacionado este item
 reference | string | La referencia del item (está relacionado con la plantilla del contrato)
 title | string | Un título referente al item
-type | string | El tipo del item
+type | string | El ID del [tipo del Item](#tipos-de-item) al que pertenece
 stageIndex | integer | El índice del nivel al que pertenece el item
 value | object | El valor del item. La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key **url** el cual contiene la URL firmada para poder descargar el archivo. **Las URLs firmadas tienen una duración máxima de 12 horas**
 
+## Tipos de Item
+En la siguiente tabla podrás ver los Tipos de Items que existen en Keynua
+
+Item | Id | User Input | Descripción
+--------- | ----------- | ----------- | -----------
+Términos y condiciones | terms | `si` | Hace referencia si el usuario ha aceptado o no los términos y condiciones
+Verificación de documentos | documents | `si` | Indica que se le ha mostrado los documentos a firmar al usuario
+Campo de Texto | text | `si` | Campo de texto ingresado por el usuario o por el creador del contrato, por ejemplo el número de Documento de Identidad
+Imagen | image | `si` | Hace referencia a una imagen subida por un usuario, por ejemplo foto del documento de Identidad
+Firma Hológrafa | imagesign | `si` | Firma hológrafa realizada por el usuario en el proceso de firma
+Video | video | `si` | Video realizado por el usuario, en la mayoría de los casos hace referencia al video de la videofirma realizada por el usuario
+Email | email | `no` | Hace referencia al envío del email a un usuario
+Reconocimiento de Documento | detectlabels | `no` | Proceso de Reconocimiento del formato de un Documento. Por ejemplo, si se le pide subir a un usuario la foto de su DNI Peruano y sube la foto de su pasaporte este proceso detectará que no es el documento solicitado y arrojará un error
+Reconocimiento de textos | checklabels | `no` | Este proceso realiza la verificación de textos sobre 2 elemetnos, por ejemplo la búsqueda del documento de identidad ingresado sobre los textos extráidos en la imagen del documento
+Conversión de Video | convertvideo | `no` | Proceso que indica que el video del firmante tiene un formato correcto para ser procesado
+Reniec | reniec | `no` | Proceso que indica el resultado de la búsqueda del DNI ingresado en Reniec
+Validación de Biometría Facial | facematch | `no` | Proceso que indica la validación Biométrica sobre 2 elementos que pueden ser por ejemplo la foto obtenida de RENIEC y la videofirma realizada por el usuario
+Reconocimiento de texto hablado | transcribe | `no` | Indica si el usuario dijo como texto hablado el código que se le pidió decir
+Prueba de vida | livenessdetection | `no` | Indica si se detectó vida en el video del usuario
+Aprobación Manul| manualapproval | `no` | Indica si hubo una aprobación manual de algún Item como `detectlabels`, `facematch` o `transcribe`
+Generación de imágenes para insertar al PDF final | generatethumbnails | `no` | Proceso que indica si se pudieron obtener los thumbnails necesarios antes de  poder crear el PDF de documento de firma final
+Documento de Firma Electrónica/Digital | pdf | `no` | Indica si el archivo PDF de la firma electrónica se generó satisfactoriamente. **En este Item puedes encontrar el PDF final de firma electrónica generado por Keynua**
+Firma Digital | dsignature | `no` | Proceso de firma digital aplicado a un archivo de firma electrónica. En este Item puedes encontrar el archivo digital, en caso tu proceso incluya firma digital
+Cavali - Perú | cavali | `no` | Proceso que indica la generación de un Pagaré electrónico mediante Cavali para Perú
+Blockchain | blockchain | `no` | Proceso que indica si se registró correctamente el hash del documento de firma electrónica final en Blockchain
+Normativa NOM151 - México | knom151 | `no` | Proceso que indica si se generó correctamente la constancia de conservación según la norma Méxicana NOM151
+Firma Múltiple | bulksignature | `no` | Indica si se solicitó firmar al usuario de firma múltiple o si firmó satsifactoriamente. El estado error no está desarrollo por el momento en este Item.
 ## Actualizar el valor de un item
 
 <aside class="notice">Este procedimiento sólo será realizado en caso quieran construir su propio proceso de firma. Keynua ofrece el proceso de firmar sin costo adicional bajo el propio dominio de Keynua o la posibilidad de incrustar el proceso de firma bajo tu dominio o App móvil mediante nuestro <code>Keynua Widget</code></aside>
@@ -896,10 +923,10 @@ El request tendrá la siguiente estructura
 }
 ```
 
-Key | Value
---------- | -----------
+Key                 | Value
+------------------ | -----------
 Content-Type | application/json
-x-keynua-webhook-sig | Firma del request para el control de la manipulacion de la peticion
+x-keynua-webhook-sig | Firma del request para el control de la manipulacion de la peticion. Para más información revisa la sección de [Verificar Keynua Signature Webhook](#verificar-keynua-signature-webhook)
 x-keynua-webhook-ts | Numero de millisegundos desde UNIX Epoch (01/01/1970) cuando se envio el evento
 x-keynua-webhook-type | Nombre del evento emitido
 
@@ -1210,3 +1237,21 @@ name | string | Nombre del documento
 type | string | Tipo del documento en formato MIME
 size | integer | Peso del documento en bytes
 url | integer | Link del documento. **Expira en 12 horas**
+
+## Verificar Keynua Signature Webhook
+
+```
+SHA_256(requestPayloadAsString + ts + webHookSecret)
+```
+
+Si quieres verificar la integridad del payload y asegurarte de que Keynua es quién está golpeando tu API Webhook, debes verificar el Signature que envía Keynua en el header `X-Keynua-Webhook-Sig`
+
+Para verificar este valor necesitas:
+
+* El object payload del body `body.payload` como string
+* El valor del header `X-Keynua-Webhook-TS`
+* El valor del `secret` que obtuviste al crear el webhook
+
+Luego de ello debes concatenar todos estos valores y aplicarle SHA256, el resultado debe ser el mismo que el valor del header `X-Keynua-Webhook-Sig`
+
+<aside class="notice">Si el resultado de tu hash coincide con el que te enviamos, puedes tener la seguridad de que es Keynua quién envió la información a tu API y que la información no ha sido alterada en tránsito.</aside>
