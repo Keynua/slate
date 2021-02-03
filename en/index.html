@@ -280,7 +280,7 @@
 }
 	</style>
 	<link href="../images/favicon-1a78870a.png" rel="icon" type="image/png" />
-    <link href="../stylesheets/screen-123335ee.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/screen-b3397d56.css" rel="stylesheet" media="screen" />
     <link href="../stylesheets/print-953e3353.css" rel="stylesheet" media="print" />
       <script src="../javascripts/all-e033bdd3.js"></script>
 
@@ -1374,13 +1374,13 @@ Producción: https://api.keynua.com
 <td>Términos y condiciones</td>
 <td>terms</td>
 <td><code>si</code></td>
-<td>Hace referencia si el usuario ha aceptado o no los términos y condiciones</td>
+<td>Hace  referencia a si el usuario ha aceptado o no los términos y condiciones</td>
 </tr>
 <tr>
 <td>Verificación de documentos</td>
 <td>documents</td>
 <td><code>si</code></td>
-<td>Indica que se le ha mostrado los documentos a firmar al usuario</td>
+<td>Indica que se le han mostrado los documentos a firmar al usuario</td>
 </tr>
 <tr>
 <td>Campo de Texto</td>
@@ -1392,7 +1392,7 @@ Producción: https://api.keynua.com
 <td>Imagen</td>
 <td>image</td>
 <td><code>si</code></td>
-<td>Hace referencia a una imagen subida por un usuario, por ejemplo foto del documento de Identidad</td>
+<td>Hace referencia a una imagen subida por un usuario, por ejemplo, foto del documento de identidad</td>
 </tr>
 <tr>
 <td>Firma Hológrafa</td>
@@ -1404,7 +1404,7 @@ Producción: https://api.keynua.com
 <td>Video</td>
 <td>video</td>
 <td><code>si</code></td>
-<td>Video realizado por el usuario, en la mayoría de los casos hace referencia al video de la videofirma realizada por el usuario</td>
+<td>Video realizado por el usuario, en la mayoría de los casos hace referencia a la videofirma.</td>
 </tr>
 <tr>
 <td>Email</td>
@@ -1416,13 +1416,13 @@ Producción: https://api.keynua.com
 <td>Reconocimiento de Documento</td>
 <td>detectlabels</td>
 <td><code>no</code></td>
-<td>Proceso de Reconocimiento del formato de un Documento. Por ejemplo, si se le pide subir a un usuario la foto de su DNI Peruano y sube la foto de su pasaporte este proceso detectará que no es el documento solicitado y arrojará un error</td>
+<td>Proceso de Reconocimiento del formato de un Documento. Por ejemplo, si se le pide subir a un usuario la foto de su DNI del país y sube la foto de su pasaporte, este proceso detectará que no es el documento solicitado y arrojará un error</td>
 </tr>
 <tr>
 <td>Reconocimiento de textos</td>
 <td>checklabels</td>
 <td><code>no</code></td>
-<td>Este proceso realiza la verificación de textos sobre 2 elemetnos, por ejemplo la búsqueda del documento de identidad ingresado sobre los textos extráidos en la imagen del documento</td>
+<td>Este proceso realiza la verificación de textos entre 2 elementos, por ejemplo la búsqueda del documento de identidad ingresado y los textos extraídos de la imagen del documento</td>
 </tr>
 <tr>
 <td>Conversión de Video</td>
@@ -1440,13 +1440,13 @@ Producción: https://api.keynua.com
 <td>Validación de Biometría Facial</td>
 <td>facematch</td>
 <td><code>no</code></td>
-<td>Proceso que indica la validación Biométrica sobre 2 elementos que pueden ser por ejemplo la foto obtenida de RENIEC y la videofirma realizada por el usuario</td>
+<td>Proceso que indica la validación Biométrica entre 2 elementos que pueden ser por ejemplo la foto obtenida de RENIEC y la videofirma realizada por el usuario</td>
 </tr>
 <tr>
 <td>Reconocimiento de texto hablado</td>
 <td>transcribe</td>
 <td><code>no</code></td>
-<td>Indica si el usuario dijo como texto hablado el código que se le pidió decir</td>
+<td>Indica si el usuario dijo como texto hablado el código que corresponde con los documentos que está firmando</td>
 </tr>
 <tr>
 <td>Prueba de vida</td>
@@ -1455,16 +1455,16 @@ Producción: https://api.keynua.com
 <td>Indica si se detectó vida en el video del usuario</td>
 </tr>
 <tr>
-<td>Aprobación Manul</td>
+<td>Aprobación Manual</td>
 <td>manualapproval</td>
 <td><code>no</code></td>
 <td>Indica si hubo una aprobación manual de algún Item como <code>detectlabels</code>, <code>facematch</code> o <code>transcribe</code></td>
 </tr>
 <tr>
-<td>Generación de imágenes para insertar al PDF final</td>
+<td>Generación de imágenes para insertar en el PDF final</td>
 <td>generatethumbnails</td>
 <td><code>no</code></td>
-<td>Proceso que indica si se pudieron obtener los thumbnails necesarios antes de  poder crear el PDF de documento de firma final</td>
+<td>Proceso que indica si se pudieron obtener los thumbnails necesarios antes de  poder crear el PDF de documento de firma final (Certificado)</td>
 </tr>
 <tr>
 <td>Documento de Firma Electrónica/Digital</td>
@@ -1476,19 +1476,19 @@ Producción: https://api.keynua.com
 <td>Firma Digital</td>
 <td>dsignature</td>
 <td><code>no</code></td>
-<td>Proceso de firma digital aplicado a un archivo de firma electrónica. En este Item puedes encontrar el archivo digital, en caso tu proceso incluya firma digital</td>
+<td>Proceso de firma digital aplicado a un archivo de firma electrónica. En este Item puedes encontrar el archivo digital, en caso de que tu proceso incluya firma digital</td>
 </tr>
 <tr>
 <td>Cavali - Perú</td>
 <td>cavali</td>
 <td><code>no</code></td>
-<td>Proceso que indica la generación de un Pagaré electrónico mediante Cavali para Perú</td>
+<td>Proceso que indica el registro de un Pagaré electrónico en Cavali para Perú</td>
 </tr>
 <tr>
 <td>Blockchain</td>
 <td>blockchain</td>
 <td><code>no</code></td>
-<td>Proceso que indica si se registró correctamente el hash del documento de firma electrónica final en Blockchain</td>
+<td>Proceso que indica si se registró correctamente el hash del documento de firma electrónica final(certificado) en Blockchain</td>
 </tr>
 <tr>
 <td>Normativa NOM151 - México</td>
@@ -1500,11 +1500,11 @@ Producción: https://api.keynua.com
 <td>Firma Múltiple</td>
 <td>bulksignature</td>
 <td><code>no</code></td>
-<td>Indica si se solicitó firmar al usuario de firma múltiple o si firmó satsifactoriamente. El estado error no está desarrollo por el momento en este Item.</td>
+<td>Indica si se solicitó firmar al usuario de firma múltiple o si firmó satsifactoriamente. El estado &quot;error&quot; no está implementado por el momento en este Item.</td>
 </tr>
 </tbody></table>
 <h2 id='actualizar-el-valor-de-un-item'>Actualizar el valor de un item</h2>
-<aside class="notice">Este procedimiento sólo será realizado en caso quieran construir su propio proceso de firma. Keynua ofrece el proceso de firmar sin costo adicional bajo el propio dominio de Keynua o la posibilidad de incrustar el proceso de firma bajo tu dominio o App móvil mediante nuestro <code>Keynua Widget</code></aside>
+<aside class="notice">Este procedimiento sólo será realizado en caso quieran construir su propio proceso de firma. Keynua ofrece el proceso de firmar sin costo adicional bajo el propio dominio de Keynua o la posibilidad de incrustar el proceso de firma bajo tu dominio o App móvil mediante nuestro <code><a href="https://github.com/Keynua/public-docs/wiki/Widget">Keynua Widget</a></code></aside>
 
 <p>Para poder actualizar el valor de cada item, se debe utilizar la información que se obtiene luego de crear un certificado o de obtener un certificado por id. Así, podemos saber los tipos (type) de cada item y seguir los siguientes pasos para realizar la actualización.</p>
 
@@ -1783,7 +1783,7 @@ Producción: https://api.keynua.com
 <li>El API debe retornar status code 200 y el body del response debe ser <code>KEYNUA</code></li>
 </ul>
 
-<p>Una vez tengas habilitado tu Webhook, puedes comenzar a escuchar las notificaciones de tus contratos siguiendo la siguiente <a href="#especificación-del-webhook">especificación</a>.</p>
+<p>Una vez tengas habilitado tu Webhook, puedes comenzar a escuchar las notificaciones de tus contratos siguiendo la siguiente <a href="#especificación-del-webhook">Especificación del Webhook</a>.</p>
 
 <aside class="notice">Si ya estás listo para integrar en producción, por favor contacta al equipo de <code>Keynua</code></aside>
 <h2 id='especificacion-del-webhook'>Especificación del Webhook</h2>
