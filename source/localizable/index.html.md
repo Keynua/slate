@@ -652,31 +652,31 @@ En la siguiente tabla podrás ver los Tipos de Items que existen en Keynua
 
 Item | Id | User Input | Descripción
 --------- | ----------- | ----------- | -----------
-Términos y condiciones | terms | `si` | Hace referencia si el usuario ha aceptado o no los términos y condiciones
-Verificación de documentos | documents | `si` | Indica que se le ha mostrado los documentos a firmar al usuario
+Términos y condiciones | terms | `si` | Hace  referencia a si el usuario ha aceptado o no los términos y condiciones
+Verificación de documentos | documents | `si` | Indica que se le han mostrado los documentos a firmar al usuario
 Campo de Texto | text | `si` | Campo de texto ingresado por el usuario o por el creador del contrato, por ejemplo el número de Documento de Identidad
-Imagen | image | `si` | Hace referencia a una imagen subida por un usuario, por ejemplo foto del documento de Identidad
+Imagen | image | `si` | Hace referencia a una imagen subida por un usuario, por ejemplo, foto del documento de identidad
 Firma Hológrafa | imagesign | `si` | Firma hológrafa realizada por el usuario en el proceso de firma
-Video | video | `si` | Video realizado por el usuario, en la mayoría de los casos hace referencia al video de la videofirma realizada por el usuario
+Video | video | `si` | Video realizado por el usuario, en la mayoría de los casos hace referencia a la videofirma.
 Email | email | `no` | Hace referencia al envío del email a un usuario
-Reconocimiento de Documento | detectlabels | `no` | Proceso de Reconocimiento del formato de un Documento. Por ejemplo, si se le pide subir a un usuario la foto de su DNI Peruano y sube la foto de su pasaporte este proceso detectará que no es el documento solicitado y arrojará un error
-Reconocimiento de textos | checklabels | `no` | Este proceso realiza la verificación de textos sobre 2 elemetnos, por ejemplo la búsqueda del documento de identidad ingresado sobre los textos extráidos en la imagen del documento
+Reconocimiento de Documento | detectlabels | `no` | Proceso de Reconocimiento del formato de un Documento. Por ejemplo, si se le pide subir a un usuario la foto de su DNI del país y sube la foto de su pasaporte, este proceso detectará que no es el documento solicitado y arrojará un error
+Reconocimiento de textos | checklabels | `no` | Este proceso realiza la verificación de textos entre 2 elementos, por ejemplo la búsqueda del documento de identidad ingresado y los textos extraídos de la imagen del documento
 Conversión de Video | convertvideo | `no` | Proceso que indica que el video del firmante tiene un formato correcto para ser procesado
 Reniec | reniec | `no` | Proceso que indica el resultado de la búsqueda del DNI ingresado en Reniec
-Validación de Biometría Facial | facematch | `no` | Proceso que indica la validación Biométrica sobre 2 elementos que pueden ser por ejemplo la foto obtenida de RENIEC y la videofirma realizada por el usuario
-Reconocimiento de texto hablado | transcribe | `no` | Indica si el usuario dijo como texto hablado el código que se le pidió decir
+Validación de Biometría Facial | facematch | `no` | Proceso que indica la validación Biométrica entre 2 elementos que pueden ser por ejemplo la foto obtenida de RENIEC y la videofirma realizada por el usuario
+Reconocimiento de texto hablado | transcribe | `no` | Indica si el usuario dijo como texto hablado el código que corresponde con los documentos que está firmando
 Prueba de vida | livenessdetection | `no` | Indica si se detectó vida en el video del usuario
-Aprobación Manul| manualapproval | `no` | Indica si hubo una aprobación manual de algún Item como `detectlabels`, `facematch` o `transcribe`
-Generación de imágenes para insertar al PDF final | generatethumbnails | `no` | Proceso que indica si se pudieron obtener los thumbnails necesarios antes de  poder crear el PDF de documento de firma final
+Aprobación Manual| manualapproval | `no` | Indica si hubo una aprobación manual de algún Item como `detectlabels`, `facematch` o `transcribe`
+Generación de imágenes para insertar en el PDF final | generatethumbnails | `no` | Proceso que indica si se pudieron obtener los thumbnails necesarios antes de  poder crear el PDF de documento de firma final (Certificado)
 Documento de Firma Electrónica/Digital | pdf | `no` | Indica si el archivo PDF de la firma electrónica se generó satisfactoriamente. **En este Item puedes encontrar el PDF final de firma electrónica generado por Keynua**
-Firma Digital | dsignature | `no` | Proceso de firma digital aplicado a un archivo de firma electrónica. En este Item puedes encontrar el archivo digital, en caso tu proceso incluya firma digital
-Cavali - Perú | cavali | `no` | Proceso que indica la generación de un Pagaré electrónico mediante Cavali para Perú
-Blockchain | blockchain | `no` | Proceso que indica si se registró correctamente el hash del documento de firma electrónica final en Blockchain
+Firma Digital | dsignature | `no` | Proceso de firma digital aplicado a un archivo de firma electrónica. En este Item puedes encontrar el archivo digital, en caso de que tu proceso incluya firma digital
+Cavali - Perú | cavali | `no` | Proceso que indica el registro de un Pagaré electrónico en Cavali para Perú
+Blockchain | blockchain | `no` | Proceso que indica si se registró correctamente el hash del documento de firma electrónica final(certificado) en Blockchain
 Normativa NOM151 - México | knom151 | `no` | Proceso que indica si se generó correctamente la constancia de conservación según la norma Méxicana NOM151
-Firma Múltiple | bulksignature | `no` | Indica si se solicitó firmar al usuario de firma múltiple o si firmó satsifactoriamente. El estado error no está desarrollo por el momento en este Item.
+Firma Múltiple | bulksignature | `no` | Indica si se solicitó firmar al usuario de firma múltiple o si firmó satsifactoriamente. El estado "error" no está implementado por el momento en este Item.
 ## Actualizar el valor de un item
 
-<aside class="notice">Este procedimiento sólo será realizado en caso quieran construir su propio proceso de firma. Keynua ofrece el proceso de firmar sin costo adicional bajo el propio dominio de Keynua o la posibilidad de incrustar el proceso de firma bajo tu dominio o App móvil mediante nuestro <code>Keynua Widget</code></aside>
+<aside class="notice">Este procedimiento sólo será realizado en caso quieran construir su propio proceso de firma. Keynua ofrece el proceso de firmar sin costo adicional bajo el propio dominio de Keynua o la posibilidad de incrustar el proceso de firma bajo tu dominio o App móvil mediante nuestro <code><a href="https://github.com/Keynua/public-docs/wiki/Widget">Keynua Widget</a></code></aside>
 
 Para poder actualizar el valor de cada item, se debe utilizar la información que se obtiene luego de crear un certificado o de obtener un certificado por id. Así, podemos saber los tipos (type) de cada item y seguir los siguientes pasos para realizar la actualización.
 
@@ -902,7 +902,7 @@ Una vez configurado el Webhook, te llegará un email de confirmación al correo 
 * El API debe ser HTTPS
 * El API debe retornar status code 200 y el body del response debe ser `KEYNUA`
 
-Una vez tengas habilitado tu Webhook, puedes comenzar a escuchar las notificaciones de tus contratos siguiendo la siguiente [especificación](#especificación-del-webhook).
+Una vez tengas habilitado tu Webhook, puedes comenzar a escuchar las notificaciones de tus contratos siguiendo la siguiente [Especificación del Webhook](#especificación-del-webhook).
 
 <aside class="notice">Si ya estás listo para integrar en producción, por favor contacta al equipo de <code>Keynua</code></aside>
 
