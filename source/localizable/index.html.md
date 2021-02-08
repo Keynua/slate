@@ -176,7 +176,7 @@ id | string | Identificador del grupo
 name | string | El nombre del grupo
 description | string | Descripción del grupo
 digitalSignature | boolean | Flag que indica si el grupo realizará firma digital o no
-bulk | boolean | Flag que indica si el grupo pertenece a Firma Múltiple o no.
+bulk | boolean | Flag que indica si el grupo pertenece a Firma Múltiple o no
 
 ### Propiedades de un Documento
 
