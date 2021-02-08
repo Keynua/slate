@@ -113,11 +113,22 @@ metadata | object | Metadata del contrato
 reference | string | Referencia del contrato. Este campo es usado como clave de búsqueda en la plataforma web de Keynua.
 shortCode | string | Código corto del contrato para facilitar su identificación
 expirationInHours | integer | Expiración del contrato en horas, a partir de la fecha de inicio del contrato
-status | string | Estado actual del contrato
 users | array | [Usuarios](#propiedades-de-un-usuario) del contrato
 groups | array | [Grupos](#propiedades-de-un-grupo) del contrato
 documents | array | [Documentos](#propiedades-de-un-documento) del contrato
 items | array | [Items](#items-del-contrato) del contrato
+status | string | [Estado del contrato](#estados-del-contrato) actual
+
+### Estados del Contrato
+
+Valor | Descripción
+--------- | -----------
+pending_input | Estado inicial del contrato, cuando ha sido creado pero aún nadie ha comenzado el proceso de firma
+working | Cuando los Items del contrato están en proceso de ejecución
+pending_approval | Cuando existe un Item pendiente a ser aprobado manualmente por el dueño del contrato
+error | Cuando existe un error sin resolver en uno de los Items del contrato
+deleted | Cuando el contrato ha sido eliminado
+done | Cuando el contrato ha sido firmado por todos y ha finalizado correctamente
 
 ### Propiedades de un Usuario
 
