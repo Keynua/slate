@@ -667,7 +667,7 @@ Términos y condiciones | terms | `si` | Hace  referencia a si el usuario ha ace
 Verificación de documentos | documents | `si` | Indica que se le han mostrado los documentos a firmar al usuario
 Campo de Texto | text | `si` | Campo de texto ingresado por el usuario o por el creador del contrato, por ejemplo el número de Documento de Identidad
 Imagen | image | `si` | Hace referencia a una imagen subida por un usuario, por ejemplo, foto del documento de identidad
-Firma Hológrafa | imagesign | `si` | Firma hológrafa realizada por el usuario en el proceso de firma
+Firma Ológrafa | imagesign | `si` | Firma ológrafa realizada por el usuario en el proceso de firma
 Video | video | `si` | Video realizado por el usuario, en la mayoría de los casos hace referencia a la videofirma.
 Email | email | `no` | Hace referencia al envío del email a un usuario
 Reconocimiento de Documento | detectlabels | `no` | Proceso de Reconocimiento del formato de un Documento. Por ejemplo, si se le pide subir a un usuario la foto de su DNI del país y sube la foto de su pasaporte, este proceso detectará que no es el documento solicitado y arrojará un error
