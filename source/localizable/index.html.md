@@ -435,7 +435,7 @@ language | string |  `Default "es"` Idioma del contrato. Puede ser `en` o `es`
 userEmailNotifications | boolean | `Default "false"` Indica si los usuarios serán notificados por email cuando hay un error o finaliza un contrato
 expirationInHours | integer | `optional` Expiración del contrato en horas, a partir de la fecha de inicio del contrato. Mínimo uno (1)
 templateId | string | Id del template a usar. Puedes usar uno de los template públicos de Keynua como `keynua-peru-default`. Si es un proceso customizado, el equipo de Keynua te enviará este valor
-documents | array | Arreglo de los documentos PDFs encodificados en base64 que van a ser firmados. Mínimo 1 y máximo 10. El peso máximo en total no debe ser mayor a 4.5 MB
+documents | array | Arreglo de los documentos PDFs encodificados en base64 que van a ser firmados. Mínimo 1 y máximo 10. El peso máximo en total no debe ser mayor a 4.5 MB. En lugar de `base64` también se puede enviar `storageId`, como por ejemplo se obtiene de [este](#generar-documentos-rellenados) API.
 users | array | Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en **groups** depende del templateId a usar. Para el caso de `keynua-peru-default`, el valor en groups debe ser `signers`. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario
 metadata | object | `optional` Metadata del contrato. Puedes enviar información en este campo como key-value para poder identificar el contrato creado por Keynua con algún Identificador interno de tu sistema.
 flags | object | `optional` Se podrá enviar información adicional para crear un contrato. Por ejemplo la información de [Cavali](#cavali) para crear un contrato con Pagaré Electrónico se enviará con el key `cavaliData`
@@ -883,6 +883,196 @@ version | integer | La versión del item del que se actualizará el valor
 value | object | Dentro del objeto value debes enviar el linkId obtenido en el paso 1 con el key `linkId`
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
+
+# Plantillas de contrato
+
+Permite generar documentos pdf a partir de una plantilla de documento.
+
+## Generar documentos rellenados
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'openssl'
+
+url = URI("https://api.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId}")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Post.new(url)
+request["authorization"] =
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+request["Content-Type"] = "application/json"
+request.body = "{\n  \"fieldValues\": [\n    {\n      \"name\": \"email-0\",\n      \"value\": \"user@mail.com\"\n    },\n    {\n      \"name\": \"date-0\",\n      \"value\": \"2020-10-09\"\n    }\n  ]\n}"
+
+response = http.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+import json
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+
+payload = json.dumps({
+  "fieldValues": [
+    {
+      "name": "email-0",
+      "value": "user@mail.com"
+    },
+    {
+      "name": "date-0",
+      "value": "2020-10-09"
+    }
+  ]
+})
+
+headers = {
+  'x-api-key': "YOUR-API-KEY-HERE",
+  'authorization': "YOUR-API-TOKEN-HERE",
+  'Content-Type': 'application/json'
+}
+
+conn.request("POST", "/contract-manager-document-templates/api/create-filled-files/{templateId}", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --location --request POST 'https://api.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId} \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE'
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "fieldValues": [
+      {
+        "name": "email-0",
+        "value": "user@mail.com"
+      },
+      {
+        "name": "date-0",
+        "value": "2020-10-09"
+      }
+    ]
+  }'
+```
+
+```javascript
+const https = require("https");
+var fs = require('fs');
+
+var options = {
+  method: 'POST',
+  hostname: 'api.keynua.com',
+  path: '/contract-manager-document-templates/api/create-filled-files/{templateId',
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE"
+    "Content-Type": "application/json"
+  },
+};
+
+var req = https.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function (chunk) {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+
+  res.on("error", function (error) {
+    console.error(error);
+  });
+});
+
+var postData = JSON.stringify({
+  "fieldValues": [
+    {
+      "name": "email-0",
+      "value": "user@mail.com"
+    },
+    {
+      "name": "date-0",
+      "value": "2020-10-09"
+    }
+  ]
+});
+
+req.write(postData);
+
+req.end();
+```
+
+> Success response:
+
+```json
+{
+  "files": [
+    {
+      "id": "b5d1b359-3736-424b-b83d-f0d0da910a89",
+      "storageId": "eyJidWNrZXQiOiJjb250cmFjdC1tYW5hZ2VyLWRvY3Vt",
+      "url": "https://s3.amazonaws.com/id-del-documento",
+      "size": 8568,
+      "sha256": "edd34e53e6b709fc4344f6799a8c228320e879fd7f92c95ed6ad8d7c4e0cd812"
+    },
+    {
+      "id": "428c25aa-6d9e-405e-9c19-9fafc9f1a3ec",
+      "storageId": "eyJidWNrZXQiOiJjb250cmFjdC1tYW5hZ2VyLWRvY3Vt",
+      "url": "https://s3.amazonaws.com/id-del-documento",
+      "size": 56628,
+      "sha256": "b4b488d71896341ff6520881e56da7e5cfe41a603de5f16eef68114c2c9acda3"
+    }
+  ]
+}
+```
+
+Este API genera en base a cada documento de una plantilla, otros documentos pdf que incluyen el valor de cada campo enviado. La plantilla debe ser creada desde app.keynua.com.
+
+### HTTP Request
+
+`POST /contract-manager-document-templates/api/create-filled-files/{templateId}`
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+Authorization | your-api-token
+Content-Type | application/json
+
+### Body
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+fieldValues | Lista de [FieldValues](#propiedades-de-fieldvalues) | Lista de valores por cada campo
+
+### Propiedades de FieldValues
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+name | string | Id del campo
+value | string | Valor del campo
+
+### Response body (propiedades de cada file)
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+id | string | Id del archivo dentro de la plantilla
+storageId | string | Id de almacenamiento. Se puede utilizar para [crear contratos](#crear-un-contrato).
+url | string | Url para descargar el documento generado
+size | number | Tamaño en bytes del documento generado
+sha256 | string | Hash sha256 del documento generado
 
 # Webhooks
 
