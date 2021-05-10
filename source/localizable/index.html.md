@@ -884,9 +884,316 @@ value | object | Dentro del objeto value debes enviar el linkId obtenido en el p
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
 
-# Plantillas de contrato
+# Plantillas de documento
 
-Permite generar documentos pdf a partir de una plantilla de documento.
+Permite listar y obtener plantillas de documentos para, a partir de estos, generar documentos pdf.
+
+## Propiedades de una plantilla de documento
+
+```json
+{
+  "templateId": "2021-05-07T22:10:14.935Z8f8bc671-626d-4212-9c8c-c5d5f9464fa6",
+  "accountId": "48101c38-f770-4ea8-88ab-248e672d88bd",
+  "name": "A document template",
+  "creatorEmail": "creator@keynua.com",
+  "fields": DocumentTemplateField[],
+  "files": DocumentTemplateFile[],
+  "updatedAt": "2021-05-07T22:10:14.935Z",
+  "createdAt": "2021-05-07T22:10:14.935Z"
+}
+```
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+templateId | string | No | El id de la plantilla de documento
+accountId | string | No | El id del usuario que creó la plantilla de documento
+name | string | No | El nombre de la plantilla de documento
+creatorEmail | string | No | El email del usuario que creó la plantilla de documento
+fields | [DocumentTemplateField](#propiedades-de-documenttemplatefield)[] | No | Los campos variables de la plantilla de documento, cuyo valor será utilizado para generar los archivos finales
+files | [DocumentTemplateFile](#propiedades-de-documenttemplatefile)[] | No | Los archivos pdf que serán utilizados como base para generar los archivos que incluyan los valores de los campos
+updatedAt | string | No | La fecha y hora de la última modificación en formato ISO
+createdAt | string | No | La fecha y hora de creación en formato ISO
+
+### Propiedades de DocumentTemplateField
+
+```json
+{
+  "id": "email-0",
+  "name": "Email",
+  "type": "string",
+  "required": true,
+  "default": "default value",
+  "minLength": 2,
+  "maxLength": 10,
+  "regex": "^\\d?$",
+  "placeholder": "A placeholder"
+}
+```
+
+Atributo | Tipo  | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+id | string | No | El id del campo
+name | string | No | El nombre del campo
+type | string | No | El tipo del campo. `string`, `date` o `number`.
+required | boolean | No | Si el campo es obligatorio
+default | string | Sí | Un valor por defecto para el campo
+minLength | number | Sí | La longitud mínima para campos de tipo `string`
+maxLength | number | Sí | La longitud máxima para campos de tipo `string`
+regex | string | Sí | Regex para validar campos de tipo `string`
+placeholder | string | Sí | Texto adicional
+
+
+### Propiedades de DocumentTemplateFile
+
+```json
+{
+  "url": "https://s3.amazonaws.com/48101c38-f770-4ea8-88ab-25",
+  "id": "b5d1b359-3736-424b-b83d-f0d0da910a89",
+  "annotations": FileAnnotation[],
+  "name": "isotype_stamp.pdf",
+  "size": 3708
+}
+```
+
+Atributo | Tipo  | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+url | string | No | Url que contiene el documento original
+id | string | No | Id del archivo
+annotations | [FileAnnotation](#propiedades-de-fileannotation)[] | No | Información de la anotación creada en el documento pdf
+name | boolean | No | Nombre del archivo
+size | number | No | Tamaño del archivo
+
+
+### Propiedades de FileAnnotation
+
+```json
+{
+  "extAnnotationObject": {
+    ...
+  },
+  "fieldId": "email-0"
+}
+```
+
+Atributo | Tipo  | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+extAnnotationObject | object | No | Objeto que contiene información de la anotación
+fieldId | string | No | Id del campo relacionado a esta anotación
+
+
+## Obtener plantilla de documento
+
+```ruby
+require "uri"
+require "net/http"
+
+url = URI("https://api.keynua.com/contract-manager-document-templates/api/{templateId}")
+
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Get.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+headers = {
+  'x-api-key': "YOUR-API-KEY-HERE",
+  'authorization': "YOUR-API-TOKEN-HERE",
+}
+conn.request("GET", "/contract-manager-document-templates/api/{templateId}", payload, headers)
+res = conn.getresponse()
+data = res.read()
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --location --request GET 'https://api.keynua.com/contract-manager-document-templates/api/{templateId}' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE'
+```
+
+```javascript
+const https = require("https");
+
+var options = {
+  'method': 'GET',
+  'hostname': 'api.dev.keynua.com',
+  'path': '/contract-manager-document-templates/api/{templateId}',
+  'headers': {
+    'x-api-key': 'YOUR-API-KEY-HERE',
+    'authorization': 'YOUR-API-TOKEN-HERE'
+  },
+};
+
+var req = https.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function (chunk) {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+
+  res.on("error", function (error) {
+    console.error(error);
+  });
+});
+
+req.end();
+```
+
+> Si la plantilla fue obtenida satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [Plantilla de documento](#propiedades-de-una-plantilla-de-documento)
+
+Obtener una plantilla de documento.
+
+### HTTP Request
+
+`GET /contract-manager-document-templates/api/{templateId}`
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+Authorization | your-api-token
+
+## Listar plantillas de documento
+
+```ruby
+require "uri"
+require "net/http"
+
+url = URI("https://api.keynua.com/contract-manager-document-templates/api")
+
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Get.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+headers = {
+  'x-api-key': "YOUR-API-KEY-HERE",
+  'authorization': "YOUR-API-TOKEN-HERE",
+}
+conn.request("GET", "/contract-manager-document-templates/api", payload, headers)
+res = conn.getresponse()
+data = res.read()
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --location --request GET 'https://api.keynua.com/contract-manager-document-templates/api' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE'
+```
+
+```javascript
+const https = require("https");
+
+var options = {
+  'method': 'GET',
+  'hostname': 'api.dev.keynua.com',
+  'path': '/contract-manager-document-templates/api',
+  'headers': {
+    'x-api-key': 'YOUR-API-KEY-HERE',
+    'authorization': 'YOUR-API-TOKEN-HERE'
+  },
+};
+
+var req = https.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function (chunk) {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+
+  res.on("error", function (error) {
+    console.error(error);
+  });
+});
+
+req.end();
+```
+
+> Success response
+
+```json
+{
+  "templates": [
+    {
+      "templateId": "2021-05-07T22:10:14.935Z8f8bc671-626d-4212-9c8c-c5d5f9464fa6",
+      "accountId": "48101c38-f570-4ea8-88ab-258e672d88bd",
+      "name": "test 1",
+      "creatorEmail": "creator@keynua.com",
+      "fileCount": 5,
+      "fieldCount": 2,
+      "updatedAt": "2021-05-07T22:10:14.935Z",
+      "createdAt": "2021-05-07T22:10:14.935Z"
+    },
+    {
+      "templateId": "2021-02-11T21:18:18.463Z962ce87f-d3b7-4cbb-afa0-04e85e2791b2",
+      "accountId": "48101c38-f770-4e28-88ab-258e672d88bd",
+      "name": "test 2",
+      "creatorEmail": "creator@keynua.com",
+      "fileCount": 1,
+      "fieldCount": 1,
+      "updatedAt": "2021-02-11T21:18:18.463Z",
+      "createdAt": "2021-02-11T21:18:18.463Z"
+    }
+  ]
+}
+```
+
+Obtener una plantilla de documento.
+
+### HTTP Request
+
+`GET /contract-manager-document-templates/api`
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+Authorization | your-api-token
+
+### Response body template item
+
+Atributo | Tipo | Descripción
+--------- | ----------- | ----------- | -----------
+templateId | string | El id de la plantilla de documento
+accountId | string | El id del usuario que creó la plantilla de documento
+name | string | El nombre de la plantilla de documento
+creatorEmail | string | El email del usuario que creó la plantilla de documento
+fileCount | number | Cantidad de archivos en la plantilla
+fieldCount | number | Cantidad de campos en la plantilla
+updatedAt | string | La fecha y hora de la última modificación en formato ISO
+createdAt | string | La fecha y hora de creación en formato ISO
 
 ## Generar documentos rellenados
 
@@ -966,7 +1273,6 @@ curl --location --request POST 'https://api.keynua.com/contract-manager-document
 
 ```javascript
 const https = require("https");
-var fs = require('fs');
 
 var options = {
   method: 'POST',
@@ -1055,16 +1361,16 @@ Content-Type | application/json
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-fieldValues | Lista de [FieldValues](#propiedades-de-fieldvalues) | Lista de valores por cada campo
+fieldValues | [FieldValues](#propiedades-de-fieldvalues)[] | Lista de valores por cada campo
 
 ### Propiedades de FieldValues
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-name | string | Id del campo
+name | string | Id de [DocumentTemplateField](#propiedades-de-documenttemplatefield)
 value | string | Valor del campo
 
-### Response body (propiedades de cada file)
+### Response body item
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
