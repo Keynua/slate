@@ -911,7 +911,7 @@ templateId | string | No | El id de la plantilla de documento
 accountId | string | No | El id del usuario que creó la plantilla de documento
 name | string | No | El nombre de la plantilla de documento
 creatorEmail | string | No | El email del usuario que creó la plantilla de documento
-fields | [DocumentTemplateField](#propiedades-de-documenttemplatefield)[] | No | Los campos variables de la plantilla de documento, cuyo valor será utilizado para generar los archivos finales
+fields | [DocumentTemplateField](#propiedades-de-documenttemplatefield)[] | No | Contiene las reglas para cada campo de la plantilla de documento. Los valores de estos campos serán utilizados para generar los archivos finales.
 files | [DocumentTemplateFile](#propiedades-de-documenttemplatefile)[] | No | Los archivos pdf que serán utilizados como base para generar los archivos que incluyan los valores de los campos
 updatedAt | string | No | La fecha y hora de la última modificación en formato ISO
 createdAt | string | No | La fecha y hora de creación en formato ISO
@@ -1081,33 +1081,33 @@ Authorization | your-api-token
 
 ### Search params
 
-Nombre | Tipo | Descripción
---------- | ----------- | -----------
-limit | string | La cantidad máxima de items que el api debe devolver. Si no se envía, el api devuelve todos.
-start | string | Sirve para obtener la siguiente porción de items en la lista. Recibe el valor de next que se obtiene en la respuesta.
-organizational | boolean | `true` si se quiere las plantillas de documento de la organización
+Nombre | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+limit | string | Sí | La cantidad máxima de items que el api debe devolver. Si no se envía, el api devuelve todos.
+start | string | Sí | Sirve para obtener la siguiente porción de items en la lista. Recibe el valor de `next` que se obtiene en la respuesta.
+organizational | boolean | Sí | `true` si se quiere las plantillas de documento de la organización
 
 
 ### Response body
 
-Atributo | Tipo | Descripción
+Atributo | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
-templates | [TemplateItem](#response-body-template-item) | Lista de plantillas de documento
-next | string | Envía este valor en `start` para obtener la siguiente porción de la lista. Si no se encuetra en la respuesta, entonces no quedan más items en la lista.
+templates | [TemplateItem](#response-body-templateitem) | No | Lista de plantillas de documento
+next | string | Sí | Envía este valor en `start` para obtener la siguiente porción de la lista. Si no se encuetra en la respuesta, entonces no quedan más items en la lista.
 
 
-### Response body template item
+### Response body TemplateItem
 
-Atributo | Tipo | Descripción
+Atributo | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
-templateId | string | El id de la plantilla de documento
-accountId | string | El id del usuario que creó la plantilla de documento
-name | string | El nombre de la plantilla de documento
-creatorEmail | string | El email del usuario que creó la plantilla de documento
-fileCount | number | Cantidad de archivos en la plantilla
-fieldCount | number | Cantidad de campos en la plantilla
-updatedAt | string | La fecha y hora de la última modificación en formato ISO
-createdAt | string | La fecha y hora de creación en formato ISO
+templateId | string | No | El id de la plantilla de documento
+accountId | string | No | El id del usuario que creó la plantilla de documento
+name | string | No | El nombre de la plantilla de documento
+creatorEmail | string | No | El email del usuario que creó la plantilla de documento
+fileCount | number | No | Cantidad de archivos en la plantilla
+fieldCount | number | No | Cantidad de campos en la plantilla
+updatedAt | string | No | La fecha y hora de la última modificación en formato ISO
+createdAt | string | No | La fecha y hora de creación en formato ISO
 
 ## Obtener plantilla de documento
 
@@ -1344,7 +1344,7 @@ req.end();
 }
 ```
 
-Este API genera en base a cada documento de una plantilla, otros documentos pdf que incluyen el valor de cada campo enviado.
+En base a cada documento de una plantilla, este API genera otros documentos pdf que incluyen el valor de cada campo enviado.
 
 ### HTTP Request
 
@@ -1360,26 +1360,26 @@ Content-Type | application/json
 
 ### Body
 
-Atributo | Tipo | Descripción
---------- | ----------- | -----------
-fieldValues | [FieldValues](#propiedades-de-fieldvalues)[] | Lista de valores por cada campo
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+fieldValues | [FieldValues](#propiedades-de-fieldvalues)[] | No | Lista de items que contienen el id y valor de cada campo
 
 ### Propiedades de FieldValues
 
-Atributo | Tipo | Descripción
---------- | ----------- | -----------
-name | string | Id de [DocumentTemplateField](#propiedades-de-documenttemplatefield)
-value | string | Valor del campo
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+name | string | No | Id que indica a qué [DocumentTemplateField](#propiedades-de-documenttemplatefield) de la plantilla corresponde `value`
+value | string | No | Valor del campo que es validado con las reglas de [DocumentTemplateField](#propiedades-de-documenttemplatefield)
 
 ### Response body item
 
-Atributo | Tipo | Descripción
---------- | ----------- | -----------
-id | string | Id del archivo dentro de la plantilla
-storageId | string | Id de almacenamiento. Se puede utilizar para [crear contratos](#crear-un-contrato).
-url | string | Url para descargar el documento generado
-size | number | Tamaño en bytes del documento generado
-sha256 | string | Hash sha256 del documento generado
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+id | string | No | Id del archivo dentro de la plantilla
+storageId | string | No | Id de almacenamiento. Se puede utilizar para [crear contratos](#crear-un-contrato).
+url | string | No | Url para descargar el documento generado
+size | number | No | Tamaño en bytes del documento generado
+sha256 | string | No | Hash sha256 del documento generado
 
 # Webhooks
 
