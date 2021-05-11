@@ -435,7 +435,7 @@ language | string |  `Default "es"` Idioma del contrato. Puede ser `en` o `es`
 userEmailNotifications | boolean | `Default "false"` Indica si los usuarios serán notificados por email cuando hay un error o finaliza un contrato
 expirationInHours | integer | `optional` Expiración del contrato en horas, a partir de la fecha de inicio del contrato. Mínimo uno (1)
 templateId | string | Id del template a usar. Puedes usar uno de los template públicos de Keynua como `keynua-peru-default`. Si es un proceso customizado, el equipo de Keynua te enviará este valor
-documents | array | Arreglo de los documentos PDFs encodificados en base64 que van a ser firmados. Mínimo 1 y máximo 10. El peso máximo en total no debe ser mayor a 4.5 MB
+documents | array | Arreglo de los documentos PDFs encodificados en base64 que van a ser firmados. Mínimo 1 y máximo 10. El peso máximo en total no debe ser mayor a 4.5 MB. En lugar de `base64` también se puede enviar `storageId`, como por ejemplo se obtiene de [este](#generar-documentos-rellenados) API.
 users | array | Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en **groups** depende del templateId a usar. Para el caso de `keynua-peru-default`, el valor en groups debe ser `signers`. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario
 metadata | object | `optional` Metadata del contrato. Puedes enviar información en este campo como key-value para poder identificar el contrato creado por Keynua con algún Identificador interno de tu sistema.
 flags | object | `optional` Se podrá enviar información adicional para crear un contrato. Por ejemplo la información de [Cavali](#cavali) para crear un contrato con Pagaré Electrónico se enviará con el key `cavaliData`
@@ -883,6 +883,503 @@ version | integer | La versión del item del que se actualizará el valor
 value | object | Dentro del objeto value debes enviar el linkId obtenido en el paso 1 con el key `linkId`
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
+
+# Plantillas de documento
+
+Permite listar, obtener y rellenar plantillas de documentos PDF.
+
+<aside class="notice">Estas plantillas son creadas únicamente desde el Web App. Si quieres usar esta funcionalidad ponte en contacto con el equipo de soporte de Keynua.</aside>
+
+## Propiedades de una plantilla de documento
+
+```json
+{
+  "templateId": "2021-05-07T22:10:14.935Z8f8bc671-626d-4212-9c8c-c5d5f9464fa6",
+  "accountId": "48101c38-f770-4ea8-88ab-248e672d88bd",
+  "name": "A document template",
+  "creatorEmail": "creator@keynua.com",
+  "fields": DocumentTemplateField[],
+  "files": DocumentTemplateFile[],
+  "updatedAt": "2021-05-07T22:10:14.935Z",
+  "createdAt": "2021-05-07T22:10:14.935Z"
+}
+```
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+templateId | string | No | El id de la plantilla de documento
+accountId | string | No | El id del usuario que creó la plantilla de documento
+name | string | No | El nombre de la plantilla de documento
+creatorEmail | string | No | El email del usuario que creó la plantilla de documento
+fields | [DocumentTemplateField](#propiedades-de-documenttemplatefield)[] | No | Los campos variables de la plantilla de documento, cuyo valor será utilizado para generar los archivos finales
+files | [DocumentTemplateFile](#propiedades-de-documenttemplatefile)[] | No | Los archivos pdf que serán utilizados como base para generar los archivos que incluyan los valores de los campos
+updatedAt | string | No | La fecha y hora de la última modificación en formato ISO
+createdAt | string | No | La fecha y hora de creación en formato ISO
+
+### Propiedades de DocumentTemplateField
+
+```json
+{
+  "id": "email-0",
+  "name": "Email",
+  "type": "string",
+  "required": true,
+  "default": "default value",
+  "minLength": 2,
+  "maxLength": 10,
+  "regex": "^\\d?$",
+  "placeholder": "A placeholder"
+}
+```
+
+Atributo | Tipo  | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+id | string | No | El id del campo
+name | string | No | El nombre del campo
+type | string | No | El tipo del campo. `string`, `date` o `number`.
+required | boolean | No | Si el campo es obligatorio
+default | string | Sí | Un valor por defecto para el campo
+minLength | number | Sí | La longitud mínima para campos de tipo `string`
+maxLength | number | Sí | La longitud máxima para campos de tipo `string`
+regex | string | Sí | Regex para validar campos de tipo `string`
+placeholder | string | Sí | Texto adicional
+
+
+### Propiedades de DocumentTemplateFile
+
+```json
+{
+  "url": "https://s3.amazonaws.com/48101c38-f770-4ea8-88ab-25",
+  "id": "b5d1b359-3736-424b-b83d-f0d0da910a89",
+  "name": "isotype_stamp.pdf",
+  "size": 3708
+}
+```
+
+Atributo | Tipo  | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+url | string | No | Url que contiene el documento original
+id | string | No | Id del archivo
+name | boolean | No | Nombre del archivo
+size | number | No | Tamaño del archivo
+
+
+## Listar plantillas de documento
+
+```ruby
+require "uri"
+require "net/http"
+
+url = URI("https://api.keynua.com/contract-manager-document-templates/api")
+
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Get.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+headers = {
+  'x-api-key': "YOUR-API-KEY-HERE",
+  'authorization': "YOUR-API-TOKEN-HERE",
+}
+conn.request("GET", "/contract-manager-document-templates/api", payload, headers)
+res = conn.getresponse()
+data = res.read()
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --location --request GET 'https://api.keynua.com/contract-manager-document-templates/api' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE'
+```
+
+```javascript
+const https = require("https");
+
+var options = {
+  'method': 'GET',
+  'hostname': 'api.dev.keynua.com',
+  'path': '/contract-manager-document-templates/api',
+  'headers': {
+    'x-api-key': 'YOUR-API-KEY-HERE',
+    'authorization': 'YOUR-API-TOKEN-HERE'
+  },
+};
+
+var req = https.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function (chunk) {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+
+  res.on("error", function (error) {
+    console.error(error);
+  });
+});
+
+req.end();
+```
+
+> Success response
+
+```json
+{
+  "templates": [
+    {
+      "templateId": "2021-05-07T22:10:14.935Z8f8bc671-626d-4212-9c8c-c5d5f9464fa6",
+      "accountId": "48101c38-f570-4ea8-88ab-258e672d88bd",
+      "name": "test 1",
+      "creatorEmail": "creator@keynua.com",
+      "fileCount": 5,
+      "fieldCount": 2,
+      "updatedAt": "2021-05-07T22:10:14.935Z",
+      "createdAt": "2021-05-07T22:10:14.935Z"
+    },
+    {
+      "templateId": "2021-02-11T21:18:18.463Z962ce87f-d3b7-4cbb-afa0-04e85e2791b2",
+      "accountId": "48101c38-f770-4e28-88ab-258e672d88bd",
+      "name": "test 2",
+      "creatorEmail": "creator@keynua.com",
+      "fileCount": 1,
+      "fieldCount": 1,
+      "updatedAt": "2021-02-11T21:18:18.463Z",
+      "createdAt": "2021-02-11T21:18:18.463Z"
+    }
+  ],
+  "next": "eyJwayI6IjQ4MTAxYzM4LWY3NzAtNGVhOC04OGFiLTI1OGU2NzJkODhiZDp0ZW1wbGF0ZSIsInJrIjoiMjAyMS0wMi0wMlQyMToxMzozNy42NDhaNGE3YWZiZDEtMTQ0Yi00YmRmLWI1NTUtOWFlZTQ2MDMxZGE1In0="
+}
+```
+
+Permite obtener una lista de las plantillas de documento que pertenecen al usuario o a su organización.
+
+### HTTP Request
+
+`GET /contract-manager-document-templates/api`
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+Authorization | your-api-token
+
+### Search params
+
+Nombre | Tipo | Descripción
+--------- | ----------- | -----------
+limit | string | La cantidad máxima de items que el api debe devolver. Si no se envía, el api devuelve todos.
+start | string | Sirve para obtener la siguiente porción de items en la lista. Recibe el valor de next que se obtiene en la respuesta.
+organizational | boolean | `true` si se quiere las plantillas de documento de la organización
+
+
+### Response body
+
+Atributo | Tipo | Descripción
+--------- | ----------- | ----------- | -----------
+templates | [TemplateItem](#response-body-template-item) | Lista de plantillas de documento
+next | string | Envía este valor en `start` para obtener la siguiente porción de la lista. Si no se encuetra en la respuesta, entonces no quedan más items en la lista.
+
+
+### Response body template item
+
+Atributo | Tipo | Descripción
+--------- | ----------- | ----------- | -----------
+templateId | string | El id de la plantilla de documento
+accountId | string | El id del usuario que creó la plantilla de documento
+name | string | El nombre de la plantilla de documento
+creatorEmail | string | El email del usuario que creó la plantilla de documento
+fileCount | number | Cantidad de archivos en la plantilla
+fieldCount | number | Cantidad de campos en la plantilla
+updatedAt | string | La fecha y hora de la última modificación en formato ISO
+createdAt | string | La fecha y hora de creación en formato ISO
+
+## Obtener plantilla de documento
+
+```ruby
+require "uri"
+require "net/http"
+
+url = URI("https://api.keynua.com/contract-manager-document-templates/api/{templateId}")
+
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Get.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+headers = {
+  'x-api-key': "YOUR-API-KEY-HERE",
+  'authorization': "YOUR-API-TOKEN-HERE",
+}
+conn.request("GET", "/contract-manager-document-templates/api/{templateId}", payload, headers)
+res = conn.getresponse()
+data = res.read()
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --location --request GET 'https://api.keynua.com/contract-manager-document-templates/api/{templateId}' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE'
+```
+
+```javascript
+const https = require("https");
+
+var options = {
+  'method': 'GET',
+  'hostname': 'api.dev.keynua.com',
+  'path': '/contract-manager-document-templates/api/{templateId}',
+  'headers': {
+    'x-api-key': 'YOUR-API-KEY-HERE',
+    'authorization': 'YOUR-API-TOKEN-HERE'
+  },
+};
+
+var req = https.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function (chunk) {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+
+  res.on("error", function (error) {
+    console.error(error);
+  });
+});
+
+req.end();
+```
+
+> Si la plantilla fue obtenida satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [Plantilla de documento](#propiedades-de-una-plantilla-de-documento)
+
+Permite obtener una plantilla de documento.
+
+### HTTP Request
+
+`GET /contract-manager-document-templates/api/{templateId}`
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+Authorization | your-api-token
+
+## Generar documentos rellenados
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'openssl'
+
+url = URI("https://api.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId}")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Post.new(url)
+request["authorization"] =
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+request["Content-Type"] = "application/json"
+request.body = "{\n  \"fieldValues\": [\n    {\n      \"name\": \"email-0\",\n      \"value\": \"user@mail.com\"\n    },\n    {\n      \"name\": \"date-0\",\n      \"value\": \"2020-10-09\"\n    }\n  ]\n}"
+
+response = http.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+import json
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+
+payload = json.dumps({
+  "fieldValues": [
+    {
+      "name": "email-0",
+      "value": "user@mail.com"
+    },
+    {
+      "name": "date-0",
+      "value": "2020-10-09"
+    }
+  ]
+})
+
+headers = {
+  'x-api-key': "YOUR-API-KEY-HERE",
+  'authorization': "YOUR-API-TOKEN-HERE",
+  'Content-Type': 'application/json'
+}
+
+conn.request("POST", "/contract-manager-document-templates/api/create-filled-files/{templateId}", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --location --request POST 'https://api.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId} \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE'
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "fieldValues": [
+      {
+        "name": "email-0",
+        "value": "user@mail.com"
+      },
+      {
+        "name": "date-0",
+        "value": "2020-10-09"
+      }
+    ]
+  }'
+```
+
+```javascript
+const https = require("https");
+
+var options = {
+  method: 'POST',
+  hostname: 'api.keynua.com',
+  path: '/contract-manager-document-templates/api/create-filled-files/{templateId',
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE"
+    "Content-Type": "application/json"
+  },
+};
+
+var req = https.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function (chunk) {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+
+  res.on("error", function (error) {
+    console.error(error);
+  });
+});
+
+var postData = JSON.stringify({
+  "fieldValues": [
+    {
+      "name": "email-0",
+      "value": "user@mail.com"
+    },
+    {
+      "name": "date-0",
+      "value": "2020-10-09"
+    }
+  ]
+});
+
+req.write(postData);
+
+req.end();
+```
+
+> Success response:
+
+```json
+{
+  "files": [
+    {
+      "id": "b5d1b359-3736-424b-b83d-f0d0da910a89",
+      "storageId": "eyJidWNrZXQiOiJjb250cmFjdC1tYW5hZ2VyLWRvY3Vt",
+      "url": "https://s3.amazonaws.com/id-del-documento",
+      "size": 8568,
+      "sha256": "edd34e53e6b709fc4344f6799a8c228320e879fd7f92c95ed6ad8d7c4e0cd812"
+    },
+    {
+      "id": "428c25aa-6d9e-405e-9c19-9fafc9f1a3ec",
+      "storageId": "eyJidWNrZXQiOiJjb250cmFjdC1tYW5hZ2VyLWRvY3Vt",
+      "url": "https://s3.amazonaws.com/id-del-documento",
+      "size": 56628,
+      "sha256": "b4b488d71896341ff6520881e56da7e5cfe41a603de5f16eef68114c2c9acda3"
+    }
+  ]
+}
+```
+
+Este API genera en base a cada documento de una plantilla, otros documentos pdf que incluyen el valor de cada campo enviado.
+
+### HTTP Request
+
+`POST /contract-manager-document-templates/api/create-filled-files/{templateId}`
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+Authorization | your-api-token
+Content-Type | application/json
+
+### Body
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+fieldValues | [FieldValues](#propiedades-de-fieldvalues)[] | Lista de valores por cada campo
+
+### Propiedades de FieldValues
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+name | string | Id de [DocumentTemplateField](#propiedades-de-documenttemplatefield)
+value | string | Valor del campo
+
+### Response body item
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+id | string | Id del archivo dentro de la plantilla
+storageId | string | Id de almacenamiento. Se puede utilizar para [crear contratos](#crear-un-contrato).
+url | string | Url para descargar el documento generado
+size | number | Tamaño en bytes del documento generado
+sha256 | string | Hash sha256 del documento generado
 
 # Webhooks
 
