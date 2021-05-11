@@ -1090,24 +1090,24 @@ organizational | boolean | Sí | `true` si se quiere las plantillas de documento
 
 ### Response body
 
-Atributo | Tipo | Opcional | Descripción
---------- | ----------- | ----------- | -----------
-templates | [TemplateItem](#response-body-templateitem) | No | Lista de plantillas de documento
-next | string | Sí | Envía este valor en `start` para obtener la siguiente porción de la lista. Si no se encuetra en la respuesta, entonces no quedan más items en la lista.
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+templates | [TemplateItem](#response-body-templateitem) | Lista de plantillas de documento
+next | string | `opcional` Envía este valor en `start` para obtener la siguiente porción de la lista. Si no se encuetra en la respuesta, entonces no quedan más items en la lista.
 
 
 ### Response body TemplateItem
 
-Atributo | Tipo | Opcional | Descripción
---------- | ----------- | ----------- | -----------
-templateId | string | No | El id de la plantilla de documento
-accountId | string | No | El id del usuario que creó la plantilla de documento
-name | string | No | El nombre de la plantilla de documento
-creatorEmail | string | No | El email del usuario que creó la plantilla de documento
-fileCount | number | No | Cantidad de archivos en la plantilla
-fieldCount | number | No | Cantidad de campos en la plantilla
-updatedAt | string | No | La fecha y hora de la última modificación en formato ISO
-createdAt | string | No | La fecha y hora de creación en formato ISO
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+templateId | string | El id de la plantilla de documento
+accountId | string | El id del usuario que creó la plantilla de documento
+name | string | El nombre de la plantilla de documento
+creatorEmail | string | El email del usuario que creó la plantilla de documento
+fileCount | number | Cantidad de archivos en la plantilla
+fieldCount | number | Cantidad de campos en la plantilla
+updatedAt | string | La fecha y hora de la última modificación en formato ISO
+createdAt | string | La fecha y hora de creación en formato ISO
 
 ## Obtener plantilla de documento
 
@@ -1366,20 +1366,20 @@ fieldValues | [FieldValues](#propiedades-de-fieldvalues)[] | No | Lista de items
 
 ### Propiedades de FieldValues
 
-Atributo | Tipo | Opcional | Descripción
---------- | ----------- | ----------- | -----------
-name | string | No | Id que indica a qué [DocumentTemplateField](#propiedades-de-documenttemplatefield) de la plantilla corresponde `value`
-value | string | No | Valor del campo que es validado con las reglas de [DocumentTemplateField](#propiedades-de-documenttemplatefield)
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+name | string | Id que indica a qué [DocumentTemplateField](#propiedades-de-documenttemplatefield) de la plantilla corresponde `value`
+value | string | Valor del campo que es validado con las reglas de [DocumentTemplateField](#propiedades-de-documenttemplatefield)
 
 ### Response body item
 
-Atributo | Tipo | Opcional | Descripción
---------- | ----------- | ----------- | -----------
-id | string | No | Id del archivo dentro de la plantilla
-storageId | string | No | Id de almacenamiento. Se puede utilizar para [crear contratos](#crear-un-contrato).
-url | string | No | Url para descargar el documento generado
-size | number | No | Tamaño en bytes del documento generado
-sha256 | string | No | Hash sha256 del documento generado
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+id | string | Id del archivo dentro de la plantilla
+storageId | string | Id de almacenamiento. Se puede utilizar para [crear contratos](#crear-un-contrato).
+url | string | Url para descargar el documento generado
+size | number | Tamaño en bytes del documento generado
+sha256 | string | Hash sha256 del documento generado
 
 # Webhooks
 
