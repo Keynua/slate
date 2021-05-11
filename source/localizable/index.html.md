@@ -886,7 +886,9 @@ value | object | Dentro del objeto value debes enviar el linkId obtenido en el p
 
 # Plantillas de documento
 
-Permite listar y obtener plantillas de documentos para, a partir de estos, generar documentos pdf.
+Permite listar, obtener y rellenar plantillas de documentos PDF.
+
+<aside class="notice">Estas plantillas son creadas únicamente desde el Web App. Si quieres usar esta funcionalidad ponte en contacto con el equipo de soporte de Keynua.</aside>
 
 ## Propiedades de una plantilla de documento
 
@@ -949,7 +951,6 @@ placeholder | string | Sí | Texto adicional
 {
   "url": "https://s3.amazonaws.com/48101c38-f770-4ea8-88ab-25",
   "id": "b5d1b359-3736-424b-b83d-f0d0da910a89",
-  "annotations": FileAnnotation[],
   "name": "isotype_stamp.pdf",
   "size": 3708
 }
@@ -959,114 +960,9 @@ Atributo | Tipo  | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
 url | string | No | Url que contiene el documento original
 id | string | No | Id del archivo
-annotations | [FileAnnotation](#propiedades-de-fileannotation)[] | No | Información de la anotación creada en el documento pdf
 name | boolean | No | Nombre del archivo
 size | number | No | Tamaño del archivo
 
-
-### Propiedades de FileAnnotation
-
-```json
-{
-  "extAnnotationObject": {
-    ...
-  },
-  "fieldId": "email-0"
-}
-```
-
-Atributo | Tipo  | Opcional | Descripción
---------- | ----------- | ----------- | -----------
-extAnnotationObject | object | No | Objeto que contiene información de la anotación
-fieldId | string | No | Id del campo relacionado a esta anotación
-
-
-## Obtener plantilla de documento
-
-```ruby
-require "uri"
-require "net/http"
-
-url = URI("https://api.keynua.com/contract-manager-document-templates/api/{templateId}")
-
-https = Net::HTTP.new(url.host, url.port)
-https.use_ssl = true
-
-request = Net::HTTP::Get.new(url)
-request["x-api-key"] = 'YOUR-API-KEY-HERE'
-request["authorization"] = 'YOUR-API-TOKEN-HERE'
-
-response = https.request(request)
-puts response.read_body
-```
-
-```python
-import http.client
-
-conn = http.client.HTTPSConnection("api.keynua.com")
-headers = {
-  'x-api-key': "YOUR-API-KEY-HERE",
-  'authorization': "YOUR-API-TOKEN-HERE",
-}
-conn.request("GET", "/contract-manager-document-templates/api/{templateId}", payload, headers)
-res = conn.getresponse()
-data = res.read()
-print(data.decode("utf-8"))
-```
-
-```shell
-curl --location --request GET 'https://api.keynua.com/contract-manager-document-templates/api/{templateId}' \
-  --header 'x-api-key: YOUR-API-KEY-HERE' \
-  --header 'authorization: YOUR-API-TOKEN-HERE'
-```
-
-```javascript
-const https = require("https");
-
-var options = {
-  'method': 'GET',
-  'hostname': 'api.dev.keynua.com',
-  'path': '/contract-manager-document-templates/api/{templateId}',
-  'headers': {
-    'x-api-key': 'YOUR-API-KEY-HERE',
-    'authorization': 'YOUR-API-TOKEN-HERE'
-  },
-};
-
-var req = https.request(options, function (res) {
-  var chunks = [];
-
-  res.on("data", function (chunk) {
-    chunks.push(chunk);
-  });
-
-  res.on("end", function (chunk) {
-    var body = Buffer.concat(chunks);
-    console.log(body.toString());
-  });
-
-  res.on("error", function (error) {
-    console.error(error);
-  });
-});
-
-req.end();
-```
-
-> Si la plantilla fue obtenida satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [Plantilla de documento](#propiedades-de-una-plantilla-de-documento)
-
-Obtener una plantilla de documento.
-
-### HTTP Request
-
-`GET /contract-manager-document-templates/api/{templateId}`
-
-### Headers
-
-Key | Value
---------- | -----------
-x-api-key | your-api-key
-Authorization | your-api-token
 
 ## Listar plantillas de documento
 
@@ -1165,11 +1061,12 @@ req.end();
       "updatedAt": "2021-02-11T21:18:18.463Z",
       "createdAt": "2021-02-11T21:18:18.463Z"
     }
-  ]
+  ],
+  "next": "eyJwayI6IjQ4MTAxYzM4LWY3NzAtNGVhOC04OGFiLTI1OGU2NzJkODhiZDp0ZW1wbGF0ZSIsInJrIjoiMjAyMS0wMi0wMlQyMToxMzozNy42NDhaNGE3YWZiZDEtMTQ0Yi00YmRmLWI1NTUtOWFlZTQ2MDMxZGE1In0="
 }
 ```
 
-Obtener una plantilla de documento.
+Permite obtener una lista de las plantillas de documento que pertenecen al usuario o a su organización.
 
 ### HTTP Request
 
@@ -1181,6 +1078,23 @@ Key | Value
 --------- | -----------
 x-api-key | your-api-key
 Authorization | your-api-token
+
+### Search params
+
+Nombre | Tipo | Descripción
+--------- | ----------- | -----------
+limit | string | La cantidad máxima de items que el api debe devolver. Si no se envía, el api devuelve todos.
+start | string | Sirve para obtener la siguiente porción de items en la lista. Recibe el valor de next que se obtiene en la respuesta.
+organizational | boolean | `true` si se quiere las plantillas de documento de la organización
+
+
+### Response body
+
+Atributo | Tipo | Descripción
+--------- | ----------- | ----------- | -----------
+templates | [TemplateItem](#response-body-template-item) | Lista de plantillas de documento
+next | string | Envía este valor en `start` para obtener la siguiente porción de la lista. Si no se encuetra en la respuesta, entonces no quedan más items en la lista.
+
 
 ### Response body template item
 
@@ -1194,6 +1108,93 @@ fileCount | number | Cantidad de archivos en la plantilla
 fieldCount | number | Cantidad de campos en la plantilla
 updatedAt | string | La fecha y hora de la última modificación en formato ISO
 createdAt | string | La fecha y hora de creación en formato ISO
+
+## Obtener plantilla de documento
+
+```ruby
+require "uri"
+require "net/http"
+
+url = URI("https://api.keynua.com/contract-manager-document-templates/api/{templateId}")
+
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Get.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+headers = {
+  'x-api-key': "YOUR-API-KEY-HERE",
+  'authorization': "YOUR-API-TOKEN-HERE",
+}
+conn.request("GET", "/contract-manager-document-templates/api/{templateId}", payload, headers)
+res = conn.getresponse()
+data = res.read()
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --location --request GET 'https://api.keynua.com/contract-manager-document-templates/api/{templateId}' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE'
+```
+
+```javascript
+const https = require("https");
+
+var options = {
+  'method': 'GET',
+  'hostname': 'api.dev.keynua.com',
+  'path': '/contract-manager-document-templates/api/{templateId}',
+  'headers': {
+    'x-api-key': 'YOUR-API-KEY-HERE',
+    'authorization': 'YOUR-API-TOKEN-HERE'
+  },
+};
+
+var req = https.request(options, function (res) {
+  var chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function (chunk) {
+    var body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+
+  res.on("error", function (error) {
+    console.error(error);
+  });
+});
+
+req.end();
+```
+
+> Si la plantilla fue obtenida satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [Plantilla de documento](#propiedades-de-una-plantilla-de-documento)
+
+Permite obtener una plantilla de documento.
+
+### HTTP Request
+
+`GET /contract-manager-document-templates/api/{templateId}`
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+Authorization | your-api-token
 
 ## Generar documentos rellenados
 
@@ -1343,7 +1344,7 @@ req.end();
 }
 ```
 
-Este API genera en base a cada documento de una plantilla, otros documentos pdf que incluyen el valor de cada campo enviado. La plantilla debe ser creada desde app.keynua.com.
+Este API genera en base a cada documento de una plantilla, otros documentos pdf que incluyen el valor de cada campo enviado.
 
 ### HTTP Request
 
