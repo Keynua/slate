@@ -433,7 +433,7 @@ Producción: https://api.keynua.com
 <td>API Key para acceder al servicio.</td>
 </tr>
 <tr>
-<td>Authorization</td>
+<td>authorization</td>
 <td>Token único de autorización.</td>
 </tr>
 </tbody></table>
@@ -1097,7 +1097,7 @@ Producción: https://api.keynua.com
 <td>your-api-key</td>
 </tr>
 <tr>
-<td>Authorization</td>
+<td>authorization</td>
 <td>your-api-token</td>
 </tr>
 <tr>
@@ -1285,7 +1285,7 @@ Producción: https://api.keynua.com
 
 <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
 </code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> DELETE <span class="se">\</span>
-  <span class="nt">--url</span> https://api.dev.keynua.com/contracts/v1/<span class="o">{</span>contractId<span class="o">}</span> <span class="se">\</span>
+  <span class="nt">--url</span> https://api.stg.keynua.com/contracts/v1/<span class="o">{</span>contractId<span class="o">}</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span> <span class="se">\</span>
 </code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">https</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">https</span><span class="dl">"</span><span class="p">);</span>
@@ -1971,7 +1971,7 @@ Producción: https://api.keynua.com
 <h2 id='listar-plantillas-de-documento'>Listar plantillas de documento</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.keynua.com/contract-manager-document-templates/api"</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.stg.keynua.com/contract-manager-document-templates/api"</span><span class="p">)</span>
 
 <span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
@@ -1984,7 +1984,7 @@ Producción: https://api.keynua.com
 <span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
 </code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.keynua.com"</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.stg.keynua.com"</span><span class="p">)</span>
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s">'x-api-key'</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
   <span class="s">'authorization'</span><span class="p">:</span> <span class="s">"YOUR-API-TOKEN-HERE"</span><span class="p">,</span>
@@ -1993,14 +1993,14 @@ Producción: https://api.keynua.com
 <span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
 <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
-</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/contract-manager-document-templates/api'</span> <span class="se">\</span>
+</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.stg.keynua.com/contract-manager-document-templates/api'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span>
 </code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">https</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">https</span><span class="dl">"</span><span class="p">);</span>
 
 <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
   <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">,</span>
-  <span class="dl">'</span><span class="s1">hostname</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">api.dev.keynua.com</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">hostname</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">api.stg.keynua.com</span><span class="dl">'</span><span class="p">,</span>
   <span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">/contract-manager-document-templates/api</span><span class="dl">'</span><span class="p">,</span>
   <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">'</span><span class="s1">x-api-key</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">YOUR-API-KEY-HERE</span><span class="dl">'</span><span class="p">,</span>
@@ -2071,7 +2071,7 @@ Producción: https://api.keynua.com
 <td>your-api-key</td>
 </tr>
 <tr>
-<td>Authorization</td>
+<td>authorization</td>
 <td>your-api-token</td>
 </tr>
 </tbody></table>
@@ -2174,7 +2174,7 @@ Producción: https://api.keynua.com
 <h2 id='obtener-plantilla-de-documento'>Obtener plantilla de documento</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.keynua.com/contract-manager-document-templates/api/{templateId}"</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.stg.keynua.com/contract-manager-document-templates/api/{templateId}"</span><span class="p">)</span>
 
 <span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
@@ -2187,7 +2187,7 @@ Producción: https://api.keynua.com
 <span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
 </code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.keynua.com"</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.stg.keynua.com"</span><span class="p">)</span>
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s">'x-api-key'</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
   <span class="s">'authorization'</span><span class="p">:</span> <span class="s">"YOUR-API-TOKEN-HERE"</span><span class="p">,</span>
@@ -2196,7 +2196,7 @@ Producción: https://api.keynua.com
 <span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
 <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
-</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/contract-manager-document-templates/api/{templateId}'</span> <span class="se">\</span>
+</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.stg.keynua.com/contract-manager-document-templates/api/{templateId}'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span>
 </code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">https</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">https</span><span class="dl">"</span><span class="p">);</span>
@@ -2249,7 +2249,7 @@ Producción: https://api.keynua.com
 <td>your-api-key</td>
 </tr>
 <tr>
-<td>Authorization</td>
+<td>authorization</td>
 <td>your-api-token</td>
 </tr>
 </tbody></table>
@@ -2257,7 +2257,7 @@ Producción: https://api.keynua.com
 <span class="nb">require</span> <span class="s1">'net/http'</span>
 <span class="nb">require</span> <span class="s1">'openssl'</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId}"</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.stg.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId}"</span><span class="p">)</span>
 
 <span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
@@ -2275,7 +2275,7 @@ Producción: https://api.keynua.com
 </code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
 <span class="kn">import</span> <span class="nn">json</span>
 
-<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.keynua.com"</span><span class="p">)</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.stg.keynua.com"</span><span class="p">)</span>
 
 <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">({</span>
   <span class="s">"fieldValues"</span><span class="p">:</span> <span class="p">[</span>
@@ -2302,7 +2302,7 @@ Producción: https://api.keynua.com
 <span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
 
 <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
-</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId} \
+</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.stg.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId} \
   --header '</span>x-api-key: YOUR-API-KEY-HERE<span class="s1">' \
   --header '</span>authorization: YOUR-API-TOKEN-HERE<span class="s1">'
   --header '</span>Content-Type: application/json<span class="s1">' \
@@ -2322,7 +2322,7 @@ Producción: https://api.keynua.com
 
 <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
   <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span>
-  <span class="na">hostname</span><span class="p">:</span> <span class="dl">'</span><span class="s1">api.keynua.com</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">hostname</span><span class="p">:</span> <span class="dl">'</span><span class="s1">api.stg.keynua.com</span><span class="dl">'</span><span class="p">,</span>
   <span class="na">path</span><span class="p">:</span> <span class="dl">'</span><span class="s1">/contract-manager-document-templates/api/create-filled-files/{templateId</span><span class="dl">'</span><span class="p">,</span>
   <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-KEY-HERE</span><span class="dl">"</span><span class="p">,</span>
@@ -2402,7 +2402,7 @@ Producción: https://api.keynua.com
 <td>your-api-key</td>
 </tr>
 <tr>
-<td>Authorization</td>
+<td>authorization</td>
 <td>your-api-token</td>
 </tr>
 <tr>
