@@ -63,7 +63,7 @@ Keynua utiliza **API Keys** y **Authorization tokens** para acceder al API. Una 
 Header | Description
 --------- | -----------
 x-api-key | API Key para acceder al servicio.
-Authorization | Token único de autorización.
+authorization | Token único de autorización.
 
 <aside class="notice">Si ya estás listo para integrar en producción, por favor contacta al equipo de <code>Keynua</code></aside>
 
@@ -419,7 +419,7 @@ req.end();
 Key | Value
 --------- | -----------
 x-api-key | your-api-key
-Authorization | your-api-token
+authorization | your-api-token
 Content-Type | application/json
 
 ### Body
@@ -570,7 +570,7 @@ print(data.decode("utf-8"))
 
 ```shell
 curl --request DELETE \
-  --url https://api.dev.keynua.com/contracts/v1/{contractId} \
+  --url https://api.stg.keynua.com/contracts/v1/{contractId} \
   --header 'x-api-key: YOUR-API-KEY-HERE' \
   --header 'authorization: YOUR-API-TOKEN-HERE' \
 ```
@@ -970,7 +970,7 @@ size | number | No | Tamaño del archivo
 require "uri"
 require "net/http"
 
-url = URI("https://api.keynua.com/contract-manager-document-templates/api")
+url = URI("https://api.stg.keynua.com/contract-manager-document-templates/api")
 
 https = Net::HTTP.new(url.host, url.port)
 https.use_ssl = true
@@ -986,7 +986,7 @@ puts response.read_body
 ```python
 import http.client
 
-conn = http.client.HTTPSConnection("api.keynua.com")
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
 headers = {
   'x-api-key': "YOUR-API-KEY-HERE",
   'authorization': "YOUR-API-TOKEN-HERE",
@@ -998,7 +998,7 @@ print(data.decode("utf-8"))
 ```
 
 ```shell
-curl --location --request GET 'https://api.keynua.com/contract-manager-document-templates/api' \
+curl --location --request GET 'https://api.stg.keynua.com/contract-manager-document-templates/api' \
   --header 'x-api-key: YOUR-API-KEY-HERE' \
   --header 'authorization: YOUR-API-TOKEN-HERE'
 ```
@@ -1008,7 +1008,7 @@ const https = require("https");
 
 var options = {
   'method': 'GET',
-  'hostname': 'api.dev.keynua.com',
+  'hostname': 'api.stg.keynua.com',
   'path': '/contract-manager-document-templates/api',
   'headers': {
     'x-api-key': 'YOUR-API-KEY-HERE',
@@ -1077,7 +1077,7 @@ Permite obtener una lista de las plantillas de documento que pertenecen al usuar
 Key | Value
 --------- | -----------
 x-api-key | your-api-key
-Authorization | your-api-token
+authorization | your-api-token
 
 ### Search params
 
@@ -1115,7 +1115,7 @@ createdAt | string | La fecha y hora de creación en formato ISO
 require "uri"
 require "net/http"
 
-url = URI("https://api.keynua.com/contract-manager-document-templates/api/{templateId}")
+url = URI("https://api.stg.keynua.com/contract-manager-document-templates/api/{templateId}")
 
 https = Net::HTTP.new(url.host, url.port)
 https.use_ssl = true
@@ -1131,7 +1131,7 @@ puts response.read_body
 ```python
 import http.client
 
-conn = http.client.HTTPSConnection("api.keynua.com")
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
 headers = {
   'x-api-key': "YOUR-API-KEY-HERE",
   'authorization': "YOUR-API-TOKEN-HERE",
@@ -1143,7 +1143,7 @@ print(data.decode("utf-8"))
 ```
 
 ```shell
-curl --location --request GET 'https://api.keynua.com/contract-manager-document-templates/api/{templateId}' \
+curl --location --request GET 'https://api.stg.keynua.com/contract-manager-document-templates/api/{templateId}' \
   --header 'x-api-key: YOUR-API-KEY-HERE' \
   --header 'authorization: YOUR-API-TOKEN-HERE'
 ```
@@ -1194,7 +1194,7 @@ Permite obtener una plantilla de documento.
 Key | Value
 --------- | -----------
 x-api-key | your-api-key
-Authorization | your-api-token
+authorization | your-api-token
 
 ## Generar documentos rellenados
 
@@ -1203,7 +1203,7 @@ require 'uri'
 require 'net/http'
 require 'openssl'
 
-url = URI("https://api.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId}")
+url = URI("https://api.stg.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId}")
 
 http = Net::HTTP.new(url.host, url.port)
 http.use_ssl = true
@@ -1224,7 +1224,7 @@ puts response.read_body
 import http.client
 import json
 
-conn = http.client.HTTPSConnection("api.keynua.com")
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
 
 payload = json.dumps({
   "fieldValues": [
@@ -1254,7 +1254,7 @@ print(data.decode("utf-8"))
 ```
 
 ```shell
-curl --location --request POST 'https://api.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId} \
+curl --location --request POST 'https://api.stg.keynua.com/contract-manager-document-templates/api/create-filled-files/{templateId} \
   --header 'x-api-key: YOUR-API-KEY-HERE' \
   --header 'authorization: YOUR-API-TOKEN-HERE'
   --header 'Content-Type: application/json' \
@@ -1277,7 +1277,7 @@ const https = require("https");
 
 var options = {
   method: 'POST',
-  hostname: 'api.keynua.com',
+  hostname: 'api.stg.keynua.com',
   path: '/contract-manager-document-templates/api/create-filled-files/{templateId',
   headers: {
     "x-api-key": "YOUR-API-KEY-HERE",
@@ -1355,7 +1355,7 @@ En base a cada documento de una plantilla, este API genera otros documentos pdf 
 Key | Value
 --------- | -----------
 x-api-key | your-api-key
-Authorization | your-api-token
+authorization | your-api-token
 Content-Type | application/json
 
 ### Body
