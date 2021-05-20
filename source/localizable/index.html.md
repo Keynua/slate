@@ -884,6 +884,554 @@ value | object | Dentro del objeto value debes enviar el linkId obtenido en el p
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
 
+# Verificación de identidad
+
+Permite crear, listar y obtener verificaciones de identidad.
+
+## Propiedades de una verificación de identidad
+
+```json
+{
+  "userRealName": "JOHN, DOE",
+  "status": "done",
+  "finishedAt": "2021-04-26T23:03:50.272Z",
+  "language": "es",
+  "reference": "123456789",
+  "expirationInHours": 0,
+  "startedAt": "2021-04-26T23:02:08.500Z",
+  "contractId": "6afe9bb0-a6e3-11eb-9a2c-11fc3348624ae1",
+  "documentNumber": "123456789",
+  "id": "88b93325-82c4-40aa-9606-f49c757382ae",
+  "accountId": "48101c38-f770-4ea8-88ab-258e672d88bd",
+  "userEmail": "user_email@gmail.com",
+  "countryCode": "pe",
+  "userToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODYyNGFlMS",
+  "createdAt": "2021-04-26T23:02:02.309Z",
+  "accountEmail": "user@keynua.com",
+  "organizationId": "48101c38-f770-4ea8-88ab-258e672d88bd",
+  "updatedAt": "2021-05-18T22:40:05.851Z",
+  "userFullName": null,
+  "accountName": "Patrick Star",
+  "timezone": "America/Lima",
+  "title": "Identification 123456789",
+  "items": ContractItem[]
+}
+```
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+userRealName | string | No | Nombre completo del usuario
+status | string | No | `pending`, `pending_input`, `pending_approval`, `working`, `error`, `done`, `deleted`, o `expired`
+finishedAt | string | Sí | Fecha y hora de finalización en formato ISO
+language | string | No | Lenguaje con el cual se completará el proceso de identificación
+reference | string | Sí | Campo libre. Útil para realizar busquedas.
+expirationInHours | string | Sí | En cuantas horas luego de la creación, la verificación expirará. `0` no expira.
+startedAt | string | Sí | Fecha y hora en formato ISO del momento en que el verificante ingresa todos sus datos.
+contractId | string | No | Id interno
+documentNumber | string | No | Número de documento nacional de identificación
+id | string | No | Identificador único de la verificación
+accountId | string | No | Id de la cuenta que creó la verificación
+userEmail | string | Sí | Email del verificante en el cual recibirá el link de inicio del proceso
+userPhone | string | Sí | Telefono celular del verificante en el cual recibirá el link de inicio del proceso
+countryCode | string | No | Código del país en el que se realiza la verificación
+userToken | string | No | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: `https://sign.keynua.com/index.html?token={token}`
+createdAt | string | No | Fecha y hora de creación en formato ISO
+accountEmail | string | No | Email de la cuenta que creó la verificación
+organizationId | string | Sí | Id de la organización en la que se creó la verificación 
+updatedAt | string | No | Última fecha y hora en formato ISO en la que se realizó alguna modificación
+userFullName | string | Sí | Nombre completo de la persona
+accountName | string | No | Nombre de la cuenta que creó la verificación
+timezone | string | No | Huso horario  utilizado en notificaciones y mensajes
+title | string | No | Título de la verificación
+items | [ContractItem](#items-del-contrato)[] | No | Lista de pasos que sigue la verificación.
+
+## Crear verificación de identidad
+
+```shell
+curl --location --request PUT 'https://api.keynua.com/identity-verification/v1' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "documentNumber": "12345678",
+    "userPhone": "51123456789",
+    "userFullName": "Patrick Star",
+    "title": "Identification 12345678",
+    "type": "video"
+  }'
+```
+
+```ruby
+require "uri"
+require "net/http"
+
+url = URI("https://api.dev.keynua.com/identity-verification/v1")
+
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Put.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+request["Content-Type"] = "application/json"
+request.body = "{\n  \"documentNumber\": \"12345678\",\n  \"userPhone\": \"51123456789\",\n  \"userFullName\": \"Patrick Star\",\n  \"title\": \"Identification 12345678\",\n  \"type\": \"video\"\n}"
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+import json
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+payload = json.dumps({
+    "documentNumber": "12345678",
+    "userPhone": "51123456789",
+    "userFullName": "Patrick Star",
+    "title": "Identification 12345678",
+    "type": "video"
+})
+headers = {
+  'x-api-key': "YOUR-API-KEY-HERE",
+  'authorization': "YOUR-API-TOKEN-HERE",
+  'Content-Type': 'application/json'
+}
+conn.request("PUT", "/identity-verification/v1", payload, headers)
+res = conn.getresponse()
+data = res.read()
+print(data.decode("utf-8"))
+```
+
+```javascript
+const http = require("https");
+
+const options = {
+  "method": "PUT",
+  "hostname": "api.keynua.com",
+  "path": "/identity-verification/v1",
+  "headers": {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE",
+    "Content-Type": "application/json"
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+var postData = JSON.stringify({
+    "documentNumber": "12345678",
+    "userPhone": "51123456789",
+    "userFullName": "Patrick Star",
+    "title": "Identification 12345678",
+    "type": "video"
+});
+
+req.write(postData);
+
+req.end();
+```
+
+> Si la plantilla fue creada satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [verificación de identidad](#propiedades-de-una-verificacion-de-identidad).
+
+```json
+{
+  "userRealName": "JOHN, DOE",
+  "status": "done",
+  "finishedAt": "2021-04-26T23:03:50.272Z",
+  "language": "es",
+  "reference": "123456789",
+  "expirationInHours": 0,
+  "startedAt": "2021-04-26T23:02:08.500Z",
+  "contractId": "6afe9bb0-a6e3-11eb-9a2c-11fc3348624ae1",
+  "documentNumber": "123456789",
+  "id": "88b93325-82c4-40aa-9606-f49c757382ae",
+  "accountId": "48101c38-f770-4ea8-88ab-258e672d88bd",
+  "userEmail": "user_email@gmail.com",
+  "countryCode": "pe",
+  "userToken": "eyJ0eXAiOiJKV...9TstTqlChryW4mZGyAgHE9Y",
+  "createdAt": "2021-04-26T23:02:02.309Z",
+  "accountEmail": "account_email@keynua.com",
+  "organizationId": "48101c38-f770-4ea8-88ab-258e672d88bd",
+  "updatedAt": "2021-05-19T20:55:48.186Z",
+  "userFullName": null,
+  "accountName": "Patrick Star",
+  "timezone": "America/Lima",
+  "title": "Identification 123456789",
+  "items": [
+    {
+      "id": 0,
+      "version": 1,
+      "state": "success",
+      "userId": 0,
+      "reference": "signersemail",
+      "title": "Invitación de inicio de firma",
+      "type": "usernotifier",
+      "stageIndex": 0,
+      "value": {},
+      "allowsManualUpdate": false,
+      "allowsRetry": false,
+      "hideOnWebApp": false
+    },
+    {
+      "id": 1,
+      "version": 1,
+      "state": "success",
+      "userId": 0,
+      "reference": "terms",
+      "title": "Aceptación de Términos",
+      "type": "terms",
+      "stageIndex": 0,
+      "value": {
+        "termsAndConditionsUrl": "https://www.dev.keynua.com/legal/terms-and-conditions/",
+        "privacypolicyUrl": "https://www.dev.keynua.com/legal/privacy-policy/",
+        "viewedAt": "2021-04-26T23:03:13.928Z"
+      },
+      "allowsManualUpdate": false,
+      "allowsRetry": false,
+      "hideOnWebApp": false
+    },
+    ...
+  ]
+}
+```
+
+### HTTP Request
+
+`PUT /identity-verification/v1`
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+Authorization | your-api-token
+
+### Request body
+
+Nombre | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+title | string | No | Nombre que se le quiera dar a la verificación
+documentNumber | string | No | Número de documento nacional de identificación de la persona
+userFullName | string | Sí | Nombre completo de la persona
+userEmail | string | Sí | Email de la persona. Si se envía, no enviar el campo `userPhone` también.
+userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no enviar el campo `userEmail` también.
+reference | string | Sí | Campo útil para realizar busquedas entre verificaciones creadas
+type | string | Sí | `selfie` o `video`. `selfie` solo pide un selfie y valida esa imagen  con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video.
+
+### Response body
+
+[IdentityVerification](#propiedades-de-una-verificacion-de-identidad)
+
+## Listar verificaciones de identidad
+
+```shell
+curl --location --request GET 'https://api.keynua.com/identity-verification/v1/list' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE'
+```
+
+```ruby
+require "uri"
+require "net/http"
+
+url = URI("https://api.dev.keynua.com/identity-verification/v1/list")
+
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Get.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+headers = {
+  'x-api-key': "YOUR-API-KEY-HERE",
+  'authorization': "YOUR-API-TOKEN-HERE",
+}
+conn.request("GET", "/identity-verification/v1/list", None, headers)
+res = conn.getresponse()
+data = res.read()
+print(data.decode("utf-8"))
+```
+
+```javascript
+const http = require("https");
+
+const options = {
+  "method": "GET",
+  "hostname": "api.keynua.com",
+  "path": "/identity-verification/v1/list",
+  "headers": {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE"
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.end();
+```
+
+> Response
+
+```json
+{
+  "items": [
+    {
+      "id": "88b93325-82c4-40aa-9606-f49c757382ae",
+      "status": "done",
+      "accountEmail": "user@keynua.com",
+      "createdAt": "2021-04-26T23:02:02.309Z",
+      "documentNumber": "12345678",
+      "title": "Identification 70671142",
+      "userEmail": "user_email@gmail.com"
+    },
+    {
+      "id": "565b0132-ef7d-4a27-aa8c-f0f96a2d74b1",
+      "status": "done",
+      "accountEmail": "user@keynua.com",
+      "createdAt": "2021-04-24T00:10:50.237Z",
+      "documentNumber": "12345678",
+      "title": "Identification 123456789",
+      "userPhone": "51123456789"
+    }
+  ],
+  "next": "eyJhY2NvdW50SWQi...jIwMjEtMDQtMjRUMDA6MTA6NTAuMjM3WiJ9"
+}
+```
+
+Permite obtener una lista de verificaciones de identidad creadas.
+
+### HTTP Request
+
+`GET /identity-verification/v1/list` obtiene las de tu cuenta
+
+`GET /identity-verification/v1/list-org` obtiene las de tu organización
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+Authorization | your-api-token
+
+### Search params
+
+Nombre | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+startKey | string | Sí | Sirve para obtener la siguiente porción de items en la lista. Recibe el valor de `next` que se obtiene en la respuesta.
+startDate | string | Sí | Enviar necesariamente junto con `endDate` para listar las verificaciones dentro de un rango de fechas. Debe estar en formato ISO.
+endDate | string | Sí | Enviar necesariamente junto con `startDate` para listar las verificaciones dentro de un rango de fechas. Debe estar en formato ISO.
+limit | number | Sí | La cantidad máxima de items que el api debe devolver. Si no se envía, el api devuelve alrededor de 1 MB de datos.
+expanded | boolean | Sí | `true` si se quiere más detalle en cada item de la lista.
+
+### Response body
+
+Nombre | Tipo | Descripción
+--------- | ----------- | -----------
+items | [VerificationItem](#response-body-verificationitem)[] | Lista de verificaciones
+next | string | `Opcional` Envía este valor en `startKey` para obtener la siguiente porción de la lista. Si no se encuentra en la respuesta, entonces no quedan más items en la lista.
+
+### Response body VerificationItem
+
+Nombre | Tipo | Requiere expanded | Descripción
+--------- | ----------- | ----------- | -----------
+id | string | No | Identificador único de la verificación
+status | string | No | `pending`, `pending_input`, `pending_approval`, `working`, `error`, `done`, `deleted`, o `expired`
+accountEmail | string | No | Email de la cuenta que creó la verificación
+createdAt | string | No | Fecha y hora de creación en formato ISO
+documentNumber | string | No | Número de documento
+title | string | No | Título de la verificación
+userEmail | string | No | `Opcional` Email del verificante en el cual recibirá el link de inicio del proceso
+userPhone | string | No | `Opcional` Telefono celular del verificante en el cual recibirá el link de inicio del proceso
+accountId | string | Sí | Id de la cuenta que creó la verificación
+organizationId | string | Sí | Id de la organización en la que se creó la verificación
+countryCode | string | Sí | Código del país en el que realiza la verificación
+language | string | Sí | Lenguaje con el cual se completará el proceso de identificación
+expirationInHours | string | Sí | En cuantas horas luego de la creación la verificación expirará. `0` no expira.
+startedAt | string | Sí | Fecha y hora en formato ISO del momento en que el verificante ingresa todos sus datos
+userFullName | string | Sí | Nombre completo de la persona
+accountName | string | Sí | Nombre de la cuenta que creó la verificación
+
+## Obtener verificación de identidad
+
+```shell
+curl --location --request GET 'https://api.keynua.com/identity-verification/v1/{verification_id}' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE'
+```
+
+```ruby
+require "uri"
+require "net/http"
+
+url = URI("https://api.dev.keynua.com/identity-verification/v1/{verification_id}")
+
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Get.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+headers = {
+  'x-api-key': "YOUR-API-KEY-HERE",
+  'authorization': "YOUR-API-TOKEN-HERE",
+}
+conn.request("GET", "/identity-verification/v1/{verification_id}", None, headers)
+res = conn.getresponse()
+data = res.read()
+print(data.decode("utf-8"))
+```
+
+```javascript
+const http = require("https");
+
+const options = {
+  "method": "GET",
+  "hostname": "api.keynua.com",
+  "path": "/identity-verification/v1/{verification_id}",
+  "headers": {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE"
+  }
+};
+
+const req = http.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.end();
+```
+
+> Si la plantilla fue obtenida satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [verificación de identidad](#propiedades-de-una-verificacion-de-identidad).
+
+```json
+{
+  "userRealName": "JOHN, DOE",
+  "status": "done",
+  "finishedAt": "2021-04-26T23:03:50.272Z",
+  "language": "es",
+  "reference": "123456789",
+  "expirationInHours": 0,
+  "startedAt": "2021-04-26T23:02:08.500Z",
+  "contractId": "6afe9bb0-a6e3-11eb-9a2c-11fc3348624ae1",
+  "documentNumber": "123456789",
+  "id": "88b93325-82c4-40aa-9606-f49c757382ae",
+  "accountId": "48101c38-f770-4ea8-88ab-258e672d88bd",
+  "userEmail": "user_email@gmail.com",
+  "countryCode": "pe",
+  "userToken": "eyJ0eXAiOiJKV...9TstTqlChryW4mZGyAgHE9Y",
+  "createdAt": "2021-04-26T23:02:02.309Z",
+  "accountEmail": "account_email@keynua.com",
+  "organizationId": "48101c38-f770-4ea8-88ab-258e672d88bd",
+  "updatedAt": "2021-05-19T20:55:48.186Z",
+  "userFullName": null,
+  "accountName": "Patrick Star",
+  "timezone": "America/Lima",
+  "title": "Identification 123456789",
+  "items": [
+    {
+      "id": 0,
+      "version": 1,
+      "state": "success",
+      "userId": 0,
+      "reference": "signersemail",
+      "title": "Invitación de inicio de firma",
+      "type": "usernotifier",
+      "stageIndex": 0,
+      "value": {},
+      "allowsManualUpdate": false,
+      "allowsRetry": false,
+      "hideOnWebApp": false
+    },
+    {
+      "id": 1,
+      "version": 1,
+      "state": "success",
+      "userId": 0,
+      "reference": "terms",
+      "title": "Aceptación de Términos",
+      "type": "terms",
+      "stageIndex": 0,
+      "value": {
+        "termsAndConditionsUrl": "https://www.dev.keynua.com/legal/terms-and-conditions/",
+        "privacypolicyUrl": "https://www.dev.keynua.com/legal/privacy-policy/",
+        "viewedAt": "2021-04-26T23:03:13.928Z"
+      },
+      "allowsManualUpdate": false,
+      "allowsRetry": false,
+      "hideOnWebApp": false
+    },
+    ...
+  ]
+}
+```
+
+Permite obtener una verificación de identidad
+
+### HTTP Request
+
+`GET /identity-verification/v1/{verification_id}`
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+Authorization | your-api-token
+
+### Response body
+
+[IdentityVerification](#propiedades-de-una-verificacion-de-identidad)
+
 # Plantillas de documento
 
 Permite listar, obtener y rellenar plantillas de documentos PDF.
@@ -962,7 +1510,6 @@ url | string | No | Url que contiene el documento original
 id | string | No | Id del archivo
 name | boolean | No | Nombre del archivo
 size | number | No | Tamaño del archivo
-
 
 ## Listar plantillas de documento
 
@@ -1083,7 +1630,7 @@ authorization | your-api-token
 
 Nombre | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
-limit | string | Sí | La cantidad máxima de items que el api debe devolver. Si no se envía, el api devuelve todos.
+limit | number | Sí | La cantidad máxima de items que el api debe devolver. Si no se envía, el api devuelve todos.
 start | string | Sí | Sirve para obtener la siguiente porción de items en la lista. Recibe el valor de `next` que se obtiene en la respuesta.
 organizational | boolean | Sí | `true` si se quiere las plantillas de documento de la organización
 
@@ -1093,7 +1640,7 @@ organizational | boolean | Sí | `true` si se quiere las plantillas de documento
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 templates | [TemplateItem](#response-body-templateitem) | Lista de plantillas de documento
-next | string | `opcional` Envía este valor en `start` para obtener la siguiente porción de la lista. Si no se encuetra en la respuesta, entonces no quedan más items en la lista.
+next | string | `opcional` Envía este valor en `start` para obtener la siguiente porción de la lista. Si no se encuentra en la respuesta, entonces no quedan más items en la lista.
 
 
 ### Response body TemplateItem
