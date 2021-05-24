@@ -2188,7 +2188,7 @@ documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook
 
 ### Propiedades de ContractItemUpdated
 
-> Ejemplo de Body de contrato
+> Ejemplo de Body
 
 ```json
 {
