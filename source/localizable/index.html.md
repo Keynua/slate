@@ -21,7 +21,7 @@ code_clipboard: true
 
 # Introducción
 
-> La URL base de nuestra API es distintia por ambiente:
+> La URL base de nuestra API es distinta por ambiente:
 
 ```shell
 Pruebas: https://api.stg.keynua.com
@@ -230,7 +230,7 @@ Cavali permite crear un Pagaré y asociarlo a la firma de un contrato. Para crea
 
 <aside class="warning">Si quieres crear contratos con Pagarés electrónicos, debes contactar al equipo de soporte de Keynua</aside>
 
-El Pagaré esta compuesto por lo siguiente:
+El Pagaré está compuesto por lo siguiente:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
@@ -514,7 +514,7 @@ const req = http.request(options, function (res) {
 req.end();
 ```
 
-> Si el contrato fue obtenido satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
+> Si el contrato fue obtenido satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
 
 Este API obtiene un contrato específico
 
@@ -924,15 +924,15 @@ userRealName | string | No | Nombre completo del usuario
 status | string | No | `pending`, `pending_input`, `pending_approval`, `working`, `error`, `done`, `deleted`, o `expired`
 finishedAt | string | Sí | Fecha y hora de finalización en formato ISO
 language | string | No | Lenguaje con el cual se completará el proceso de identificación
-reference | string | Sí | Campo libre. Útil para realizar busquedas.
+reference | string | Sí | Campo libre. Útil para realizar búsquedas.
 expirationInHours | string | Sí | En cuantas horas luego de la creación, la verificación expirará. `0` no expira.
-startedAt | string | Sí | Fecha y hora en formato ISO del momento en que el verificante ingresa todos sus datos.
+startedAt | string | Sí | Fecha y hora en formato ISO del momento en que la verificación está lista para ser completada.
 contractId | string | No | Id interno
 documentNumber | string | No | Número de documento nacional de identificación
 id | string | No | Identificador único de la verificación
 accountId | string | No | Id de la cuenta que creó la verificación
 userEmail | string | Sí | Email del verificante en el cual recibirá el link de inicio del proceso
-userPhone | string | Sí | Telefono celular del verificante en el cual recibirá el link de inicio del proceso
+userPhone | string | Sí | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
 countryCode | string | No | Código del país en el que se realiza la verificación
 userToken | string | No | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: `https://sign.keynua.com/index.html?token={token}`
 createdAt | string | No | Fecha y hora de creación en formato ISO
@@ -1043,7 +1043,7 @@ req.write(postData);
 req.end();
 ```
 
-> Si la plantilla fue creada satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [verificación de identidad](#propiedades-de-una-verificacion-de-identidad).
+> Si la plantilla fue creada satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de [verificación de identidad](#propiedades-de-una-verificacion-de-identidad).
 
 ```json
 {
@@ -1127,7 +1127,7 @@ documentNumber | string | No | Número de documento nacional de identificación 
 userFullName | string | Sí | Nombre completo de la persona
 userEmail | string | Sí | Email de la persona. Si se envía, no enviar el campo `userPhone` también.
 userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no enviar el campo `userEmail` también.
-reference | string | Sí | Campo útil para realizar busquedas entre verificaciones creadas
+reference | string | Sí | Campo útil para realizar búsquedas entre verificaciones creadas
 type | string | Sí | `selfie` o `video`. `selfie` solo pide un selfie y valida esa imagen  con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video.
 
 ### Response body
@@ -1273,7 +1273,7 @@ createdAt | string | No | Fecha y hora de creación en formato ISO
 documentNumber | string | No | Número de documento
 title | string | No | Título de la verificación
 userEmail | string | No | `Opcional` Email del verificante en el cual recibirá el link de inicio del proceso
-userPhone | string | No | `Opcional` Telefono celular del verificante en el cual recibirá el link de inicio del proceso
+userPhone | string | No | `Opcional` Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
 accountId | string | Sí | Id de la cuenta que creó la verificación
 organizationId | string | Sí | Id de la organización en la que se creó la verificación
 countryCode | string | Sí | Código del país en el que realiza la verificación
@@ -1351,7 +1351,7 @@ const req = http.request(options, function (res) {
 req.end();
 ```
 
-> Si la plantilla fue obtenida satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [verificación de identidad](#propiedades-de-una-verificacion-de-identidad).
+> Si la plantilla fue obtenida satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de [verificación de identidad](#propiedades-de-una-verificacion-de-identidad).
 
 ```json
 {
@@ -1930,7 +1930,7 @@ sha256 | string | Hash sha256 del documento generado
 
 # Webhooks
 
-Los Webhooks permiten suscribirte a ciertos eventos del Contrato, por ejemplo cuando un contrato es creado, cuando ocurre un error en el proceso de firma o el contrato ha sido firmado satisfactoriamente. Cuando ocurre uno de estos eventos, enviaremos un request **HTTP POST** a la API configurada en el webhook.
+Los Webhooks permiten suscribirte a ciertos eventos de un Contrato o de una Verificación de identidad. Por ejemplo cuando un contrato es creado, cuando ocurre un error en el proceso de firma o el contrato ha sido firmado satisfactoriamente. Cuando ocurre uno de estos eventos, enviaremos un request **HTTP POST** a la API configurada en el webhook.
 
 ## Configuración del Webhook
 
@@ -1938,15 +1938,15 @@ Los Webhooks permiten suscribirte a ciertos eventos del Contrato, por ejemplo cu
 
 Una vez ya tengas una cuenta en el ambiente de pruebas de Keynua, puedes acceder a la sección [Developers](https://app.stg.keynua.com/developers) y configurar tu Webhook.
 
-Si tu API necesita unos headers específicos, puedes agregarlo en la configuración del Webhook y nosotros lo enviaremos en cada request.
+Si tu API necesita unos headers específicos, puedes agregarlo en la configuración del Webhook y nosotros lo enviaremos en cada request. También puedes desactivar las notificaciones de eventos para las verificaciones de identidad luego de crear el webhook.
 
-Entre los eventos que puedes escoger están:
+Los eventos son disparados por las mismas circunstancias para contratos y para verificación de identidad. Entre los eventos que puedes escoger están:
 
 Evento | Descripción
 --------- | -----------
-Created | Serás notificado cuando un contrato fue creado satisfactoriamente
-Started | Serás notificado cuando un contrato fue creado satisfactoriamente y está listo para ser firmado. **Recomendamos usar este evento en lugar del evento Created ya que este evento te notificará cuando el contrato está listo para comenzar el proceso de firma**
-Finished | Serás notificado cuando el contrato ha sido firmado por todos y finalizó correctamente
+Created | Serás notificado cuando un contrato o verificación de identidad fue creado satisfactoriamente
+Started | Serás notificado cuando un contrato o verificación de identidad fue creado satisfactoriamente y está listo para ser firmado o completado. **Recomendamos usar este evento en lugar del evento Created ya que este evento te notificará cuando el contrato está listo para comenzar el proceso de firma**
+Finished | Serás notificado cuando el contrato o verificación de identidad ha sido completado por todos y finalizó correctamente
 ItemWorking | Serás notificado cada vez que se comienza a procesar un [Item](#propiedades-de-un-item)
 ItemSuccess | Serás notificado cada vez que un [Item](#propiedades-de-un-item) ha concluído satisactoriamente
 ItemError | Serás notificado cada vez que ocurre un error en un [Item](#propiedades-de-un-item)
@@ -1981,8 +1981,8 @@ El request tendrá la siguiente estructura
 Key                 | Value
 ------------------ | -----------
 Content-Type | application/json
-x-keynua-webhook-sig | Firma del request para el control de la manipulacion de la peticion. Para más información revisa la sección de [Verificar Keynua Signature Webhook](#verificar-keynua-signature-webhook)
-x-keynua-webhook-ts | Numero de millisegundos desde UNIX Epoch (01/01/1970) cuando se envio el evento
+x-keynua-webhook-sig | Firma del request para el control de la manipulación de la petición. Para más información revisa la sección de [Verificar Keynua Signature Webhook](#verificar-keynua-signature-webhook)
+x-keynua-webhook-ts | Numero de milisegundos desde UNIX Epoch (01/01/1970) cuando se envió el evento
 x-keynua-webhook-type | Nombre del evento emitido
 
 ### Body
@@ -1997,7 +1997,7 @@ x-keynua-webhook-type | Nombre del evento emitido
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-type | string | Nombre del [tipo de evento](#tipos-de-eventos-webhook) emitido. Puede ser `ContractCreated`, `ContractStarted`, `ContractItemUpdated`, `ContractFinished`
+type | string | Nombre del [tipo de evento](#tipos-de-eventos-webhook) emitido. Puede ser `ContractCreated`, `ContractStarted`, `ContractItemUpdated`, `ContractFinished`, `IdentityVerificationCreated`, `IdentityVerificationStarted`, `IdentityVerificationFinished`, o `IdentityVerificationItemUpdated`
 accountId | string | Codigo de la cuenta propietaria del webhook
 payload | object | Datos del evento que varian segun el valor de [type](#tipos-de-eventos-webhook)
 
@@ -2006,12 +2006,12 @@ Keynua enviará un request a tu API configurado por cada Evento registrado. En e
 
 Evento del Webhook | Tipo de Evento
 --------| ----------
-Created | [ContractCreated](#propiedades-de-contractcreated)
-Started | [ContractStarted](#propiedades-de-contractstarted)
-Finished | [ContractFinished](#propiedades-de-contractfinished)
-ItemWorking | [ContractItemUpdated](#propiedades-de-contractitemupdated). Item.state `working`
-ItemSuccess | [ContractItemUpdated](#propiedades-de-contractitemupdated). Item.state `success`
-ItemError | [ContractItemUpdated](#propiedades-de-contractitemupdated). Item.state `error`
+Created | [ContractCreated](#propiedades-de-contractcreated) o [IdentityVerificationCreated](#propiedades-de-identityverificationcreated)
+Started | [ContractStarted](#propiedades-de-contractstarted) o [IdentityVerificationStarted](#propiedades-de-identityverificationstarted)
+Finished | [ContractFinished](#propiedades-de-contractfinished) o [IdentityVerificationFinished](#propiedades-de-identityverificationfinished)
+ItemWorking | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `working`
+ItemSuccess | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `success`
+ItemError | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `error`
 
 ### Propiedades de ContractCreated
 
@@ -2101,18 +2101,18 @@ Se emite cuando el contrato está listo para ser firmado.
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-contractId | string | Codigo del contrato
+contractId | string | Código del contrato
 reference | string | Referencia del contrato
 title | string | Titulo del contrato
 templateId | string | Identificador del Template
-description | string | Descripcion del contrato
-language | string | Idima del contrato
-createdAt | string | Fecha de creacion del contrato
+description | string | Descripción del contrato
+language | string | Idioma del contrato
+createdAt | string | Fecha de creación del contrato
 startedAt | string | Fecha de inicio del proceso de firma del contrato
 docCount | integer | Cantidad de documentos que tiene el contrato
 itemCount | integer | Cantidad de items que tiene el contrato
 userCount | integer | Cantidad de usuarios que tiene el contrato
-metadata | integer | Metada del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
+metadata | integer | Metadata del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
 longCode | string | Código largo del contrato
 shortCode | string | Código corto del contrato para facilitar su identificación
 users | array | Arreglo de [Usuarios](#propiedades-de-un-usuario-webhook) del Contrato
@@ -2168,19 +2168,19 @@ Se emite cuando el contrato ha sido firmado por todos y ha finalizado correctame
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-contractId | string | Codigo del contrato
+contractId | string | Código del contrato
 reference | string | Referencia del contrato
 title | string | Titulo del contrato
 templateId | string | Identificador del Template
-description | string | Descripcion del contrato
-language | string | Idima del contrato
-createdAt | string | Fecha de creacion del contrato
+description | string | Descripción del contrato
+language | string | Idioma del contrato
+createdAt | string | Fecha de creación del contrato
 startedAt | string | Fecha de inicio del proceso de firma del contrato
 finishedAt | string | Fecha de finalización del proceso de firma del contrato
 docCount | integer | Cantidad de documentos que tiene el contrato
 itemCount | integer | Cantidad de items que tiene el contrato
 userCount | integer | Cantidad de usuarios que tiene el contrato
-metadata | integer | Metada del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
+metadata | integer | Metadata del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
 longCode | string | Código largo del contrato
 shortCode | string | Código corto del contrato para facilitar su identificación
 users | array | Arreglo de [Usuarios](#propiedades-de-un-usuario-webhook) del Contrato
@@ -2188,7 +2188,7 @@ documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook
 
 ### Propiedades de ContractItemUpdated
 
-> Ejemplo de Body
+> Ejemplo de Body de contrato
 
 ```json
 {
@@ -2235,22 +2235,217 @@ Se emite cuando un elemento del contrato ha cambiado de estado. Los estados pued
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-contractId | string | Codigo del contrato
+contractId | string | Código del contrato
 reference | string | Referencia del contrato
 title | string | Titulo del contrato
 templateId | string | Identificador del Template
-description | string | Descripcion del contrato
-language | string | Idima del contrato
-createdAt | string | Fecha de creacion del contrato
+description | string | Descripción del contrato
+language | string | Idioma del contrato
+createdAt | string | Fecha de creación del contrato
 startedAt | string | Fecha de inicio del proceso de firma del contrato
 docCount | integer | Cantidad de documentos que tiene el contrato
 itemCount | integer | Cantidad de items que tiene el contrato
 userCount | integer | Cantidad de usuarios que tiene el contrato
-metadata | integer | Metada del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
+metadata | integer | Metadata del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
 longCode | string | Código largo del contrato
 shortCode | string | Código corto del contrato para facilitar su identificación
 item | object | [Item](#propiedades-de-un-item) del contrato que ha cambiado de estado
-user | object | [Usuario](#propiedades-de-un-usuario-webhook) al que pertence el elemento modificado. Si el valor es null el elemento le pertenece a todos los usuarios
+user | object | [Usuario](#propiedades-de-un-usuario-webhook) al que pertenece el elemento modificado. Si el valor es null el elemento le pertenece a todos los usuarios
+
+### Propiedades de IdentityVerificationCreated
+
+> Ejemplo de Body
+
+```json
+{
+	"type": "IdentityVerificationCreated",
+	"accountId": "00000000-0000-0000-0000-000000000000",
+	"payload": {
+        "language": "es",
+        "reference": "12345678",
+        "contractId": "00000000-0000-0000-0000-000000000000",
+        "documentNumber": "12345678",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "accountId": "00000000-0000-0000-0000-000000000000",
+        "createdAt": "2020-01-01T00:00:00.000Z",
+        "accountEmail": "account@mail.com",
+        "organizationId": "00000000-0000-0000-0000-000000000000",
+        "accountName": "Patrick Star",
+        "title": "Identificación de 12345678"
+	}
+}
+```
+
+Se emite cuando una verificación de identidad ha sido creada.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+language | string | Lenguaje con el cual se completará el proceso de identificación
+reference | string | Campo libre. Útil para realizar búsquedas.
+contractId | string | Id interno
+documentNumber | string | Número de documento nacional de identificación
+id | string | Identificador único de la verificación
+accountId | string | Id de la cuenta que creó la verificación
+createdAt | string | Fecha y hora de creación en formato ISO
+accountEmail | string | Email de la cuenta que creó la verificación
+organizationId | string | Id de la organización en la que se creó la verificación
+accountName | string | Nombre de la cuenta que creó la verificación
+title | string | Título de la verificación
+
+### Propiedades de IdentityVerificationStarted
+
+> Ejemplo de Body
+
+```json
+{
+	"type": "IdentityVerificationStarted",
+	"accountId": "00000000-0000-0000-0000-000000000000",
+	"payload": {
+        "language": "es",
+        "reference": "12345678",
+        "contractId": "00000000-0000-0000-0000-000000000000",
+        "documentNumber": "12345678",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "accountId": "00000000-0000-0000-0000-000000000000",
+        "createdAt": "2020-01-01T00:00:00.000Z",
+        "startedAt": "2020-01-01T00:00:00.000Z",
+        "accountEmail": "account@mail.com",
+        "organizationId": "00000000-0000-0000-0000-000000000000",
+        "accountName": "Patrick Star",
+        "title": "Identificación de 12345678",
+        "userEmail": "user@mail.com",
+        "userPhone": "23456789",
+        "userToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY"
+	}
+}
+```
+
+Se emite cuando una verificación de identidad está lista para ser completada.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+language | string | Lenguaje con el cual se completará el proceso de identificación
+reference | string | Campo libre. Útil para realizar búsquedas.
+contractId | string | Id interno
+documentNumber | string | Número de documento nacional de identificación
+id | string | Identificador único de la verificación
+accountId | string | Id de la cuenta que creó la verificación
+createdAt | string | Fecha y hora de creación en formato ISO
+startedAt | string | Fecha y hora en formato ISO del momento en que la verificación está lista para ser completada.
+accountEmail | string | Email de la cuenta que creó la verificación
+organizationId | string | Id de la organización en la que se creó la verificación
+accountName | string | Nombre de la cuenta que creó la verificación
+title | string | Título de la verificación
+userEmail | string | Email del verificante en el cual recibirá el link de inicio del proceso
+userPhone | string | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
+userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
+
+### Propiedades de IdentityVerificationFinished
+
+> Ejemplo de Body
+
+```json
+{
+	"type": "IdentityVerificationFinished",
+	"accountId": "00000000-0000-0000-0000-000000000000",
+	"payload": {
+        "language": "es",
+        "reference": "12345678",
+        "contractId": "00000000-0000-0000-0000-000000000000",
+        "documentNumber": "12345678",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "accountId": "00000000-0000-0000-0000-000000000000",
+        "createdAt": "2020-01-01T00:00:00.000Z",
+        "startedAt": "2020-01-01T00:00:00.000Z",
+        "accountEmail": "account@mail.com",
+        "organizationId": "00000000-0000-0000-0000-000000000000",
+        "accountName": "Patrick Star",
+        "title": "Identificación de 12345678",
+        "userEmail": "user@mail.com",
+        "userPhone": "23456789",
+        "userToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY"
+	}
+}
+```
+
+Se emite cuando una verificación de identidad ha sido completada por la persona y ha finalizado correctamente.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+language | string | Lenguaje con el cual se completará el proceso de identificación
+reference | string | Campo libre. Útil para realizar búsquedas.
+contractId | string | Id interno
+documentNumber | string | Número de documento nacional de identificación
+id | string | Identificador único de la verificación
+accountId | string | Id de la cuenta que creó la verificación
+createdAt | string | Fecha y hora de creación en formato ISO
+startedAt | string | Fecha y hora en formato ISO del momento en que la verificación está lista para ser completada.
+accountEmail | string | Email de la cuenta que creó la verificación
+organizationId | string | Id de la organización en la que se creó la verificación
+accountName | string | Nombre de la cuenta que creó la verificación
+title | string | Título de la verificación
+userEmail | string | Email del verificante en el cual recibirá el link de inicio del proceso
+userPhone | string | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
+userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
+
+### Propiedades de IdentityVerificationItemUpdated
+
+> Ejemplo de Body
+
+```json
+{
+	"type": "IdentityVerificationItemUpdated",
+	"accountId": "00000000-0000-0000-0000-000000000000",
+	"payload": {
+        "language": "es",
+        "reference": "12345678",
+        "contractId": "00000000-0000-0000-0000-000000000000",
+        "documentNumber": "12345678",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "accountId": "00000000-0000-0000-0000-000000000000",
+        "createdAt": "2020-01-01T00:00:00.000Z",
+        "startedAt": "2020-01-01T00:00:00.000Z",
+        "accountEmail": "account@mail.com",
+        "organizationId": "00000000-0000-0000-0000-000000000000",
+        "accountName": "Patrick Star",
+        "title": "Identificación de 12345678",
+        "userEmail": "user@mail.com",
+        "userPhone": "23456789",
+        "userToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY",
+        "item": {
+            "id": 0,
+            "reference": "signersemail",
+            "state": "working",
+            "version": 1,
+            "stageIndex": 0,
+            "type": "email",
+            "title": "Mail de inicio de firma",
+            "value": null
+        }
+	}
+}
+```
+
+Se emite cuando un item de una verificación de identidad cambia de estado. Los estados pueden ser `working`, `success`, `error`.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+language | string | Lenguaje con el cual se completará el proceso de identificación
+reference | string | Campo libre. Útil para realizar búsquedas.
+contractId | string | Id interno
+documentNumber | string | Número de documento nacional de identificación
+id | string | Identificador único de la verificación
+accountId | string | Id de la cuenta que creó la verificación
+createdAt | string | Fecha y hora de creación en formato ISO
+startedAt | string | Fecha y hora en formato ISO del momento en que la verificación está lista para ser completada.
+accountEmail | string | Email de la cuenta que creó la verificación
+organizationId | string | Id de la organización en la que se creó la verificación
+accountName | string | Nombre de la cuenta que creó la verificación
+title | string | Título de la verificación
+userEmail | string | Email del verificante en el cual recibirá el link de inicio del proceso
+userPhone | string | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
+userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
+item | object | [Item](#propiedades-de-un-item) del contrato que ha cambiado de estado
 
 ### Propiedades de un Usuario Webhook
 
