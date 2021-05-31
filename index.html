@@ -350,6 +350,23 @@
               </ul>
           </li>
           <li>
+            <a href="#verificacion-de-identidad" class="toc-h1 toc-link" data-title="Verificación de identidad">Verificación de identidad</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#propiedades-de-una-verificacion-de-identidad" class="toc-h2 toc-link" data-title="Propiedades de una verificación de identidad">Propiedades de una verificación de identidad</a>
+                  </li>
+                  <li>
+                    <a href="#crear-verificacion-de-identidad" class="toc-h2 toc-link" data-title="Crear verificación de identidad">Crear verificación de identidad</a>
+                  </li>
+                  <li>
+                    <a href="#listar-verificaciones-de-identidad" class="toc-h2 toc-link" data-title="Listar verificaciones de identidad">Listar verificaciones de identidad</a>
+                  </li>
+                  <li>
+                    <a href="#obtener-verificacion-de-identidad" class="toc-h2 toc-link" data-title="Obtener verificación de identidad">Obtener verificación de identidad</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#plantillas-de-documento" class="toc-h1 toc-link" data-title="Plantillas de documento">Plantillas de documento</a>
               <ul class="toc-list-h2">
                   <li>
@@ -397,7 +414,7 @@
       <div class="content">
         <h1 id='introduccion'>Introducción</h1>
 <blockquote>
-<p>La URL base de nuestra API es distintia por ambiente:</p>
+<p>La URL base de nuestra API es distinta por ambiente:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>Pruebas: https://api.stg.keynua.com
 Producción: https://api.keynua.com
@@ -771,7 +788,7 @@ Producción: https://api.keynua.com
 
 <aside class="warning">Si quieres crear contratos con Pagarés electrónicos, debes contactar al equipo de soporte de Keynua</aside>
 
-<p>El Pagaré esta compuesto por lo siguiente:</p>
+<p>El Pagaré está compuesto por lo siguiente:</p>
 
 <table><thead>
 <tr>
@@ -1234,7 +1251,7 @@ Producción: https://api.keynua.com
 <span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
 </code></pre></div>
 <blockquote>
-<p>Si el contrato fue obtenido satisfactoramente, el API retorna un Json estructurado como aparece en la sección de <a href="#contratos">Contratos</a></p>
+<p>Si el contrato fue obtenido satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de <a href="#contratos">Contratos</a></p>
 </blockquote>
 
 <p>Este API obtiene un contrato específico</p>
@@ -1781,6 +1798,813 @@ Producción: https://api.keynua.com
 </tbody></table>
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
+<h1 id='verificacion-de-identidad'>Verificación de identidad</h1>
+<p>Permite crear, listar y obtener verificaciones de identidad.</p>
+<h2 id='propiedades-de-una-verificacion-de-identidad'>Propiedades de una verificación de identidad</h2><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"userRealName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JOHN, DOE"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"finishedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:03:50.272Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"expirationInHours"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"startedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:02:08.500Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"contractId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6afe9bb0-a6e3-11eb-9a2c-11fc3348624ae1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"88b93325-82c4-40aa-9606-f49c757382ae"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48101c38-f770-4ea8-88ab-258e672d88bd"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_email@gmail.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"countryCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pe"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODYyNGFlMS"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:02:02.309Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@keynua.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"organizationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48101c38-f770-4ea8-88ab-258e672d88bd"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-05-18T22:40:05.851Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userFullName"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/Lima"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identification 123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="err">ContractItem</span><span class="p">[]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Opcional</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>userRealName</td>
+<td>string</td>
+<td>No</td>
+<td>Nombre completo del usuario</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>No</td>
+<td><code>pending</code>, <code>pending_input</code>, <code>pending_approval</code>, <code>working</code>, <code>error</code>, <code>done</code>, <code>deleted</code>, o <code>expired</code></td>
+</tr>
+<tr>
+<td>finishedAt</td>
+<td>string</td>
+<td>Sí</td>
+<td>Fecha y hora de finalización en formato ISO</td>
+</tr>
+<tr>
+<td>language</td>
+<td>string</td>
+<td>No</td>
+<td>Lenguaje con el cual se completará el proceso de identificación</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>Sí</td>
+<td>Campo libre. Útil para realizar búsquedas.</td>
+</tr>
+<tr>
+<td>expirationInHours</td>
+<td>string</td>
+<td>Sí</td>
+<td>En cuantas horas luego de la creación, la verificación expirará. <code>0</code> no expira.</td>
+</tr>
+<tr>
+<td>startedAt</td>
+<td>string</td>
+<td>Sí</td>
+<td>Fecha y hora en formato ISO del momento en que la verificación está lista para ser completada.</td>
+</tr>
+<tr>
+<td>contractId</td>
+<td>string</td>
+<td>No</td>
+<td>Id interno</td>
+</tr>
+<tr>
+<td>documentNumber</td>
+<td>string</td>
+<td>No</td>
+<td>Número de documento nacional de identificación</td>
+</tr>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>No</td>
+<td>Identificador único de la verificación</td>
+</tr>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>No</td>
+<td>Id de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>userEmail</td>
+<td>string</td>
+<td>Sí</td>
+<td>Email del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>userPhone</td>
+<td>string</td>
+<td>Sí</td>
+<td>Teléfono celular del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>countryCode</td>
+<td>string</td>
+<td>No</td>
+<td>Código del país en el que se realiza la verificación</td>
+</tr>
+<tr>
+<td>userToken</td>
+<td>string</td>
+<td>No</td>
+<td>Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: <code>https://sign.keynua.com/index.html?token={token}</code></td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>string</td>
+<td>No</td>
+<td>Fecha y hora de creación en formato ISO</td>
+</tr>
+<tr>
+<td>accountEmail</td>
+<td>string</td>
+<td>No</td>
+<td>Email de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>organizationId</td>
+<td>string</td>
+<td>Sí</td>
+<td>Id de la organización en la que se creó la verificación</td>
+</tr>
+<tr>
+<td>updatedAt</td>
+<td>string</td>
+<td>No</td>
+<td>Última fecha y hora en formato ISO en la que se realizó alguna modificación</td>
+</tr>
+<tr>
+<td>userFullName</td>
+<td>string</td>
+<td>Sí</td>
+<td>Nombre completo de la persona</td>
+</tr>
+<tr>
+<td>accountName</td>
+<td>string</td>
+<td>No</td>
+<td>Nombre de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>timezone</td>
+<td>string</td>
+<td>No</td>
+<td>Huso horario  utilizado en notificaciones y mensajes</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>No</td>
+<td>Título de la verificación</td>
+</tr>
+<tr>
+<td>items</td>
+<td><a href="#items-del-contrato">ContractItem</a>[]</td>
+<td>No</td>
+<td>Lista de pasos que sigue la verificación.</td>
+</tr>
+</tbody></table>
+<h2 id='crear-verificacion-de-identidad'>Crear verificación de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> PUT <span class="s1">'https://api.keynua.com/identity-verification/v1'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--data-raw</span> <span class="s1">'{
+    "documentNumber": "12345678",
+    "userPhone": "51123456789",
+    "userFullName": "Patrick Star",
+    "title": "Identification 12345678",
+    "type": "video"
+  }'</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
+<span class="nb">require</span> <span class="s2">"net/http"</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v1"</span><span class="p">)</span>
+
+<span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Put</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"x-api-key"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-KEY-HERE'</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-TOKEN-HERE'</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"application/json"</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="s2">"{</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">documentNumber</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">12345678</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">userPhone</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">51123456789</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">userFullName</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">Patrick Star</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">title</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">Identification 12345678</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">type</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">video</span><span class="se">\"\n</span><span class="s2">}"</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">https</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.keynua.com"</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">({</span>
+    <span class="s">"documentNumber"</span><span class="p">:</span> <span class="s">"12345678"</span><span class="p">,</span>
+    <span class="s">"userPhone"</span><span class="p">:</span> <span class="s">"51123456789"</span><span class="p">,</span>
+    <span class="s">"userFullName"</span><span class="p">:</span> <span class="s">"Patrick Star"</span><span class="p">,</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"Identification 12345678"</span><span class="p">,</span>
+    <span class="s">"type"</span><span class="p">:</span> <span class="s">"video"</span>
+<span class="p">})</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'x-api-key'</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
+  <span class="s">'authorization'</span><span class="p">:</span> <span class="s">"YOUR-API-TOKEN-HERE"</span><span class="p">,</span>
+  <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span>
+<span class="p">}</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"PUT"</span><span class="p">,</span> <span class="s">"/identity-verification/v1"</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">https</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">PUT</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">hostname</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">api.keynua.com</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/identity-verification/v1</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">headers</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-KEY-HERE</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">authorization</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-TOKEN-HERE</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">end</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="kd">var</span> <span class="nx">postData</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+    <span class="dl">"</span><span class="s2">documentNumber</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">12345678</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">userPhone</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">51123456789</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">userFullName</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Patrick Star</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">title</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Identification 12345678</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">video</span><span class="dl">"</span>
+<span class="p">});</span>
+
+<span class="nx">req</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">postData</span><span class="p">);</span>
+
+<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+</code></pre></div>
+<blockquote>
+<p>Si la plantilla fue creada satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de <a href="#propiedades-de-una-verificacion-de-identidad">verificación de identidad</a>.</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"userRealName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JOHN, DOE"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"finishedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:03:50.272Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"expirationInHours"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"startedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:02:08.500Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"contractId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6afe9bb0-a6e3-11eb-9a2c-11fc3348624ae1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"88b93325-82c4-40aa-9606-f49c757382ae"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48101c38-f770-4ea8-88ab-258e672d88bd"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_email@gmail.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"countryCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pe"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV...9TstTqlChryW4mZGyAgHE9Y"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:02:02.309Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account_email@keynua.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"organizationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48101c38-f770-4ea8-88ab-258e672d88bd"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-05-19T20:55:48.186Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userFullName"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/Lima"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identification 123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"signersemail"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Invitación de inicio de firma"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usernotifier"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"stageIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+      </span><span class="nl">"allowsManualUpdate"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"allowsRetry"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"hideOnWebApp"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"terms"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Aceptación de Términos"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"terms"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"stageIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"termsAndConditionsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.dev.keynua.com/legal/terms-and-conditions/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"privacypolicyUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.dev.keynua.com/legal/privacy-policy/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"viewedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:03:13.928Z"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"allowsManualUpdate"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"allowsRetry"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"hideOnWebApp"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="err">...</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='http-request-7'>HTTP Request</h3>
+<p><code>PUT /identity-verification/v1</code></p>
+<h3 id='headers-5'>Headers</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>x-api-key</td>
+<td>your-api-key</td>
+</tr>
+<tr>
+<td>Authorization</td>
+<td>your-api-token</td>
+</tr>
+</tbody></table>
+<h3 id='request-body'>Request body</h3>
+<table><thead>
+<tr>
+<th>Nombre</th>
+<th>Tipo</th>
+<th>Opcional</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>No</td>
+<td>Nombre que se le quiera dar a la verificación</td>
+</tr>
+<tr>
+<td>documentNumber</td>
+<td>string</td>
+<td>No</td>
+<td>Número de documento nacional de identificación de la persona</td>
+</tr>
+<tr>
+<td>userFullName</td>
+<td>string</td>
+<td>Sí</td>
+<td>Nombre completo de la persona</td>
+</tr>
+<tr>
+<td>userEmail</td>
+<td>string</td>
+<td>Sí</td>
+<td>Email de la persona. Si se envía, no enviar el campo <code>userPhone</code> también.</td>
+</tr>
+<tr>
+<td>userPhone</td>
+<td>string</td>
+<td>Sí</td>
+<td>Teléfono celular de la persona. Si se envía, no enviar el campo <code>userEmail</code> también.</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>Sí</td>
+<td>Campo útil para realizar búsquedas entre verificaciones creadas</td>
+</tr>
+<tr>
+<td>type</td>
+<td>string</td>
+<td>Sí</td>
+<td><code>selfie</code> o <code>video</code>. <code>selfie</code> solo pide un selfie y valida esa imagen  con RENIEC. <code>video</code> además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video.</td>
+</tr>
+</tbody></table>
+<h3 id='response-body'>Response body</h3>
+<p><a href="#propiedades-de-una-verificacion-de-identidad">IdentityVerification</a></p>
+<h2 id='listar-verificaciones-de-identidad'>Listar verificaciones de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/identity-verification/v1/list'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
+<span class="nb">require</span> <span class="s2">"net/http"</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v1/list"</span><span class="p">)</span>
+
+<span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"x-api-key"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-KEY-HERE'</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-TOKEN-HERE'</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">https</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.keynua.com"</span><span class="p">)</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'x-api-key'</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
+  <span class="s">'authorization'</span><span class="p">:</span> <span class="s">"YOUR-API-TOKEN-HERE"</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"/identity-verification/v1/list"</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">https</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">GET</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">hostname</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">api.keynua.com</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/identity-verification/v1/list</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">headers</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-KEY-HERE</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">authorization</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-TOKEN-HERE</span><span class="dl">"</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">end</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+</code></pre></div>
+<blockquote>
+<p>Response</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"88b93325-82c4-40aa-9606-f49c757382ae"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"accountEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@keynua.com"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:02:02.309Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identification 70671142"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"userEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_email@gmail.com"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"565b0132-ef7d-4a27-aa8c-f0f96a2d74b1"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"accountEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@keynua.com"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-24T00:10:50.237Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identification 123456789"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"userPhone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"51123456789"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"next"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJhY2NvdW50SWQi...jIwMjEtMDQtMjRUMDA6MTA6NTAuMjM3WiJ9"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Permite obtener una lista de verificaciones de identidad creadas.</p>
+<h3 id='http-request-8'>HTTP Request</h3>
+<p><code>GET /identity-verification/v1/list</code> obtiene las de tu cuenta</p>
+
+<p><code>GET /identity-verification/v1/list-org</code> obtiene las de tu organización</p>
+<h3 id='headers-6'>Headers</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>x-api-key</td>
+<td>your-api-key</td>
+</tr>
+<tr>
+<td>Authorization</td>
+<td>your-api-token</td>
+</tr>
+</tbody></table>
+<h3 id='search-params'>Search params</h3>
+<table><thead>
+<tr>
+<th>Nombre</th>
+<th>Tipo</th>
+<th>Opcional</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>startKey</td>
+<td>string</td>
+<td>Sí</td>
+<td>Sirve para obtener la siguiente porción de items en la lista. Recibe el valor de <code>next</code> que se obtiene en la respuesta.</td>
+</tr>
+<tr>
+<td>startDate</td>
+<td>string</td>
+<td>Sí</td>
+<td>Enviar necesariamente junto con <code>endDate</code> para listar las verificaciones dentro de un rango de fechas. Debe estar en formato ISO.</td>
+</tr>
+<tr>
+<td>endDate</td>
+<td>string</td>
+<td>Sí</td>
+<td>Enviar necesariamente junto con <code>startDate</code> para listar las verificaciones dentro de un rango de fechas. Debe estar en formato ISO.</td>
+</tr>
+<tr>
+<td>limit</td>
+<td>number</td>
+<td>Sí</td>
+<td>La cantidad máxima de items que el api debe devolver. Si no se envía, el api devuelve alrededor de 1 MB de datos.</td>
+</tr>
+<tr>
+<td>expanded</td>
+<td>boolean</td>
+<td>Sí</td>
+<td><code>true</code> si se quiere más detalle en cada item de la lista.</td>
+</tr>
+</tbody></table>
+<h3 id='response-body-2'>Response body</h3>
+<table><thead>
+<tr>
+<th>Nombre</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>items</td>
+<td><a href="#response-body-verificationitem">VerificationItem</a>[]</td>
+<td>Lista de verificaciones</td>
+</tr>
+<tr>
+<td>next</td>
+<td>string</td>
+<td><code>Opcional</code> Envía este valor en <code>startKey</code> para obtener la siguiente porción de la lista. Si no se encuentra en la respuesta, entonces no quedan más items en la lista.</td>
+</tr>
+</tbody></table>
+<h3 id='response-body-verificationitem'>Response body VerificationItem</h3>
+<table><thead>
+<tr>
+<th>Nombre</th>
+<th>Tipo</th>
+<th>Requiere expanded</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>No</td>
+<td>Identificador único de la verificación</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>No</td>
+<td><code>pending</code>, <code>pending_input</code>, <code>pending_approval</code>, <code>working</code>, <code>error</code>, <code>done</code>, <code>deleted</code>, o <code>expired</code></td>
+</tr>
+<tr>
+<td>accountEmail</td>
+<td>string</td>
+<td>No</td>
+<td>Email de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>string</td>
+<td>No</td>
+<td>Fecha y hora de creación en formato ISO</td>
+</tr>
+<tr>
+<td>documentNumber</td>
+<td>string</td>
+<td>No</td>
+<td>Número de documento</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>No</td>
+<td>Título de la verificación</td>
+</tr>
+<tr>
+<td>userEmail</td>
+<td>string</td>
+<td>No</td>
+<td><code>Opcional</code> Email del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>userPhone</td>
+<td>string</td>
+<td>No</td>
+<td><code>Opcional</code> Teléfono celular del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>Sí</td>
+<td>Id de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>organizationId</td>
+<td>string</td>
+<td>Sí</td>
+<td>Id de la organización en la que se creó la verificación</td>
+</tr>
+<tr>
+<td>countryCode</td>
+<td>string</td>
+<td>Sí</td>
+<td>Código del país en el que realiza la verificación</td>
+</tr>
+<tr>
+<td>language</td>
+<td>string</td>
+<td>Sí</td>
+<td>Lenguaje con el cual se completará el proceso de identificación</td>
+</tr>
+<tr>
+<td>expirationInHours</td>
+<td>string</td>
+<td>Sí</td>
+<td>En cuantas horas luego de la creación la verificación expirará. <code>0</code> no expira.</td>
+</tr>
+<tr>
+<td>startedAt</td>
+<td>string</td>
+<td>Sí</td>
+<td>Fecha y hora en formato ISO del momento en que el verificante ingresa todos sus datos</td>
+</tr>
+<tr>
+<td>userFullName</td>
+<td>string</td>
+<td>Sí</td>
+<td>Nombre completo de la persona</td>
+</tr>
+<tr>
+<td>accountName</td>
+<td>string</td>
+<td>Sí</td>
+<td>Nombre de la cuenta que creó la verificación</td>
+</tr>
+</tbody></table>
+<h2 id='obtener-verificacion-de-identidad'>Obtener verificación de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/identity-verification/v1/{verification_id}'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
+<span class="nb">require</span> <span class="s2">"net/http"</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v1/{verification_id}"</span><span class="p">)</span>
+
+<span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Get</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"x-api-key"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-KEY-HERE'</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-TOKEN-HERE'</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">https</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.keynua.com"</span><span class="p">)</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'x-api-key'</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
+  <span class="s">'authorization'</span><span class="p">:</span> <span class="s">"YOUR-API-TOKEN-HERE"</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"/identity-verification/v1/{verification_id}"</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">https</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">GET</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">hostname</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">api.keynua.com</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/identity-verification/v1/{verification_id}</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">headers</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-KEY-HERE</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">authorization</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-TOKEN-HERE</span><span class="dl">"</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">end</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+</code></pre></div>
+<blockquote>
+<p>Si la plantilla fue obtenida satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de <a href="#propiedades-de-una-verificacion-de-identidad">verificación de identidad</a>.</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"userRealName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JOHN, DOE"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"finishedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:03:50.272Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"expirationInHours"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"startedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:02:08.500Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"contractId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6afe9bb0-a6e3-11eb-9a2c-11fc3348624ae1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"88b93325-82c4-40aa-9606-f49c757382ae"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48101c38-f770-4ea8-88ab-258e672d88bd"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_email@gmail.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"countryCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pe"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV...9TstTqlChryW4mZGyAgHE9Y"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:02:02.309Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account_email@keynua.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"organizationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48101c38-f770-4ea8-88ab-258e672d88bd"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-05-19T20:55:48.186Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userFullName"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/Lima"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identification 123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"signersemail"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Invitación de inicio de firma"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usernotifier"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"stageIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+      </span><span class="nl">"allowsManualUpdate"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"allowsRetry"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"hideOnWebApp"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"terms"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Aceptación de Términos"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"terms"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"stageIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"termsAndConditionsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.dev.keynua.com/legal/terms-and-conditions/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"privacypolicyUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.dev.keynua.com/legal/privacy-policy/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"viewedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:03:13.928Z"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"allowsManualUpdate"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"allowsRetry"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"hideOnWebApp"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="err">...</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Permite obtener una verificación de identidad</p>
+<h3 id='http-request-9'>HTTP Request</h3>
+<p><code>GET /identity-verification/v1/{verification_id}</code></p>
+<h3 id='headers-7'>Headers</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>x-api-key</td>
+<td>your-api-key</td>
+</tr>
+<tr>
+<td>Authorization</td>
+<td>your-api-token</td>
+</tr>
+</tbody></table>
+<h3 id='response-body-3'>Response body</h3>
+<p><a href="#propiedades-de-una-verificacion-de-identidad">IdentityVerification</a></p>
 <h1 id='plantillas-de-documento'>Plantillas de documento</h1>
 <p>Permite listar, obtener y rellenar plantillas de documentos PDF.</p>
 
@@ -2057,9 +2881,9 @@ Producción: https://api.keynua.com
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Permite obtener una lista de las plantillas de documento que pertenecen al usuario o a su organización.</p>
-<h3 id='http-request-7'>HTTP Request</h3>
+<h3 id='http-request-10'>HTTP Request</h3>
 <p><code>GET /contract-manager-document-templates/api</code></p>
-<h3 id='headers-5'>Headers</h3>
+<h3 id='headers-8'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -2075,7 +2899,7 @@ Producción: https://api.keynua.com
 <td>your-api-token</td>
 </tr>
 </tbody></table>
-<h3 id='search-params'>Search params</h3>
+<h3 id='search-params-2'>Search params</h3>
 <table><thead>
 <tr>
 <th>Nombre</th>
@@ -2086,7 +2910,7 @@ Producción: https://api.keynua.com
 </thead><tbody>
 <tr>
 <td>limit</td>
-<td>string</td>
+<td>number</td>
 <td>Sí</td>
 <td>La cantidad máxima de items que el api debe devolver. Si no se envía, el api devuelve todos.</td>
 </tr>
@@ -2103,7 +2927,7 @@ Producción: https://api.keynua.com
 <td><code>true</code> si se quiere las plantillas de documento de la organización</td>
 </tr>
 </tbody></table>
-<h3 id='response-body'>Response body</h3>
+<h3 id='response-body-4'>Response body</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -2119,7 +2943,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>next</td>
 <td>string</td>
-<td><code>opcional</code> Envía este valor en <code>start</code> para obtener la siguiente porción de la lista. Si no se encuetra en la respuesta, entonces no quedan más items en la lista.</td>
+<td><code>opcional</code> Envía este valor en <code>start</code> para obtener la siguiente porción de la lista. Si no se encuentra en la respuesta, entonces no quedan más items en la lista.</td>
 </tr>
 </tbody></table>
 <h3 id='response-body-templateitem'>Response body TemplateItem</h3>
@@ -2235,9 +3059,9 @@ Producción: https://api.keynua.com
 </blockquote>
 
 <p>Permite obtener una plantilla de documento.</p>
-<h3 id='http-request-8'>HTTP Request</h3>
+<h3 id='http-request-11'>HTTP Request</h3>
 <p><code>GET /contract-manager-document-templates/api/{templateId}</code></p>
-<h3 id='headers-6'>Headers</h3>
+<h3 id='headers-9'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -2388,9 +3212,9 @@ Producción: https://api.keynua.com
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>En base a cada documento de una plantilla, este API genera otros documentos pdf que incluyen el valor de cada campo enviado.</p>
-<h3 id='http-request-9'>HTTP Request</h3>
+<h3 id='http-request-12'>HTTP Request</h3>
 <p><code>POST /contract-manager-document-templates/api/create-filled-files/{templateId}</code></p>
-<h3 id='headers-7'>Headers</h3>
+<h3 id='headers-10'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -2480,15 +3304,15 @@ Producción: https://api.keynua.com
 </tr>
 </tbody></table>
 <h1 id='webhooks'>Webhooks</h1>
-<p>Los Webhooks permiten suscribirte a ciertos eventos del Contrato, por ejemplo cuando un contrato es creado, cuando ocurre un error en el proceso de firma o el contrato ha sido firmado satisfactoriamente. Cuando ocurre uno de estos eventos, enviaremos un request <strong>HTTP POST</strong> a la API configurada en el webhook.</p>
+<p>Los Webhooks permiten suscribirte a ciertos eventos de un Contrato o de una Verificación de identidad. Por ejemplo cuando un contrato es creado, cuando ocurre un error en el proceso de firma o el contrato ha sido firmado satisfactoriamente. Cuando ocurre uno de estos eventos, enviaremos un request <strong>HTTP POST</strong> a la API configurada en el webhook.</p>
 <h2 id='configuracion-del-webhook'>Configuración del Webhook</h2>
 <aside class="warning">Para poder configurar tu Webhook debes contactar al equipo de Keynua</aside>
 
 <p>Una vez ya tengas una cuenta en el ambiente de pruebas de Keynua, puedes acceder a la sección <a href="https://app.stg.keynua.com/developers">Developers</a> y configurar tu Webhook.</p>
 
-<p>Si tu API necesita unos headers específicos, puedes agregarlo en la configuración del Webhook y nosotros lo enviaremos en cada request.</p>
+<p>Si tu API necesita unos headers específicos, puedes agregarlo en la configuración del Webhook y nosotros lo enviaremos en cada request. También puedes desactivar las notificaciones de eventos para las verificaciones de identidad luego de crear el webhook.</p>
 
-<p>Entre los eventos que puedes escoger están:</p>
+<p>Los eventos son disparados por las mismas circunstancias para contratos y para verificación de identidad. Entre los eventos que puedes escoger están:</p>
 
 <table><thead>
 <tr>
@@ -2498,15 +3322,15 @@ Producción: https://api.keynua.com
 </thead><tbody>
 <tr>
 <td>Created</td>
-<td>Serás notificado cuando un contrato fue creado satisfactoriamente</td>
+<td>Serás notificado cuando un contrato o verificación de identidad fue creado satisfactoriamente</td>
 </tr>
 <tr>
 <td>Started</td>
-<td>Serás notificado cuando un contrato fue creado satisfactoriamente y está listo para ser firmado. <strong>Recomendamos usar este evento en lugar del evento Created ya que este evento te notificará cuando el contrato está listo para comenzar el proceso de firma</strong></td>
+<td>Serás notificado cuando un contrato o verificación de identidad fue creado satisfactoriamente y está listo para ser firmado o completado. <strong>Recomendamos usar este evento en lugar del evento Created ya que este evento te notificará cuando el contrato está listo para comenzar el proceso de firma</strong></td>
 </tr>
 <tr>
 <td>Finished</td>
-<td>Serás notificado cuando el contrato ha sido firmado por todos y finalizó correctamente</td>
+<td>Serás notificado cuando el contrato o verificación de identidad ha sido completado por todos y finalizó correctamente</td>
 </tr>
 <tr>
 <td>ItemWorking</td>
@@ -2535,7 +3359,7 @@ Producción: https://api.keynua.com
 <aside class="notice">Si ya estás listo para integrar en producción, por favor contacta al equipo de <code>Keynua</code></aside>
 <h2 id='especificacion-del-webhook'>Especificación del Webhook</h2>
 <p>El request tendrá la siguiente estructura</p>
-<h3 id='headers-8'>Headers</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='headers-11'>Headers</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"headers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
         </span><span class="nl">"Content-Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/json"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"X-Keynua-Webhook-Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ContractFinished"</span><span class="p">,</span><span class="w">
@@ -2556,11 +3380,11 @@ Producción: https://api.keynua.com
 </tr>
 <tr>
 <td>x-keynua-webhook-sig</td>
-<td>Firma del request para el control de la manipulacion de la peticion. Para más información revisa la sección de <a href="#verificar-keynua-signature-webhook">Verificar Keynua Signature Webhook</a></td>
+<td>Firma del request para el control de la manipulación de la petición. Para más información revisa la sección de <a href="#verificar-keynua-signature-webhook">Verificar Keynua Signature Webhook</a></td>
 </tr>
 <tr>
 <td>x-keynua-webhook-ts</td>
-<td>Numero de millisegundos desde UNIX Epoch (01/01/1970) cuando se envio el evento</td>
+<td>Numero de milisegundos desde UNIX Epoch (01/01/1970) cuando se envió el evento</td>
 </tr>
 <tr>
 <td>x-keynua-webhook-type</td>
@@ -2583,7 +3407,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>type</td>
 <td>string</td>
-<td>Nombre del <a href="#tipos-de-eventos-webhook">tipo de evento</a> emitido. Puede ser <code>ContractCreated</code>, <code>ContractStarted</code>, <code>ContractItemUpdated</code>, <code>ContractFinished</code></td>
+<td>Nombre del <a href="#tipos-de-eventos-webhook">tipo de evento</a> emitido. Puede ser <code>ContractCreated</code>, <code>ContractStarted</code>, <code>ContractItemUpdated</code>, <code>ContractFinished</code>, <code>IdentityVerificationCreated</code>, <code>IdentityVerificationStarted</code>, <code>IdentityVerificationFinished</code>, o <code>IdentityVerificationItemUpdated</code></td>
 </tr>
 <tr>
 <td>accountId</td>
@@ -2607,27 +3431,27 @@ Producción: https://api.keynua.com
 </thead><tbody>
 <tr>
 <td>Created</td>
-<td><a href="#propiedades-de-contractcreated">ContractCreated</a></td>
+<td><a href="#propiedades-de-contractcreated">ContractCreated</a> o <a href="#propiedades-de-identityverificationcreated">IdentityVerificationCreated</a></td>
 </tr>
 <tr>
 <td>Started</td>
-<td><a href="#propiedades-de-contractstarted">ContractStarted</a></td>
+<td><a href="#propiedades-de-contractstarted">ContractStarted</a> o <a href="#propiedades-de-identityverificationstarted">IdentityVerificationStarted</a></td>
 </tr>
 <tr>
 <td>Finished</td>
-<td><a href="#propiedades-de-contractfinished">ContractFinished</a></td>
+<td><a href="#propiedades-de-contractfinished">ContractFinished</a> o <a href="#propiedades-de-identityverificationfinished">IdentityVerificationFinished</a></td>
 </tr>
 <tr>
 <td>ItemWorking</td>
-<td><a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a>. Item.state <code>working</code></td>
+<td><a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a> o <a href="#propiedades-de-identityverificationitemupdated">IdentityVerificationItemUpdated</a>. Item.state <code>working</code></td>
 </tr>
 <tr>
 <td>ItemSuccess</td>
-<td><a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a>. Item.state <code>success</code></td>
+<td><a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a> o <a href="#propiedades-de-identityverificationitemupdated">IdentityVerificationItemUpdated</a>. Item.state <code>success</code></td>
 </tr>
 <tr>
 <td>ItemError</td>
-<td><a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a>. Item.state <code>error</code></td>
+<td><a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a> o <a href="#propiedades-de-identityverificationitemupdated">IdentityVerificationItemUpdated</a>. Item.state <code>error</code></td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-contractcreated'>Propiedades de ContractCreated</h3>
@@ -2771,7 +3595,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>contractId</td>
 <td>string</td>
-<td>Codigo del contrato</td>
+<td>Código del contrato</td>
 </tr>
 <tr>
 <td>reference</td>
@@ -2791,17 +3615,17 @@ Producción: https://api.keynua.com
 <tr>
 <td>description</td>
 <td>string</td>
-<td>Descripcion del contrato</td>
+<td>Descripción del contrato</td>
 </tr>
 <tr>
 <td>language</td>
 <td>string</td>
-<td>Idima del contrato</td>
+<td>Idioma del contrato</td>
 </tr>
 <tr>
 <td>createdAt</td>
 <td>string</td>
-<td>Fecha de creacion del contrato</td>
+<td>Fecha de creación del contrato</td>
 </tr>
 <tr>
 <td>startedAt</td>
@@ -2826,7 +3650,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>metadata</td>
 <td>integer</td>
-<td>Metada del contrato. Esta Metadata será la misma que se envió al <a href="#crear-un-contrato">crear un Contrato</a></td>
+<td>Metadata del contrato. Esta Metadata será la misma que se envió al <a href="#crear-un-contrato">crear un Contrato</a></td>
 </tr>
 <tr>
 <td>longCode</td>
@@ -2905,7 +3729,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>contractId</td>
 <td>string</td>
-<td>Codigo del contrato</td>
+<td>Código del contrato</td>
 </tr>
 <tr>
 <td>reference</td>
@@ -2925,17 +3749,17 @@ Producción: https://api.keynua.com
 <tr>
 <td>description</td>
 <td>string</td>
-<td>Descripcion del contrato</td>
+<td>Descripción del contrato</td>
 </tr>
 <tr>
 <td>language</td>
 <td>string</td>
-<td>Idima del contrato</td>
+<td>Idioma del contrato</td>
 </tr>
 <tr>
 <td>createdAt</td>
 <td>string</td>
-<td>Fecha de creacion del contrato</td>
+<td>Fecha de creación del contrato</td>
 </tr>
 <tr>
 <td>startedAt</td>
@@ -2965,7 +3789,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>metadata</td>
 <td>integer</td>
-<td>Metada del contrato. Esta Metadata será la misma que se envió al <a href="#crear-un-contrato">crear un Contrato</a></td>
+<td>Metadata del contrato. Esta Metadata será la misma que se envió al <a href="#crear-un-contrato">crear un Contrato</a></td>
 </tr>
 <tr>
 <td>longCode</td>
@@ -3043,7 +3867,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>contractId</td>
 <td>string</td>
-<td>Codigo del contrato</td>
+<td>Código del contrato</td>
 </tr>
 <tr>
 <td>reference</td>
@@ -3063,17 +3887,17 @@ Producción: https://api.keynua.com
 <tr>
 <td>description</td>
 <td>string</td>
-<td>Descripcion del contrato</td>
+<td>Descripción del contrato</td>
 </tr>
 <tr>
 <td>language</td>
 <td>string</td>
-<td>Idima del contrato</td>
+<td>Idioma del contrato</td>
 </tr>
 <tr>
 <td>createdAt</td>
 <td>string</td>
-<td>Fecha de creacion del contrato</td>
+<td>Fecha de creación del contrato</td>
 </tr>
 <tr>
 <td>startedAt</td>
@@ -3098,7 +3922,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>metadata</td>
 <td>integer</td>
-<td>Metada del contrato. Esta Metadata será la misma que se envió al <a href="#crear-un-contrato">crear un Contrato</a></td>
+<td>Metadata del contrato. Esta Metadata será la misma que se envió al <a href="#crear-un-contrato">crear un Contrato</a></td>
 </tr>
 <tr>
 <td>longCode</td>
@@ -3118,7 +3942,442 @@ Producción: https://api.keynua.com
 <tr>
 <td>user</td>
 <td>object</td>
-<td><a href="#propiedades-de-un-usuario-webhook">Usuario</a> al que pertence el elemento modificado. Si el valor es null el elemento le pertenece a todos los usuarios</td>
+<td><a href="#propiedades-de-un-usuario-webhook">Usuario</a> al que pertenece el elemento modificado. Si el valor es null el elemento le pertenece a todos los usuarios</td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-identityverificationcreated'>Propiedades de IdentityVerificationCreated</h3>
+<blockquote>
+<p>Ejemplo de Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IdentityVerificationCreated"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"contractId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01T00:00:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account@mail.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"organizationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identificación de 12345678"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Se emite cuando una verificación de identidad ha sido creada.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>language</td>
+<td>string</td>
+<td>Lenguaje con el cual se completará el proceso de identificación</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>Campo libre. Útil para realizar búsquedas.</td>
+</tr>
+<tr>
+<td>contractId</td>
+<td>string</td>
+<td>Id interno</td>
+</tr>
+<tr>
+<td>documentNumber</td>
+<td>string</td>
+<td>Número de documento nacional de identificación</td>
+</tr>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>Identificador único de la verificación</td>
+</tr>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>Id de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>string</td>
+<td>Fecha y hora de creación en formato ISO</td>
+</tr>
+<tr>
+<td>accountEmail</td>
+<td>string</td>
+<td>Email de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>organizationId</td>
+<td>string</td>
+<td>Id de la organización en la que se creó la verificación</td>
+</tr>
+<tr>
+<td>accountName</td>
+<td>string</td>
+<td>Nombre de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Título de la verificación</td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-identityverificationstarted'>Propiedades de IdentityVerificationStarted</h3>
+<blockquote>
+<p>Ejemplo de Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IdentityVerificationStarted"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"contractId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01T00:00:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"startedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01T00:00:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account@mail.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"organizationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identificación de 12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@mail.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userPhone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"23456789"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Se emite cuando una verificación de identidad está lista para ser completada.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>language</td>
+<td>string</td>
+<td>Lenguaje con el cual se completará el proceso de identificación</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>Campo libre. Útil para realizar búsquedas.</td>
+</tr>
+<tr>
+<td>contractId</td>
+<td>string</td>
+<td>Id interno</td>
+</tr>
+<tr>
+<td>documentNumber</td>
+<td>string</td>
+<td>Número de documento nacional de identificación</td>
+</tr>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>Identificador único de la verificación</td>
+</tr>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>Id de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>string</td>
+<td>Fecha y hora de creación en formato ISO</td>
+</tr>
+<tr>
+<td>startedAt</td>
+<td>string</td>
+<td>Fecha y hora en formato ISO del momento en que la verificación está lista para ser completada.</td>
+</tr>
+<tr>
+<td>accountEmail</td>
+<td>string</td>
+<td>Email de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>organizationId</td>
+<td>string</td>
+<td>Id de la organización en la que se creó la verificación</td>
+</tr>
+<tr>
+<td>accountName</td>
+<td>string</td>
+<td>Nombre de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Título de la verificación</td>
+</tr>
+<tr>
+<td>userEmail</td>
+<td>string</td>
+<td>Email del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>userPhone</td>
+<td>string</td>
+<td>Teléfono celular del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>userToken</td>
+<td>string</td>
+<td>Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}</td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-identityverificationfinished'>Propiedades de IdentityVerificationFinished</h3>
+<blockquote>
+<p>Ejemplo de Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IdentityVerificationFinished"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"contractId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01T00:00:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"startedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01T00:00:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account@mail.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"organizationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identificación de 12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@mail.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userPhone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"23456789"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Se emite cuando una verificación de identidad ha sido completada por la persona y ha finalizado correctamente.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>language</td>
+<td>string</td>
+<td>Lenguaje con el cual se completará el proceso de identificación</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>Campo libre. Útil para realizar búsquedas.</td>
+</tr>
+<tr>
+<td>contractId</td>
+<td>string</td>
+<td>Id interno</td>
+</tr>
+<tr>
+<td>documentNumber</td>
+<td>string</td>
+<td>Número de documento nacional de identificación</td>
+</tr>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>Identificador único de la verificación</td>
+</tr>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>Id de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>string</td>
+<td>Fecha y hora de creación en formato ISO</td>
+</tr>
+<tr>
+<td>startedAt</td>
+<td>string</td>
+<td>Fecha y hora en formato ISO del momento en que la verificación está lista para ser completada.</td>
+</tr>
+<tr>
+<td>accountEmail</td>
+<td>string</td>
+<td>Email de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>organizationId</td>
+<td>string</td>
+<td>Id de la organización en la que se creó la verificación</td>
+</tr>
+<tr>
+<td>accountName</td>
+<td>string</td>
+<td>Nombre de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Título de la verificación</td>
+</tr>
+<tr>
+<td>userEmail</td>
+<td>string</td>
+<td>Email del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>userPhone</td>
+<td>string</td>
+<td>Teléfono celular del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>userToken</td>
+<td>string</td>
+<td>Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}</td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-identityverificationitemupdated'>Propiedades de IdentityVerificationItemUpdated</h3>
+<blockquote>
+<p>Ejemplo de Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IdentityVerificationItemUpdated"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"contractId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01T00:00:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"startedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01T00:00:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account@mail.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"organizationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identificación de 12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@mail.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userPhone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"23456789"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"item"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"signersemail"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"working"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"stageIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mail de inicio de firma"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Se emite cuando un item de una verificación de identidad cambia de estado. Los estados pueden ser <code>working</code>, <code>success</code>, <code>error</code>.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>language</td>
+<td>string</td>
+<td>Lenguaje con el cual se completará el proceso de identificación</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>Campo libre. Útil para realizar búsquedas.</td>
+</tr>
+<tr>
+<td>contractId</td>
+<td>string</td>
+<td>Id interno</td>
+</tr>
+<tr>
+<td>documentNumber</td>
+<td>string</td>
+<td>Número de documento nacional de identificación</td>
+</tr>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>Identificador único de la verificación</td>
+</tr>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>Id de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>string</td>
+<td>Fecha y hora de creación en formato ISO</td>
+</tr>
+<tr>
+<td>startedAt</td>
+<td>string</td>
+<td>Fecha y hora en formato ISO del momento en que la verificación está lista para ser completada.</td>
+</tr>
+<tr>
+<td>accountEmail</td>
+<td>string</td>
+<td>Email de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>organizationId</td>
+<td>string</td>
+<td>Id de la organización en la que se creó la verificación</td>
+</tr>
+<tr>
+<td>accountName</td>
+<td>string</td>
+<td>Nombre de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Título de la verificación</td>
+</tr>
+<tr>
+<td>userEmail</td>
+<td>string</td>
+<td>Email del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>userPhone</td>
+<td>string</td>
+<td>Teléfono celular del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>userToken</td>
+<td>string</td>
+<td>Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}</td>
+</tr>
+<tr>
+<td>item</td>
+<td>object</td>
+<td><a href="#propiedades-de-un-item">Item</a> del contrato que ha cambiado de estado</td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-un-usuario-webhook'>Propiedades de un Usuario Webhook</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
