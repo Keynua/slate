@@ -112,7 +112,8 @@ language | string | Lenguaje del contrato
 metadata | object | Metadata del contrato
 reference | string | Referencia del contrato. Este campo es usado como clave de búsqueda en la plataforma web de Keynua.
 shortCode | string | Código corto del contrato para facilitar su identificación
-expirationInHours | integer | Expiración del contrato en horas, a partir de la fecha de inicio del contrato
+expirationInHours | integer | Expiración del contrato en horas, a partir de la fecha de inicio del contrato.
+expirationDatetime | string | Fecha y hora de expiración del contrato en UTC y formato ISO 8601. Ejemplo: `2021-06-17T19:53:58.551Z`.
 users | array | [Usuarios](#propiedades-de-un-usuario) del contrato
 groups | array | [Grupos](#propiedades-de-un-grupo) del contrato
 documents | array | [Documentos](#propiedades-de-un-documento) del contrato
@@ -434,6 +435,7 @@ reference | string | `optional` Referencia del contrato. Este campo es usado com
 language | string |  `Default "es"` Idioma del contrato. Puede ser `en` o `es`
 userEmailNotifications | boolean | `Default "false"` Indica si los usuarios serán notificados por email cuando hay un error o finaliza un contrato
 expirationInHours | integer | `optional` Expiración del contrato en horas, a partir de la fecha de inicio del contrato. Mínimo uno (1)
+expirationDatetime | string | `optional` Fecha y hora de expiración del contrato en UTC y formato ISO 8601. Ejemplo: `2021-06-17T19:53:58.551Z`.
 templateId | string | Id del template a usar. Puedes usar uno de los template públicos de Keynua como `keynua-peru-default`. Si es un proceso customizado, el equipo de Keynua te enviará este valor
 documents | array | Arreglo de los documentos PDFs encodificados en base64 que van a ser firmados. Mínimo 1 y máximo 10. El peso máximo en total no debe ser mayor a 4.5 MB. En lugar de `base64` también se puede enviar `storageId`, como por ejemplo se obtiene de [este](#generar-documentos-rellenados) API.
 users | array | Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en **groups** depende del templateId a usar. Para el caso de `keynua-peru-default`, el valor en groups debe ser `signers`. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario
