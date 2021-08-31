@@ -886,6 +886,153 @@ value | object | Dentro del objeto value debes enviar el linkId obtenido en el p
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
 
+# Deceval
+
+Permite asociar un Pagaré emitido en el sistema de Deceval a un contrato.
+
+<aside class="warning">Si quieres crear contratos con Deceval, debes contactar al equipo de soporte de Keynua</aside>
+
+## Restricciones
+
+1. La plantilla debe tener el item de tipo text con el id `documentNumber`. Se recomienda usar `prefilledItems`.
+1. El objeto `decevalData` se debe agregar a los flags del contrato
+1. Todos los usuarios del contrato que se agregan mediante el atributo `users` deben pertenecer al grupo de firmantes del proceso si y solo si participan en el Pagaré.
+
+## Flujo de firma
+
+1. Cración del Pagaré en Deceval.
+1. Usuario realiza la firma del contrato mediante el Widget de keynua.
+1. Se ejecuta el item de firma Deceval: Este item usa la accion "FirmarPagares" del servicio de
+Deceval para registrar la firma del participante.
+1. Se ejecuta el item de validación del Pagaré: consulta el estado del Pagaré en el sistema de Deceval mediante la acción "ConsultarPagares" para guardar el documento generado en el contrato y adjuntarlo al pdf final.
+
+## Estructura del Pagaré:
+
+
+>`decevalData`
+
+```json
+{
+	"flags": {
+		"decevalData": {
+			"promissoryNote": {
+				"tipoPagare": 2,
+				"numCredito": "964234",
+				"fechaVencimientoFinanciero": "2021-08-13",
+				"numReferencia": "985462",
+				"numPagareEntidad": "642345",
+				"creditoReembolsableEn": 2,
+				"valorPesosDesembolso": 10000,
+				"valorPesosDesembolsoLetras": "DIEZ MIL",
+				"otorganteNumId": "444332323",
+				"otorganteTipoId": 1,
+				"apoderadoNumId": "754345789",
+				"apoderadoTipoId": 1,
+				"listaCodeudoresAvalistasPagare": [
+					{
+						"giradorNumId": "048918289",
+						"idRol": 6,
+						"giradorTipoId": 1
+					},
+					{
+						"giradorNumId": "453456345",
+						"idRol": 7,
+						"giradorTipoId": 1
+					}
+				],
+				"ciudadCreacion": "11001",
+				"deptoCreacion": "11",
+				"paisCreacion": "CO"
+			}
+		}
+  	}
+}
+```
+
+> `users`
+
+```json
+{
+	"users": [
+		{
+			"groups": [ "signers" ],
+			"prefilledItems": [
+				{
+					"target": "documentNumber",
+					"value": { "text": "444332323" }
+				}
+			],
+			"name": "Nombres y Apellidos 1",
+			"email": "correo1@ejemplo.com"
+		},
+		{
+			"groups": [ "signers" ],
+			"prefilledItems": [
+				{
+					"target": "documentNumber",
+					"value": { "text": "754345789" }
+				}
+			],
+			"name": "Nombres y Apellidos 2",
+			"email": "correo2@ejemplo.com"
+		},
+		{
+			"groups": [ "signers" ],
+			"prefilledItems": [
+				{
+					"target": "documentNumber",
+					"value": { "text": "048918289" }
+				}
+			],
+			"name": "Nombres y Apellidos 3",
+			"email": "correo3@ejemplo.com"
+		},
+		{
+			"groups": [ "signers" ],
+			"prefilledItems": [
+				{
+					"target": "documentNumber",
+					"value": { "text": "453456345" }
+				}
+			],
+			"name": "Nombres y Apellidos 4",
+			"email": "correo4@ejemplo.com"
+		}
+  	]
+}
+```
+
+### promissoryNote:
+Detalle del pagaré. El elemento está compuesto por:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+tipoPagare | integer | Tipo de Pagaré. Puede tener los siguientes valores: 1 (Diligenciado) | 2 (En blanco con carta de instrucciones).
+numCredito | integer | Número de crédito
+fechaVencimientoFinanciero | string | Fecha de vencimiento. Formato: YYYY-MM-dd
+numReferencia | string | Número de referencia
+numPagareEntidad | string | Número del Pagaré de la entidad
+creditoReembolsableEn | integer | Indica el tipo de moneda del desembolso. Puede tener los siguientes valores: `1 (EnURV)` , `2 (En Pesos)` , `3 (En Dólares)` , 4 `(Otros)`
+valorPesosDesembolso | integer | Valor del desembolso
+valorPesosDesembolsoLetras | string | Valor del desembolso representado en texto
+otorganteTipoId | integer | Tipo de documento del otorgante. Puede tener los siguientes valores: `1 (CEDULA DE CIUDADANIA)` , `2 (CEDULA DE EXTRANJERIA)`.
+otorganteNumId | string | Número de documento del otorgante
+apoderadoTipoId | integer | Tipo de documento del apoderado.  Puede tener los siguientes valores: `1 (CEDULA DE CIUDADANIA)` , `2 (CEDULA DE EXTRANJERIA)`.
+apoderadoNumId | string | Número de documento del apoderado
+ciudadCreacion | string | Cuidad de creacion del Pagaré
+deptoCreacion | string | Departamento de creación del Pagaré
+paisCreacion | string | Pais de creación del Pagaré
+listaCodeudoresAvalistasPagare | string | Pais de creación del Pagaré
+
+### CodeudoresAvalistas
+El codeudor o avalista del pagaré. El elemento está compuesto por:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+giradorTipoId | integer | Tipo de documento del participante. Puede tener los siguientes valores: `1 (CEDULA DE CIUDADANIA)` , `2 (CEDULA DE EXTRANJERIA)`.
+idRol | integer | Rol del participante. Puede tener los siguientes valores: `6 (Codeudor)` , `7 (Avalista)`
+giradorNumId | string | Nùmero de documento del participante
+
 # Verificación de identidad
 
 Permite crear, listar y obtener verificaciones de identidad.
@@ -939,7 +1086,7 @@ countryCode | string | No | Código del país en el que se realiza la verificaci
 userToken | string | No | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: `https://sign.keynua.com/index.html?token={token}`
 createdAt | string | No | Fecha y hora de creación en formato ISO
 accountEmail | string | No | Email de la cuenta que creó la verificación
-organizationId | string | Sí | Id de la organización en la que se creó la verificación 
+organizationId | string | Sí | Id de la organización en la que se creó la verificación
 updatedAt | string | No | Última fecha y hora en formato ISO en la que se realizó alguna modificación
 userFullName | string | Sí | Nombre completo de la persona
 accountName | string | No | Nombre de la cuenta que creó la verificación
