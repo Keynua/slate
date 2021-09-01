@@ -939,7 +939,7 @@ countryCode | string | No | Código del país en el que se realiza la verificaci
 userToken | string | No | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: `https://sign.keynua.com/index.html?token={token}`
 createdAt | string | No | Fecha y hora de creación en formato ISO
 accountEmail | string | No | Email de la cuenta que creó la verificación
-organizationId | string | Sí | Id de la organización en la que se creó la verificación 
+organizationId | string | Sí | Id de la organización en la que se creó la verificación
 updatedAt | string | No | Última fecha y hora en formato ISO en la que se realizó alguna modificación
 userFullName | string | Sí | Nombre completo de la persona
 accountName | string | No | Nombre de la cuenta que creó la verificación
@@ -1975,7 +1975,9 @@ El request tendrá la siguiente estructura
 		"Content-Type": "application/json",
 		"X-Keynua-Webhook-Type": "ContractFinished",
 		"X-Keynua-Webhook-TS": "1604957455847",
-		"X-Keynua-Webhook-Sig": "ec7584cb..."
+		"X-Keynua-Webhook-Token": "12fafbc...",
+		"X-Keynua-Webhook-Sig": "ec7584cb...",
+		"X-Keynua-Webhook-SigV2": "f2a13aa..."
 	}
 }
 ```
@@ -1984,8 +1986,10 @@ Key                 | Value
 ------------------ | -----------
 Content-Type | application/json
 x-keynua-webhook-sig | Firma del request para el control de la manipulación de la petición. Para más información revisa la sección de [Verificar Keynua Signature Webhook](#verificar-keynua-signature-webhook)
+x-keynua-webhook-sigV2 | Firma del request V2 para el control de la manipulación de la petición. Para más información revisa la sección de [Verificar Keynua Signature Webhook V2](#verificar-keynua-signature-webhook-v2)
 x-keynua-webhook-ts | Numero de milisegundos desde UNIX Epoch (01/01/1970) cuando se envió el evento
 x-keynua-webhook-type | Nombre del evento emitido
+x-keynua-webhook-token | Token unico generado por request con una integridad de 24 horas
 
 ### Body
 
@@ -2507,3 +2511,21 @@ Para verificar este valor necesitas:
 Luego de ello debes concatenar todos estos valores y aplicarle SHA256, el resultado debe ser el mismo que el valor del header `X-Keynua-Webhook-Sig`
 
 <aside class="notice">Si el resultado de tu hash coincide con el que te enviamos, puedes tener la seguridad de que es Keynua quién envió la información a tu API y que la información no ha sido alterada en tránsito.</aside>
+
+## Verificar Keynua Signature Webhook V2
+
+```
+SHA_256(webhookToken + ts + webHookSecret)
+```
+
+Si quieres verificar que Keynua es quien está golpeando tu API Webhook, debes verificar el SignatureV2 que envía Keynua en el header `X-Keynua-Webhook-SigV2`
+
+Para verificar este valor necesitas:
+
+* El valor del header `X-Keynua-Webhook-Token`
+* El valor del header `X-Keynua-Webhook-TS`
+* El valor del `secret` que obtuviste al crear el webhook
+
+Luego de ello debes concatenar todos estos valores y aplicarle SHA256, el resultado debe ser el mismo que el valor del header `X-Keynua-Webhook-SigV2`
+
+<aside class="notice">Si el resultado de tu hash coincide con el que te enviamos, puedes tener la seguridad de que es Keynua quién envió la información a tu API.</aside>
