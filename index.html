@@ -398,6 +398,9 @@
                   <li>
                     <a href="#verificar-keynua-signature-webhook" class="toc-h2 toc-link" data-title="Verificar Keynua Signature Webhook">Verificar Keynua Signature Webhook</a>
                   </li>
+                  <li>
+                    <a href="#verificar-keynua-signature-webhook-v2" class="toc-h2 toc-link" data-title="Verificar Keynua Signature Webhook V2">Verificar Keynua Signature Webhook V2</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -3374,7 +3377,9 @@ Producción: https://api.keynua.com
         </span><span class="nl">"Content-Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/json"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"X-Keynua-Webhook-Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ContractFinished"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"X-Keynua-Webhook-TS"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1604957455847"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"X-Keynua-Webhook-Sig"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ec7584cb..."</span><span class="w">
+        </span><span class="nl">"X-Keynua-Webhook-Token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12fafbc..."</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"X-Keynua-Webhook-Sig"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ec7584cb..."</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"X-Keynua-Webhook-SigV2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"f2a13aa..."</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -3393,12 +3398,20 @@ Producción: https://api.keynua.com
 <td>Firma del request para el control de la manipulación de la petición. Para más información revisa la sección de <a href="#verificar-keynua-signature-webhook">Verificar Keynua Signature Webhook</a></td>
 </tr>
 <tr>
+<td>x-keynua-webhook-sigV2</td>
+<td>Firma del request V2 para el control de la manipulación de la petición. Para más información revisa la sección de <a href="#verificar-keynua-signature-webhook-v2">Verificar Keynua Signature Webhook V2</a></td>
+</tr>
+<tr>
 <td>x-keynua-webhook-ts</td>
 <td>Numero de milisegundos desde UNIX Epoch (01/01/1970) cuando se envió el evento</td>
 </tr>
 <tr>
 <td>x-keynua-webhook-type</td>
 <td>Nombre del evento emitido</td>
+</tr>
+<tr>
+<td>x-keynua-webhook-token</td>
+<td>Token unico generado por request con una integridad de 24 horas</td>
 </tr>
 </tbody></table>
 <h3 id='body-6'>Body</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
@@ -4484,6 +4497,21 @@ Producción: https://api.keynua.com
 <p>Luego de ello debes concatenar todos estos valores y aplicarle SHA256, el resultado debe ser el mismo que el valor del header <code>X-Keynua-Webhook-Sig</code></p>
 
 <aside class="notice">Si el resultado de tu hash coincide con el que te enviamos, puedes tener la seguridad de que es Keynua quién envió la información a tu API y que la información no ha sido alterada en tránsito.</aside>
+<h2 id='verificar-keynua-signature-webhook-v2'>Verificar Keynua Signature Webhook V2</h2><div class="highlight"><pre class="highlight plaintext"><code>SHA_256(webhookToken + ts + webHookSecret)
+</code></pre></div>
+<p>Si quieres verificar que Keynua es quien está golpeando tu API Webhook, debes verificar el SignatureV2 que envía Keynua en el header <code>X-Keynua-Webhook-SigV2</code></p>
+
+<p>Para verificar este valor necesitas:</p>
+
+<ul>
+<li>El valor del header <code>X-Keynua-Webhook-Token</code></li>
+<li>El valor del header <code>X-Keynua-Webhook-TS</code></li>
+<li>El valor del <code>secret</code> que obtuviste al crear el webhook</li>
+</ul>
+
+<p>Luego de ello debes concatenar todos estos valores y aplicarle SHA256, el resultado debe ser el mismo que el valor del header <code>X-Keynua-Webhook-SigV2</code></p>
+
+<aside class="notice">Si el resultado de tu hash coincide con el que te enviamos, puedes tener la seguridad de que es Keynua quién envió la información a tu API.</aside>
 <h1 id='errors'>Errors</h1>
 <p>El API de Keynua usa los siguientes códigos de errores.</p>
 
