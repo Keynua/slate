@@ -923,7 +923,7 @@ request = Net::HTTP::POST.new(url)
 request["authorization"] = 'YOUR-API-TOKEN-HERE'
 request["x-api-key"] = 'YOUR-API-KEY-HERE'
 request["content-type"] = 'application/json'
-request.body = "{\n  \"girador\": {\n    \"nombresNat_Nat\": \"Nombre\",\n    \"correoElectronico\": \"prueba@example.com\",\n    \"primerApellido_Nat\": \"Apellido 1\",\n    \"segundoApellido_Nat\": \"Apellido 2\",\n    \"numeroCelular\": \"2348458734\",\n    \"estadoCivil\": \"soltero\",\n    \"direccion1PersonaGrupo_PGP\": \"Domicilio 1\",\n    \"telefono1PersonaGrupo_PGP\": \"3495852343\",\n    \"fechaExpedicion_Nat\": \"2021-09-01\",\n    \"fechaNacimiento_Nat\": \"2021-09-01\",\n    \"fkIdDepartamentoExpedicion_Nat\": \"11\",\n    \"fkIdCiudadExpedicion_Nat\": \"11001\",\n    \"fkIdTipoDocumento\": 1,\n    \"numeroDocumento\": \"523642456\"\n  }\n}"
+request.body = "{\n  \"girador\": {\n    \"nombresNat_Nat\": \"Nombre\",\n    \"correoElectronico\": \"prueba@example.com\",\n    \"primerApellido_Nat\": \"Apellido 1\",\n    \"segundoApellido_Nat\": \"Apellido 2\",\n    \"numeroCelular\": \"2348458734\",\n    \"estadoCivil\": \"soltero\",\n    \"direccion1PersonaGrupo_PGP\": \"Domicilio 1\",\n    \"telefono1PersonaGrupo_PGP\": \"3495852343\",\n    \"fechaExpedicion_Nat\": \"2021-09-01\",\n    \"fechaNacimiento_Nat\": \"2021-09-01\",\n    \"fkIdDepartamentoExpedicion_Nat\": \"11\",\n    \"fkIdCiudadExpedicion_Nat\": \"11001\",\n    \"fkIdTipoDocumento\": \"1\",\n    \"numeroDocumento\": \"523642456\"\n  }\n}"
 
 response = http.request(request)
 puts response.read_body
@@ -934,7 +934,7 @@ import http.client
 
 conn = http.client.HTTPSConnection("api.stg.keynua.com")
 
-payload = "{\n  \"girador\": {\n    \"nombresNat_Nat\": \"Nombre\",\n    \"correoElectronico\": \"prueba@example.com\",\n    \"primerApellido_Nat\": \"Apellido 1\",\n    \"segundoApellido_Nat\": \"Apellido 2\",\n    \"numeroCelular\": \"2348458734\",\n    \"estadoCivil\": \"soltero\",\n    \"direccion1PersonaGrupo_PGP\": \"Domicilio 1\",\n    \"telefono1PersonaGrupo_PGP\": \"3495852343\",\n    \"fechaExpedicion_Nat\": \"2021-09-01\",\n    \"fechaNacimiento_Nat\": \"2021-09-01\",\n    \"fkIdDepartamentoExpedicion_Nat\": \"11\",\n    \"fkIdCiudadExpedicion_Nat\": \"11001\",\n    \"fkIdTipoDocumento\": 1,\n    \"numeroDocumento\": \"523642456\"\n  }\n}"
+payload = "{\n  \"girador\": {\n    \"nombresNat_Nat\": \"Nombre\",\n    \"correoElectronico\": \"prueba@example.com\",\n    \"primerApellido_Nat\": \"Apellido 1\",\n    \"segundoApellido_Nat\": \"Apellido 2\",\n    \"numeroCelular\": \"2348458734\",\n    \"estadoCivil\": \"soltero\",\n    \"direccion1PersonaGrupo_PGP\": \"Domicilio 1\",\n    \"telefono1PersonaGrupo_PGP\": \"3495852343\",\n    \"fechaExpedicion_Nat\": \"2021-09-01\",\n    \"fechaNacimiento_Nat\": \"2021-09-01\",\n    \"fkIdDepartamentoExpedicion_Nat\": \"11\",\n    \"fkIdCiudadExpedicion_Nat\": \"11001\",\n    \"fkIdTipoDocumento\": \"1\",\n    \"numeroDocumento\": \"523642456\"\n  }\n}"
 
 headers = {
     'x-api-key': "YOUR-API-KEY-HERE",
@@ -970,7 +970,7 @@ curl --request POST \
     "fechaNacimiento_Nat": "2021-09-01",
     "fkIdDepartamentoExpedicion_Nat": "11",
     "fkIdCiudadExpedicion_Nat": "11001",
-    "fkIdTipoDocumento": 1,
+    "fkIdTipoDocumento": "1",
     "numeroDocumento": "523642456"
   }
 }'
@@ -993,7 +993,7 @@ const data = JSON.stringify({
     fechaNacimiento_Nat: '2021-09-01',
     fkIdDepartamentoExpedicion_Nat: '11',
     fkIdCiudadExpedicion_Nat: '11001',
-    fkIdTipoDocumento: 1,
+    fkIdTipoDocumento: '1',
     numeroDocumento: '523642456'
   }
 });
@@ -1056,7 +1056,7 @@ nombresNat_Nat | string | Nombres
 correoElectronico | string | Correo electrónico
 primerApellido_Nat | string | Primer apellido
 segundoApellido_Nat | string |  Segundo apellido
-fkIdTipoDocumento | integer | Tipo de documento. Puede tener los siguientes valores: `1 (CEDULA DE CIUDADANIA)` , `2 (CEDULA DE EXTRANJERIA)`
+fkIdTipoDocumento | string | Tipo de documento. Puede tener los siguientes valores: `"1" (CEDULA DE CIUDADANIA)` , `"2" (CEDULA DE EXTRANJERIA)`
 numeroDocumento | string | Número de documento
 numeroCelular | string | Número de celular
 estadoCivil | string | Estado civil
@@ -1076,7 +1076,7 @@ fkIdCiudadExpedicion_Nat | string | Cuidad de expedición
 	"flags": {
 		"decevalData": {
 			"promissoryNote": {
-				"tipoPagare": 2,
+				"tipoPagare": "2",
 				"numCredito": "964234",
 				"fechaVencimientoFinanciero": "2021-08-13",
 				"numReferencia": "985462",
@@ -1085,19 +1085,19 @@ fkIdCiudadExpedicion_Nat | string | Cuidad de expedición
 				"valorPesosDesembolso": 10000,
 				"valorPesosDesembolsoLetras": "DIEZ MIL",
 				"otorganteNumId": "444332323",
-				"otorganteTipoId": 1,
+				"otorganteTipoId": "1",
 				"apoderadoNumId": "754345789",
-				"apoderadoTipoId": 1,
+				"apoderadoTipoId": "1",
 				"listaCodeudoresAvalistasPagare": [
 					{
 						"giradorNumId": "048918289",
-						"idRol": 6,
-						"giradorTipoId": 1
+						"idRol": "6",
+						"giradorTipoId": "1"
 					},
 					{
 						"giradorNumId": "453456345",
 						"idRol": 7,
-						"giradorTipoId": 1
+						"giradorTipoId": "1"
 					}
 				],
 				"ciudadCreacion": "11001",
@@ -1167,17 +1167,17 @@ Detalle del pagaré. El elemento está compuesto por:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-tipoPagare | integer | Tipo de Pagaré. Puede tener los siguientes valores: `1 (Diligenciado)` , `2 (En blanco con carta de instrucciones)`.
+tipoPagare | string | Tipo de Pagaré. Puede tener los siguientes valores: `"1" (Diligenciado)` , `"2" (En blanco con carta de instrucciones)`.
 numCredito | string | Número de crédito
 fechaVencimientoFinanciero | string | Fecha de vencimiento. Formato: YYYY-MM-dd
 numReferencia | string | Número de referencia
 numPagareEntidad | string | Número del Pagaré de la entidad
 creditoReembolsableEn | integer | Indica el tipo de moneda del desembolso. Puede tener los siguientes valores: `1 (EnURV)` , `2 (En Pesos)` , `3 (En Dólares)` , 4 `(Otros)`
-valorPesosDesembolso | integer | Valor del desembolso
-valorPesosDesembolsoLetras | string | Valor del desembolso representado en texto
-otorganteTipoId | integer | Tipo de documento del otorgante. Puede tener los siguientes valores: `1 (CEDULA DE CIUDADANIA)` , `2 (CEDULA DE EXTRANJERIA)`.
+valorPesosDesembolso | integer | Valor de desembolso
+valorPesosDesembolsoLetras | string | Valor de desembolso representado en texto
+otorganteTipoId | string | Tipo de documento del apoderado.  Puede tener los siguientes valores: `"1" (CEDULA DE CIUDADANIA)` , `"2" (CEDULA DE EXTRANJERIA)`.
 otorganteNumId | string | Número de documento del otorgante
-apoderadoTipoId | integer | Tipo de documento del apoderado.  Puede tener los siguientes valores: `1 (CEDULA DE CIUDADANIA)` , `2 (CEDULA DE EXTRANJERIA)`.
+apoderadoTipoId | string | Tipo de documento del apoderado.  Puede tener los siguientes valores: `"1" (CEDULA DE CIUDADANIA)` , `"2" (CEDULA DE EXTRANJERIA)`.
 apoderadoNumId | string | Número de documento del apoderado
 ciudadCreacion | string | Cuidad de creacion del Pagaré
 deptoCreacion | string | Departamento de creación del Pagaré
@@ -1189,8 +1189,8 @@ El codeudor o avalista del pagaré. El elemento está compuesto por:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-giradorTipoId | integer | Tipo de documento del participante. Puede tener los siguientes valores: `1 (CEDULA DE CIUDADANIA)` , `2 (CEDULA DE EXTRANJERIA)`.
-idRol | integer | Rol del participante. Puede tener los siguientes valores: `6 (Codeudor)` , `7 (Avalista)`
+giradorTipoId | string | Tipo de documento del apoderado.  Puede tener los siguientes valores: `"1" (CEDULA DE CIUDADANIA)` , `"2" (CEDULA DE EXTRANJERIA)`.
+idRol | string | Rol del participante. Puede tener los siguientes valores: `"6" (Codeudor)` , `"7" (Avalista)`
 giradorNumId | string | Nùmero de documento del participante
 
 # Verificación de identidad
