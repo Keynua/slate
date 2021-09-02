@@ -886,6 +886,313 @@ value | object | Dentro del objeto value debes enviar el linkId obtenido en el p
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
 
+# Deceval
+
+Permite asociar un Pagaré emitido en el sistema de Deceval a un contrato.
+
+<aside class="warning">Si quieres crear contratos con Deceval, debes contactar al equipo de soporte de Keynua</aside>
+
+## Restricciones
+
+1. El objeto `decevalData` se debe agregar a los flags en la [creación del contrato](#crear-un-contrato).
+1. Todos los usuarios del contrato que se agregan mediante el atributo `users` deben pertenecer al grupo de firmantes del proceso si y solo si participan en el Pagaré.
+
+## Flujo de firma
+
+1. Registrar giradores.
+1. Creación del Pagaré en Deceval.
+1. Usuario realiza la firma del contrato mediante el Widget de keynua.
+1. Se ejecuta el item de firma Deceval: Este item usa la accion "FirmarPagares" del servicio de
+Deceval para registrar la firma del participante.
+1. Se ejecuta el item de validación del Pagaré: consulta el estado del Pagaré en el sistema de Deceval mediante la acción "ConsultarPagares" para guardar el documento generado en el contrato y adjuntarlo al pdf final.
+
+## Giradores
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'openssl'
+
+url = URI("https://api.stg.keynua.com/deceval/v1/web/crear-girador-natural")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::POST.new(url)
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["content-type"] = 'application/json'
+request.body = "{\n  \"girador\": {\n    \"nombresNat_Nat\": \"Nombre\",\n    \"correoElectronico\": \"prueba@example.com\",\n    \"primerApellido_Nat\": \"Apellido 1\",\n    \"segundoApellido_Nat\": \"Apellido 2\",\n    \"numeroCelular\": \"2348458734\",\n    \"estadoCivil\": \"soltero\",\n    \"direccion1PersonaGrupo_PGP\": \"Domicilio 1\",\n    \"telefono1PersonaGrupo_PGP\": \"3495852343\",\n    \"fechaExpedicion_Nat\": \"2021-09-01\",\n    \"fechaNacimiento_Nat\": \"2021-09-01\",\n    \"fkIdDepartamentoExpedicion_Nat\": \"11\",\n    \"fkIdCiudadExpedicion_Nat\": \"11001\",\n    \"fkIdTipoDocumento\": \"1\",\n    \"numeroDocumento\": \"523642456\"\n  }\n}"
+
+response = http.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
+
+payload = "{\n  \"girador\": {\n    \"nombresNat_Nat\": \"Nombre\",\n    \"correoElectronico\": \"prueba@example.com\",\n    \"primerApellido_Nat\": \"Apellido 1\",\n    \"segundoApellido_Nat\": \"Apellido 2\",\n    \"numeroCelular\": \"2348458734\",\n    \"estadoCivil\": \"soltero\",\n    \"direccion1PersonaGrupo_PGP\": \"Domicilio 1\",\n    \"telefono1PersonaGrupo_PGP\": \"3495852343\",\n    \"fechaExpedicion_Nat\": \"2021-09-01\",\n    \"fechaNacimiento_Nat\": \"2021-09-01\",\n    \"fkIdDepartamentoExpedicion_Nat\": \"11\",\n    \"fkIdCiudadExpedicion_Nat\": \"11001\",\n    \"fkIdTipoDocumento\": \"1\",\n    \"numeroDocumento\": \"523642456\"\n  }\n}"
+
+headers = {
+    'x-api-key': "YOUR-API-KEY-HERE",
+    'authorization': "YOUR-API-TOKEN-HERE",
+    'content-type': "application/json"
+    }
+
+conn.request("POST", "/deceval/v1/web/crear-girador-natural", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --request POST \
+  --url https://api.stg.keynua.com/deceval/v1/web/crear-girador-natural \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'content-type: application/json' \
+  --data '{
+  "girador": {
+    "nombresNat_Nat": "Nombre",
+    "correoElectronico": "prueba@example.com",
+    "primerApellido_Nat": "Apellido 1",
+    "segundoApellido_Nat": "Apellido 2",
+    "numeroCelular": "2348458734",
+    "estadoCivil": "soltero",
+    "direccion1PersonaGrupo_PGP": "Domicilio 1",
+    "telefono1PersonaGrupo_PGP": "3495852343",
+    "fechaExpedicion_Nat": "2021-09-01",
+    "fechaNacimiento_Nat": "2021-09-01",
+    "fkIdDepartamentoExpedicion_Nat": "11",
+    "fkIdCiudadExpedicion_Nat": "11001",
+    "fkIdTipoDocumento": "1",
+    "numeroDocumento": "523642456"
+  }
+}'
+```
+
+```javascript
+const https = require("https");
+
+const data = JSON.stringify({
+  girador: {
+    nombresNat_Nat: 'Nombre',
+    correoElectronico: 'prueba@example.com',
+    primerApellido_Nat: 'Apellido 1',
+    segundoApellido_Nat: 'Apellido 2',
+    numeroCelular: '2348458734',
+    estadoCivil: 'soltero',
+    direccion1PersonaGrupo_PGP: 'Domicilio 1',
+    telefono1PersonaGrupo_PGP: '3495852343',
+    fechaExpedicion_Nat: '2021-09-01',
+    fechaNacimiento_Nat: '2021-09-01',
+    fkIdDepartamentoExpedicion_Nat: '11',
+    fkIdCiudadExpedicion_Nat: '11001',
+    fkIdTipoDocumento: '1',
+    numeroDocumento: '523642456'
+  }
+});
+
+const options = {
+  method: "POST",
+  hostname: "api.stg.keynua.com",
+  path: "/deceval/v1/web/crear-girador-natural",
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE",
+    "content-type": "application/json",
+    "content-length": data.length
+  }
+};
+
+const req = https.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+
+req.on('error', (error) => {
+  console.error(error)
+});
+
+req.write(data);
+req.end();
+```
+
+> Los participantes del Pagaré deben ser registrados como giradores antes de crear un proceso de firma con Deceval.
+
+### HTTP Request
+
+`POST /deceval/v1/web/crear-girador-natural`
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+authorization | your-api-token
+Content-Type | application/json
+
+### Body
+
+Para crear el girador, se tiene que enviar la data como un objeto JSON
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+nombresNat_Nat | string | Nombres
+correoElectronico | string | Correo electrónico
+primerApellido_Nat | string | Primer apellido
+segundoApellido_Nat | string |  Segundo apellido
+fkIdTipoDocumento | string | Tipo de documento. Puede tener los siguientes valores: `"1" (CEDULA DE CIUDADANIA)` , `"2" (CEDULA DE EXTRANJERIA)`
+numeroDocumento | string | Número de documento
+numeroCelular | string | Número de celular
+estadoCivil | string | Estado civil
+direccion1PersonaGrupo_PGP | string | Dirección de domicilio
+telefono1PersonaGrupo_PGP | string | Teléfono
+fechaNacimiento_Nat | string | Fecha de nacimiento. Formato: YYYY-MM-dd
+fechaExpedicion_Nat | string | Fecha de expedición. Formato: YYYY-MM-dd
+fkIdDepartamentoExpedicion_Nat | string | Departamento de expedición
+fkIdCiudadExpedicion_Nat | string | Cuidad de expedición
+
+## Estructura del Pagaré
+
+>`decevalData`
+
+```json
+{
+	"flags": {
+		"decevalData": {
+			"promissoryNote": {
+				"tipoPagare": "2",
+				"numCredito": "964234",
+				"fechaVencimientoFinanciero": "2021-08-13",
+				"numReferencia": "985462",
+				"numPagareEntidad": "642345",
+				"creditoReembolsableEn": 2,
+				"valorPesosDesembolso": 10000,
+				"valorPesosDesembolsoLetras": "DIEZ MIL",
+				"otorganteNumId": "444332323",
+				"otorganteTipoId": "1",
+				"apoderadoNumId": "754345789",
+				"apoderadoTipoId": "1",
+				"listaCodeudoresAvalistasPagare": [
+					{
+						"giradorNumId": "048918289",
+						"idRol": "6",
+						"giradorTipoId": "1"
+					},
+					{
+						"giradorNumId": "453456345",
+						"idRol": 7,
+						"giradorTipoId": "1"
+					}
+				],
+				"ciudadCreacion": "11001",
+				"deptoCreacion": "11",
+				"paisCreacion": "CO"
+			}
+		}
+  	}
+}
+```
+
+> `users`
+
+```json
+{
+	"users": [
+		{
+			"groups": [ "signers" ],
+			"prefilledItems": [
+				{
+					"target": "documentNumber",
+					"value": { "text": "444332323" }
+				}
+			],
+			"name": "Nombres y Apellidos 1",
+			"email": "correo1@ejemplo.com"
+		},
+		{
+			"groups": [ "signers" ],
+			"prefilledItems": [
+				{
+					"target": "documentNumber",
+					"value": { "text": "754345789" }
+				}
+			],
+			"name": "Nombres y Apellidos 2",
+			"email": "correo2@ejemplo.com"
+		},
+		{
+			"groups": [ "signers" ],
+			"prefilledItems": [
+				{
+					"target": "documentNumber",
+					"value": { "text": "048918289" }
+				}
+			],
+			"name": "Nombres y Apellidos 3",
+			"email": "correo3@ejemplo.com"
+		},
+		{
+			"groups": [ "signers" ],
+			"prefilledItems": [
+				{
+					"target": "documentNumber",
+					"value": { "text": "453456345" }
+				}
+			],
+			"name": "Nombres y Apellidos 4",
+			"email": "correo4@ejemplo.com"
+		}
+  	]
+}
+```
+
+### promissoryNote:
+Detalle del pagaré. El elemento está compuesto por:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+tipoPagare | string | Tipo de Pagaré. Puede tener los siguientes valores: `"1" (Diligenciado)` , `"2" (En blanco con carta de instrucciones)`.
+numCredito | string | Número de crédito
+fechaVencimientoFinanciero | string | Fecha de vencimiento. Formato: YYYY-MM-dd
+numReferencia | string | Número de referencia
+numPagareEntidad | string | Número del Pagaré de la entidad
+creditoReembolsableEn | integer | Indica el tipo de moneda del desembolso. Puede tener los siguientes valores: `1 (EnURV)` , `2 (En Pesos)` , `3 (En Dólares)` , 4 `(Otros)`
+valorPesosDesembolso | integer | Valor de desembolso
+valorPesosDesembolsoLetras | string | Valor de desembolso representado en texto
+otorganteTipoId | string | Tipo de documento del apoderado.  Puede tener los siguientes valores: `"1" (CEDULA DE CIUDADANIA)` , `"2" (CEDULA DE EXTRANJERIA)`.
+otorganteNumId | string | Número de documento del otorgante
+apoderadoTipoId | string | Tipo de documento del apoderado.  Puede tener los siguientes valores: `"1" (CEDULA DE CIUDADANIA)` , `"2" (CEDULA DE EXTRANJERIA)`.
+apoderadoNumId | string | Número de documento del apoderado
+ciudadCreacion | string | Cuidad de creacion del Pagaré
+deptoCreacion | string | Departamento de creación del Pagaré
+paisCreacion | string | Pais de creación del Pagaré
+listaCodeudoresAvalistasPagare | [CodeudoresAvalistas[]](#CodeudoresAvalistas) | Lista de codeudores y avalistas
+
+### CodeudoresAvalistas
+El codeudor o avalista del pagaré. El elemento está compuesto por:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+giradorTipoId | string | Tipo de documento del apoderado.  Puede tener los siguientes valores: `"1" (CEDULA DE CIUDADANIA)` , `"2" (CEDULA DE EXTRANJERIA)`.
+idRol | string | Rol del participante. Puede tener los siguientes valores: `"6" (Codeudor)` , `"7" (Avalista)`
+giradorNumId | string | Nùmero de documento del participante
+
 # Verificación de identidad
 
 Permite crear, listar y obtener verificaciones de identidad.
