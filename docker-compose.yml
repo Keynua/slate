@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+    serve:
+        container_name: keynua-docs
+        ports:
+            - '4567:4567'
+        volumes:
+            - './source:/srv/slate/source'
+        image: slatedocs/slate
+        command:
+            - serve
