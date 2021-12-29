@@ -1,5 +1,12 @@
 version: '3.3'
 services:
+    build:
+        volumes:
+            - './build:/srv/slate/build'
+            - './source:/srv/slate/source'
+        image: slatedocs/slate
+        command:
+            - build
     serve:
         container_name: keynua-docs
         ports:
