@@ -906,14 +906,14 @@ Permite asociar un Pagaré emitido en el sistema de Deceval a un contrato.
 Deceval para registrar la firma del participante.
 1. Se ejecuta el item de validación del Pagaré: consulta el estado del Pagaré en el sistema de Deceval mediante la acción "ConsultarPagares" para guardar el documento generado en el contrato y adjuntarlo al pdf final.
 
-## Giradores
+## Crear girador natural
 
 ```ruby
 require 'uri'
 require 'net/http'
 require 'openssl'
 
-url = URI("https://api.stg.keynua.com/deceval/v1/web/crear-girador-natural")
+url = URI("https://api.stg.keynua.com/deceval/v1/crear-girador-natural")
 
 http = Net::HTTP.new(url.host, url.port)
 http.use_ssl = true
@@ -942,7 +942,7 @@ headers = {
     'content-type': "application/json"
     }
 
-conn.request("POST", "/deceval/v1/web/crear-girador-natural", payload, headers)
+conn.request("POST", "/deceval/v1/crear-girador-natural", payload, headers)
 
 res = conn.getresponse()
 data = res.read()
@@ -952,7 +952,7 @@ print(data.decode("utf-8"))
 
 ```shell
 curl --request POST \
-  --url https://api.stg.keynua.com/deceval/v1/web/crear-girador-natural \
+  --url https://api.stg.keynua.com/deceval/v1/crear-girador-natural \
   --header 'x-api-key: YOUR-API-KEY-HERE' \
   --header 'authorization: YOUR-API-TOKEN-HERE' \
   --header 'content-type: application/json' \
@@ -1001,7 +1001,7 @@ const data = JSON.stringify({
 const options = {
   method: "POST",
   hostname: "api.stg.keynua.com",
-  path: "/deceval/v1/web/crear-girador-natural",
+  path: "/deceval/v1/crear-girador-natural",
   headers: {
     "x-api-key": "YOUR-API-KEY-HERE",
     "authorization": "YOUR-API-TOKEN-HERE",
@@ -1036,8 +1036,7 @@ req.end();
 
 ### HTTP Request
 
-`POST /deceval/v1/web/crear-girador-natural`
-
+`POST /deceval/v1/crear-girador-natural`
 ### Headers
 
 Key | Value
@@ -1066,6 +1065,127 @@ fechaNacimiento_Nat | string | Fecha de nacimiento. Formato: YYYY-MM-dd
 fechaExpedicion_Nat | string | Fecha de expedición. Formato: YYYY-MM-dd
 fkIdDepartamentoExpedicion_Nat | string | Departamento de expedición
 fkIdCiudadExpedicion_Nat | string | Cuidad de expedición
+
+## Consultar girador
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'openssl'
+
+url = URI("https://api.stg.keynua.com/deceval/v1/obtener-girador")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::POST.new(url)
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["content-type"] = 'application/json'
+request.body = "{\n    \"idClasePersona\": \"1\",\n    \"tipoDocumento\": \"1\",\n    \"numeroDocumento\": \"523642456\"\n    }"
+
+response = http.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
+
+payload = "{\n    \"idClasePersona\": \"1\",\n    \"tipoDocumento\": \"1\",\n    \"numeroDocumento\": \"523642456\"\n    }"
+
+headers = {
+    'x-api-key': "YOUR-API-KEY-HERE",
+    'authorization': "YOUR-API-TOKEN-HERE",
+    'content-type': "application/json"
+    }
+
+conn.request("POST", "/deceval/v1/crear-girador-natural", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --request POST \
+  --url https://api.stg.keynua.com/deceval/v1/obtener-girador \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'content-type: application/json' \
+  --data '{
+    "idClasePersona": "1",
+    "tipoDocumento": "1",
+    "numeroDocumento": "523642456",
+}'
+```
+
+```javascript
+const https = require("https");
+
+const data = JSON.stringify({
+    "idClasePersona": "1",
+    "tipoDocumento": "1",
+    "numeroDocumento": "523642456",
+});
+
+const options = {
+  method: "POST",
+  hostname: "api.stg.keynua.com",
+  path: "deceval/v1/obtener-girador",
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE",
+    "content-type": "application/json",
+    "content-length": data.length
+  }
+};
+
+const req = https.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+
+req.on('error', (error) => {
+  console.error(error)
+});
+
+req.write(data);
+req.end();
+```
+### HTTP Request
+
+`POST /deceval/v1/obtener-girador`
+
+### Headers
+
+Key | Value
+--------- | -----------
+x-api-key | your-api-key
+authorization | your-api-token
+Content-Type | application/json
+
+### Body
+
+Para obtener el girador, se tiene que enviar la data como un objeto JSON
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+idClasePersona | string | Tipo de girador. Puede tener los siguientes valores: `"1" (NATURAL)` , `"2" (JURIDICO)`
+numeroDocumento | string | Número de documento
+tipoDocumento | string | Tipo de documento. Puede tener los siguientes valores: `"1" (CEDULA DE CIUDADANIA)` , `"2" (CEDULA DE EXTRANJERIA)`
 
 ## Estructura del Pagaré
 

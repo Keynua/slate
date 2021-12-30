@@ -1,10 +1,18 @@
 version: '3.3'
 services:
-    slate:
-		build: .
+    build:
+        container_name: build_slate
+        volumes:
+            - './build:/srv/slate/build'
+            - './source:/srv/slate/source'
+        build: .
+        image: slatedocs/slate:2.0
+    serve:
+        container_name: serve_slate
         ports:
             - '4567:4567'
         volumes:
             - './source:/srv/slate/source'
+        image: slatedocs/slate:2.0
         command:
             - serve
