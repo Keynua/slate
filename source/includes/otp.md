@@ -212,7 +212,7 @@ xhr.send(data);
 }
 ```
 
-Permite verificar si el código OTP ingresado en correcto o no.
+Permite verificar si el código OTP ingresado es correcto o no.
 
 ### HTTP Request
 
@@ -229,7 +229,7 @@ code | string | No | Código OTP ingresado por el firmante.
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-otpToken | string | Token que debe ser enviado al firmar el contrato para demostrar que se ingresó correctamente el código OTP.
+otpToken | string | Token que debe ser enviado en el _Paso 3_ al [actualizar el valor de un item](#actualizar-el-valor-de-un-item) para demostrar que se ingresó correctamente el código OTP.
 
 ## Obtener información
 
@@ -327,11 +327,20 @@ Permite revisar el estado del código actual.
 
 `POST https://api.stg.keynua.com/send-otp/v1/details`
 
-### Body
+### Request body
 
 Atributo | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
 auth | [Auth](#propiedades-de-auth) | No | Permite identificar el OTP del usuario y contrato
+
+### Response body
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+sent | boolean | Si el código OTP se envió o no.
+channel | string | Por qué medio se realizó el envío del código.
+resendInSec | number | En cuantos segundos se podrá solicitar el envío de un nuevo código.
+availableAttempts | number | Cuantos intentos aún quedan disponibles.
 
 ## Errores
 

@@ -884,6 +884,7 @@ token | string | El token del usuario del cual se actualizará el item
 itemId | integer | El identificador del item del que se actualizará el valor
 version | integer | La versión del item del que se actualizará el valor
 value | object | Dentro del objeto value debes enviar el linkId obtenido en el paso 1 con el key `linkId`
+otpToken | string | El token de otp necesario **solo** para los contratos que utilizan otp.
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
 
