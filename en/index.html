@@ -1851,6 +1851,11 @@ Producción: https://api.keynua.com
 <td>object</td>
 <td>Dentro del objeto value debes enviar el linkId obtenido en el paso 1 con el key <code>linkId</code></td>
 </tr>
+<tr>
+<td>otpToken</td>
+<td>string</td>
+<td>El token de otp necesario <strong>solo</strong> para los contratos que utilizan otp.</td>
+</tr>
 </tbody></table>
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
@@ -5365,7 +5370,7 @@ uso para realizar la firma de documentos.</p>
   </span><span class="nl">"otpToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXA...qivpYpLm9R7LHid3w"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Permite verificar si el código OTP ingresado en correcto o no.</p>
+<p>Permite verificar si el código OTP ingresado es correcto o no.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>POST https://api.stg.keynua.com/send-otp/v1</code></p>
 <h3 id='request-body-2'>Request body</h3>
@@ -5401,7 +5406,7 @@ uso para realizar la firma de documentos.</p>
 <tr>
 <td>otpToken</td>
 <td>string</td>
-<td>Token que debe ser enviado al firmar el contrato para demostrar que se ingresó correctamente el código OTP.</td>
+<td>Token que debe ser enviado en el <em>Paso 3</em> al <a href="#actualizar-el-valor-de-un-item">actualizar el valor de un item</a> para demostrar que se ingresó correctamente el código OTP.</td>
 </tr>
 </tbody></table>
 <h2 id='obtener-informacion'>Obtener información</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
@@ -5483,7 +5488,7 @@ uso para realizar la firma de documentos.</p>
 <p>Permite revisar el estado del código actual.</p>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>POST https://api.stg.keynua.com/send-otp/v1/details</code></p>
-<h3 id='body'>Body</h3>
+<h3 id='request-body-3'>Request body</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -5497,6 +5502,35 @@ uso para realizar la firma de documentos.</p>
 <td><a href="#propiedades-de-auth">Auth</a></td>
 <td>No</td>
 <td>Permite identificar el OTP del usuario y contrato</td>
+</tr>
+</tbody></table>
+<h3 id='response-body-3'>Response body</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sent</td>
+<td>boolean</td>
+<td>Si el código OTP se envió o no.</td>
+</tr>
+<tr>
+<td>channel</td>
+<td>string</td>
+<td>Por qué medio se realizó el envío del código.</td>
+</tr>
+<tr>
+<td>resendInSec</td>
+<td>number</td>
+<td>En cuantos segundos se podrá solicitar el envío de un nuevo código.</td>
+</tr>
+<tr>
+<td>availableAttempts</td>
+<td>number</td>
+<td>Cuantos intentos aún quedan disponibles.</td>
 </tr>
 </tbody></table>
 <h2 id='errores'>Errores</h2>
