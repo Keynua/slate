@@ -348,6 +348,9 @@
                     <a href="#tipos-de-item" class="toc-h2 toc-link" data-title="Tipos de Item">Tipos de Item</a>
                   </li>
                   <li>
+                    <a href="#errores-por-tipo-de-item" class="toc-h2 toc-link" data-title="Errores por tipo de Item">Errores por tipo de Item</a>
+                  </li>
+                  <li>
                     <a href="#actualizar-el-valor-de-un-item" class="toc-h2 toc-link" data-title="Actualizar el valor de un item">Actualizar el valor de un item</a>
                   </li>
               </ul>
@@ -1478,7 +1481,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>value</td>
 <td>object</td>
-<td>El valor del item. La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key <strong>url</strong> el cual contiene la URL firmada para poder descargar el archivo. <strong>Las URLs firmadas tienen una duración máxima de 12 horas</strong></td>
+<td>El valor del item. La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key <strong>url</strong> el cual contiene la URL firmada para poder descargar el archivo. <strong>Las URLs firmadas tienen una duración máxima de 12 horas</strong>. Cuando el item tenga estado Error, se obtendrá el siguiente detalle de <a href="#errores-por-tipo-de-item">error por tipo de Item</a></td>
 </tr>
 </tbody></table>
 <h2 id='tipos-de-item'>Tipos de Item</h2>
@@ -1623,6 +1626,204 @@ Producción: https://api.keynua.com
 <td>bulksignature</td>
 <td><code>no</code></td>
 <td>Indica si se solicitó firmar al usuario de firma múltiple o si firmó satsifactoriamente. El estado &quot;error&quot; no está implementado por el momento en este Item.</td>
+</tr>
+</tbody></table>
+<h2 id='errores-por-tipo-de-item'>Errores por tipo de Item</h2>
+<p>Cuando ocurra un error en un Item, se obtendrán principalmente 2 atributos: <code>code</code> y <code>message</code>.</p>
+
+<blockquote>
+<p>Por ejem:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NotValidIdCard"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"El documento de identificación no es válido."</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>El valor de <code>code</code> depende del tipo de error y tipo de Item como se detalla  a continuación</p>
+<h3 id='documents'>documents</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>DocumentRejectedBySigner</td>
+<td>El usuario rechazó el documento.</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">Para este Item, el valor de <code>message</code> vendría a ser el texto ingresado por la persona que rechazó el documento.</aside>
+<h3 id='reniec'>reniec</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ReniecFailed</td>
+<td>Ha fallado la conexión con Reniec y no fue posible obtener la información.</td>
+</tr>
+<tr>
+<td>NotAllowedCancellation</td>
+<td>El documento se encuentra cancelado.</td>
+</tr>
+<tr>
+<td>NotAllowedRestriction</td>
+<td>El documento presenta restricciones por parte de Reniec.</td>
+</tr>
+<tr>
+<td>NotAllowedObservation</td>
+<td>El documento presenta observaciones por parte de Reniec.</td>
+</tr>
+</tbody></table>
+<h3 id='convertvideo'>convertvideo</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ConvertVideoFailed</td>
+<td>No ha sido posible procesar el video del firmante. Este error puede ocurrir si el video es inválido.</td>
+</tr>
+</tbody></table>
+<h3 id='detectlabels'>detectlabels</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>DidNotPass</td>
+<td>La imagen procesada no es un documento válido.</td>
+</tr>
+<tr>
+<td>DetectLabelsFailed</td>
+<td>No ha sido posible detectar el formato esperado ni textos en la imagen.</td>
+</tr>
+</tbody></table>
+<h3 id='checklabels'>checklabels</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>unmatchedInputText</td>
+<td>El texto ingresado no coincide con la imagen del documento de identificación.</td>
+</tr>
+<tr>
+<td>NotValidIdCard</td>
+<td>El documento de identificación no es válido.</td>
+</tr>
+<tr>
+<td>NotValidExpirationDateInIdCard</td>
+<td>La fecha de expiración del documento no es válida.</td>
+</tr>
+<tr>
+<td>ExpirationDateNotDetected</td>
+<td>No se ha detectado la fecha de expiración en el documento.</td>
+</tr>
+<tr>
+<td>NoDetectedTextsInImage</td>
+<td>No se pudo detectar ningún texto dentro de la imagen.</td>
+</tr>
+<tr>
+<td>DuplicatesFoundInId</td>
+<td>Se ha detectado más de un documento de identificación.</td>
+</tr>
+</tbody></table>
+<h3 id='transcribe'>transcribe</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ShortCodeNotFound</td>
+<td>Error en el código hablado.</td>
+</tr>
+<tr>
+<td>TranscriptionFailed</td>
+<td>No fue posible extraer el audio del video.</td>
+</tr>
+</tbody></table>
+<h3 id='facematch'>facematch</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>NotAMatch</td>
+<td>La cara del video no coincide con el documento oficial.</td>
+</tr>
+<tr>
+<td>SourceFaceNotFound</td>
+<td>La cara en la imagen no se pudo encontrar.</td>
+</tr>
+<tr>
+<td>FacemasksDetected</td>
+<td>Se ha detectado una mascarilla en la imagen.</td>
+</tr>
+<tr>
+<td>FaceMatchError</td>
+<td>No fue posible encontrar una coincidencia facial.</td>
+</tr>
+<tr>
+<td>MarkedAsFraud</td>
+<td>Ha sido marcado como un posible fraude por parte de Keynua.</td>
+</tr>
+</tbody></table>
+<h3 id='livenessdetection'>livenessdetection</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>AdminReject</td>
+<td>Error obteniendo la prueba de vida del video.</td>
+</tr>
+<tr>
+<td>ManyFacesDetected</td>
+<td>Han sido detectadas múltiples caras en el video.</td>
+</tr>
+<tr>
+<td>ScoreTooLow</td>
+<td>El video no ha pasado el score mínimo y debe volver a enviarse.</td>
+</tr>
+<tr>
+<td>NoFacesDetected</td>
+<td>No se detectó ningún rostro en el video</td>
+</tr>
+<tr>
+<td>InvalidPayloadStructure</td>
+<td>Error obteniendo la prueba de vida del video.</td>
+</tr>
+<tr>
+<td>MarkedAsFraud</td>
+<td>Ha sido marcado como un posible fraude por parte de Keynua.</td>
+</tr>
+</tbody></table>
+<h3 id='manualapproval'>manualapproval</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ManualApproveRejected</td>
+<td>El item ha sido rechazado por el administrador del contrato.</td>
 </tr>
 </tbody></table>
 <h2 id='actualizar-el-valor-de-un-item'>Actualizar el valor de un item</h2>
