@@ -659,7 +659,7 @@ reference | string | La referencia del item (está relacionado con la plantilla 
 title | string | Un título referente al item
 type | string | El ID del [tipo del Item](#tipos-de-item) al que pertenece
 stageIndex | integer | El índice del nivel al que pertenece el item
-value | object | El valor del item. La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key **url** el cual contiene la URL firmada para poder descargar el archivo. **Las URLs firmadas tienen una duración máxima de 12 horas**
+value | object | El valor del item. La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key **url** el cual contiene la URL firmada para poder descargar el archivo. **Las URLs firmadas tienen una duración máxima de 12 horas**. Cuando el item tenga estado Error, se obtendrá el siguiente detalle de [error por tipo de Item](#errores-por-tipo-de-item)
 
 ## Tipos de Item
 En la siguiente tabla podrás ver los Tipos de Items que existen en Keynua
@@ -688,6 +688,96 @@ Cavali - Perú | cavali | `no` | Proceso que indica el registro de un Pagaré el
 Blockchain | blockchain | `no` | Proceso que indica si se registró correctamente el hash del documento de firma electrónica final(certificado) en Blockchain
 Normativa NOM151 - México | knom151 | `no` | Proceso que indica si se generó correctamente la constancia de conservación según la norma Méxicana NOM151
 Firma Múltiple | bulksignature | `no` | Indica si se solicitó firmar al usuario de firma múltiple o si firmó satsifactoriamente. El estado "error" no está implementado por el momento en este Item.
+
+## Errores por tipo de Item
+
+Cuando ocurra un error en un Item, se obtendrán principalmente 2 atributos: `code` y `message`.
+
+> Por ejem:
+
+
+```json
+{
+	"code": "NotValidIdCard",
+	"message": "El documento de identificación no es válido."
+}
+```
+
+El valor de `code` depende del tipo de error y tipo de Item como se detalla  a continuación
+### documents
+
+Code | Descripción
+--------- | -----------
+DocumentRejectedBySigner | El usuario rechazó el documento.
+
+<aside class="notice">Para este Item, el valor de <code>message</code> vendría a ser el texto ingresado por la persona que rechazó el documento.</aside>
+
+### reniec
+
+Code | Descripción
+--------- | -----------
+ReniecFailed | Ha fallado la conexión con Reniec y no fue posible obtener la información.
+NotAllowedCancellation | El documento se encuentra cancelado.
+NotAllowedRestriction | El documento presenta restricciones por parte de Reniec.
+NotAllowedObservation | El documento presenta observaciones por parte de Reniec.
+### convertvideo
+
+Code | Descripción
+--------- | -----------
+ConvertVideoFailed | No ha sido posible procesar el video del firmante. Este error puede ocurrir si el video es inválido.
+
+### detectlabels
+
+Code | Descripción
+--------- | -----------
+DidNotPass | La imagen procesada no es un documento válido.
+DetectLabelsFailed | No ha sido posible detectar el formato esperado ni textos en la imagen.
+
+### checklabels
+
+Code | Descripción
+--------- | -----------
+unmatchedInputText | El texto ingresado no coincide con la imagen del documento de identificación.
+NotValidIdCard | El documento de identificación no es válido.
+NotValidExpirationDateInIdCard | La fecha de expiración del documento no es válida.
+ExpirationDateNotDetected | No se ha detectado la fecha de expiración en el documento.
+NoDetectedTextsInImage | No se pudo detectar ningún texto dentro de la imagen.
+DuplicatesFoundInId | Se ha detectado más de un documento de identificación.
+
+### transcribe
+
+Code | Descripción
+--------- | -----------
+ShortCodeNotFound | Error en el código hablado.
+TranscriptionFailed | No fue posible extraer el audio del video.
+
+### facematch
+
+Code | Descripción
+--------- | -----------
+NotAMatch | La cara del video no coincide con el documento oficial.
+SourceFaceNotFound | La cara en la imagen no se pudo encontrar.
+FacemasksDetected | Se ha detectado una mascarilla en la imagen.
+FaceMatchError | No fue posible encontrar una coincidencia facial.
+MarkedAsFraud | Ha sido marcado como un posible fraude por parte de Keynua.
+
+### livenessdetection
+
+Code | Descripción
+--------- | -----------
+AdminReject | Error obteniendo la prueba de vida del video.
+ManyFacesDetected | Han sido detectadas múltiples caras en el video.
+ScoreTooLow | El video no ha pasado el score mínimo y debe volver a enviarse.
+NoFacesDetected | No se detectó ningún rostro en el video
+InvalidPayloadStructure | Error obteniendo la prueba de vida del video.
+MarkedAsFraud | Ha sido marcado como un posible fraude por parte de Keynua.
+
+### manualapproval
+
+Code | Descripción
+--------- | -----------
+ManualApproveRejected | El item ha sido rechazado por el administrador del contrato.
+
 ## Actualizar el valor de un item
 
 <aside class="notice">Este procedimiento sólo será realizado en caso quieran construir su propio proceso de firma. Keynua ofrece el proceso de firmar sin costo adicional bajo el propio dominio de Keynua o la posibilidad de incrustar el proceso de firma bajo tu dominio o App móvil mediante nuestro <code><a href="https://github.com/Keynua/public-docs/wiki/Widget">Keynua Widget</a></code></aside>
