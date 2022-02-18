@@ -1386,7 +1386,8 @@ curl --location --request PUT 'https://api.keynua.com/identity-verification/v1' 
     "userPhone": "51123456789",
     "userFullName": "Patrick Star",
     "title": "Identification 12345678",
-    "type": "video"
+    "type": "video",
+    "documentType": "pe-dni"
   }'
 ```
 
@@ -1403,7 +1404,7 @@ request = Net::HTTP::Put.new(url)
 request["x-api-key"] = 'YOUR-API-KEY-HERE'
 request["authorization"] = 'YOUR-API-TOKEN-HERE'
 request["Content-Type"] = "application/json"
-request.body = "{\n  \"documentNumber\": \"12345678\",\n  \"userPhone\": \"51123456789\",\n  \"userFullName\": \"Patrick Star\",\n  \"title\": \"Identification 12345678\",\n  \"type\": \"video\"\n}"
+request.body = "{\n  \"documentNumber\": \"12345678\",\n  \"userPhone\": \"51123456789\",\n  \"userFullName\": \"Patrick Star\",\n  \"title\": \"Identification 12345678\",\n  \"type\": \"video\"\n \"documentType\": \"pe-dni\"\n}"
 
 response = https.request(request)
 puts response.read_body
@@ -1419,7 +1420,8 @@ payload = json.dumps({
     "userPhone": "51123456789",
     "userFullName": "Patrick Star",
     "title": "Identification 12345678",
-    "type": "video"
+    "type": "video",
+    "documentType": "pe-dni"
 })
 headers = {
   'x-api-key': "YOUR-API-KEY-HERE",
@@ -1464,7 +1466,8 @@ var postData = JSON.stringify({
     "userPhone": "51123456789",
     "userFullName": "Patrick Star",
     "title": "Identification 12345678",
-    "type": "video"
+    "type": "video",
+    "documentType": "pe-dni",
 });
 
 req.write(postData);
@@ -1553,6 +1556,7 @@ Nombre | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
 title | string | No | Nombre que se le quiera dar a la verificación
 documentNumber | string | No | Número de documento nacional de identificación de la persona
+documentType | string | No | Tipo de documento nacional. Por ahora soportamos `pe-dni`, `pe-ce`, `mx-ife`, `co-cedula`, `br-denatran`, `ch-cedula` y `sv-dui`.
 userFullName | string | Sí | Nombre completo de la persona
 userEmail | string | Sí | Email de la persona. Si se envía, no enviar el campo `userPhone` también.
 userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no enviar el campo `userEmail` también.
