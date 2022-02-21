@@ -1556,7 +1556,7 @@ Nombre | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
 title | string | No | Nombre que se le quiera dar a la verificación
 documentNumber | string | No | Número de documento nacional de identificación de la persona
-documentType | string | No | Tipo de documento nacional. Por ahora soportamos `pe-dni`, `pe-ce`, `mx-ife`, `co-cedula`, `br-denatran`, `ch-cedula` y `sv-dui`.
+documentType | string | No | Tipo de documento nacional. Por ahora soportamos `pe-dni`, `pe-ce`, `mx-ife`, `co-cedula`, `br-denatran`, `cl-cedula` y `sv-dui`.
 userFullName | string | Sí | Nombre completo de la persona
 userEmail | string | Sí | Email de la persona. Si se envía, no enviar el campo `userPhone` también.
 userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no enviar el campo `userEmail` también.
