@@ -2829,7 +2829,8 @@ Deceval para registrar la firma del participante.</li>
     "userPhone": "51123456789",
     "userFullName": "Patrick Star",
     "title": "Identification 12345678",
-    "type": "video"
+    "type": "video",
+    "documentType": "pe-dni"
   }'</span>
 </code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
@@ -2843,7 +2844,7 @@ Deceval para registrar la firma del participante.</li>
 <span class="n">request</span><span class="p">[</span><span class="s2">"x-api-key"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-KEY-HERE'</span>
 <span class="n">request</span><span class="p">[</span><span class="s2">"authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-TOKEN-HERE'</span>
 <span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"application/json"</span>
-<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="s2">"{</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">documentNumber</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">12345678</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">userPhone</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">51123456789</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">userFullName</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">Patrick Star</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">title</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">Identification 12345678</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">type</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">video</span><span class="se">\"\n</span><span class="s2">}"</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="s2">"{</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">documentNumber</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">12345678</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">userPhone</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">51123456789</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">userFullName</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">Patrick Star</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">title</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">Identification 12345678</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">type</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">video</span><span class="se">\"\n</span><span class="s2"> </span><span class="se">\"</span><span class="s2">documentType</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">pe-dni</span><span class="se">\"\n</span><span class="s2">}"</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">https</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
 <span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
@@ -2856,7 +2857,8 @@ Deceval para registrar la firma del participante.</li>
     <span class="s">"userPhone"</span><span class="p">:</span> <span class="s">"51123456789"</span><span class="p">,</span>
     <span class="s">"userFullName"</span><span class="p">:</span> <span class="s">"Patrick Star"</span><span class="p">,</span>
     <span class="s">"title"</span><span class="p">:</span> <span class="s">"Identification 12345678"</span><span class="p">,</span>
-    <span class="s">"type"</span><span class="p">:</span> <span class="s">"video"</span>
+    <span class="s">"type"</span><span class="p">:</span> <span class="s">"video"</span><span class="p">,</span>
+    <span class="s">"documentType"</span><span class="p">:</span> <span class="s">"pe-dni"</span>
 <span class="p">})</span>
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s">'x-api-key'</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
@@ -2898,7 +2900,8 @@ Deceval para registrar la firma del participante.</li>
     <span class="dl">"</span><span class="s2">userPhone</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">51123456789</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">userFullName</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Patrick Star</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">title</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Identification 12345678</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">video</span><span class="dl">"</span>
+    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">video</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">documentType</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">pe-dni</span><span class="dl">"</span><span class="p">,</span>
 <span class="p">});</span>
 
 <span class="nx">req</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">postData</span><span class="p">);</span>
@@ -3005,6 +3008,12 @@ Deceval para registrar la firma del participante.</li>
 <td>string</td>
 <td>No</td>
 <td>Número de documento nacional de identificación de la persona</td>
+</tr>
+<tr>
+<td>documentType</td>
+<td>string</td>
+<td>No</td>
+<td>Tipo de documento nacional. Por ahora soportamos <code>pe-dni</code>, <code>pe-ce</code>, <code>mx-ife</code>, <code>co-cedula</code>, <code>br-denatran</code>, <code>cl-cedula</code> y <code>sv-dui</code>.</td>
 </tr>
 <tr>
 <td>userFullName</td>
