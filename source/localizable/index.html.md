@@ -2472,6 +2472,7 @@ Evento | Descripción
 Created | Serás notificado cuando un contrato o verificación de identidad fue creado satisfactoriamente
 Started | Serás notificado cuando un contrato o verificación de identidad fue creado satisfactoriamente y está listo para ser firmado o completado. **Recomendamos usar este evento en lugar del evento Created ya que este evento te notificará cuando el contrato está listo para comenzar el proceso de firma**
 Finished | Serás notificado cuando el contrato o verificación de identidad ha sido completado por todos y finalizó correctamente
+Deleted | Serás notificado cuando el contrato ha sido eliminado
 ItemWorking | Serás notificado cada vez que se comienza a procesar un [Item](#propiedades-de-un-item)
 ItemSuccess | Serás notificado cada vez que un [Item](#propiedades-de-un-item) ha concluído satisactoriamente
 ItemError | Serás notificado cada vez que ocurre un error en un [Item](#propiedades-de-un-item)
@@ -2526,7 +2527,7 @@ x-keynua-webhook-token | Token unico generado por request con una integridad de 
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-type | string | Nombre del [tipo de evento](#tipos-de-eventos-webhook) emitido. Puede ser `ContractCreated`, `ContractStarted`, `ContractItemUpdated`, `ContractFinished`, `IdentityVerificationCreated`, `IdentityVerificationStarted`, `IdentityVerificationFinished`, o `IdentityVerificationItemUpdated`
+type | string | Nombre del [tipo de evento](#tipos-de-eventos-webhook) emitido. Puede ser `ContractCreated`, `ContractStarted`, `ContractItemUpdated`, `ContractFinished`, `ContractDeleted`, `IdentityVerificationCreated`, `IdentityVerificationStarted`, `IdentityVerificationFinished`, o `IdentityVerificationItemUpdated`
 accountId | string | Codigo de la cuenta propietaria del webhook
 payload | object | Datos del evento que varian segun el valor de [type](#tipos-de-eventos-webhook)
 
@@ -2538,6 +2539,7 @@ Evento del Webhook | Tipo de Evento
 Created | [ContractCreated](#propiedades-de-contractcreated) o [IdentityVerificationCreated](#propiedades-de-identityverificationcreated)
 Started | [ContractStarted](#propiedades-de-contractstarted) o [IdentityVerificationStarted](#propiedades-de-identityverificationstarted)
 Finished | [ContractFinished](#propiedades-de-contractfinished) o [IdentityVerificationFinished](#propiedades-de-identityverificationfinished)
+Deleted | [ContractDeleted](#propiedades-de-contractdeleted)
 ItemWorking | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `working`
 ItemSuccess | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `success`
 ItemError | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `error`
@@ -2714,6 +2716,58 @@ longCode | string | Código largo del contrato
 shortCode | string | Código corto del contrato para facilitar su identificación
 users | array | Arreglo de [Usuarios](#propiedades-de-un-usuario-webhook) del Contrato
 documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook) del contrato. Acá encontrarás los **documentos originales del contrato**, NO el documento final de firma. Si lo que quieres es el documento final de firma, podrás obtenerlo desde el [Item](#propiedades-de-un-item) **PDF** en [ContractItemUpdated](#propiedades-de-contractitemupdated)
+
+### Propiedades de ContractDeleted
+
+> Ejemplo de Body
+
+```json
+{
+  "type": "ContractDeleted",
+  "accountId": "3c6ed45d-93e7-49b1-a6e4-99e274dffe15",
+  "payload": {
+    "language": "es",
+    "reference": "ref",
+    "contractId": "0a957760-910e-11ec-a9d7-d9cff2a71c0ee1",
+    "accountId": "3c6ed45d-93e7-49b1-a6e4-99e274dffe15",
+    "createdAt": "2022-02-18T22:56:43.478Z",
+    "startedAt": "2022-02-18T22:56:46.506Z",
+    "accountEmail": "john.doe@gmail.com",
+    "organizationId": "48101c38-f770-41a8-88ab-258e672d88bd",
+    "accountName": "John Doe",
+    "title": "Rent contract",
+    "templateId": "rent-template",
+    "docCount": 1,
+    "itemCount": 23,
+    "userCount": 1,
+    "metadata": {
+      "customAttr": "customData"
+    },
+    "deletedAt": "2022-02-24T00:00:18.622Z"
+  }
+}
+```
+
+Se emite cuando el contrato ha sido eliminado.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+language | string | Idima del contrato
+reference | string | Referencia del contrato
+contractId | string | Código del contrato
+accountId | string | Código de la cuenta propietaria del webhook
+createdAt | string | Fecha de creacion del contrato
+startedAt | string | Fecha de inicio del proceso de firma del contrato
+accountEmail | string | Email de la cuenta creadora del contrato
+organizationId | string o undefined | Código de la organización de la cuenta creadora del contrato
+accountName | string | Nombre de la persona creadora del contrato
+title | string | Titulo del contrato
+templateId | string | Identificador del Template
+docCount | integer | Cantidad de documentos que tiene el contrato
+itemCount | integer | Cantidad de items que tiene el contrato
+userCount | integer | Cantidad de usuarios que tiene el contrato
+metadata | integer | Metada del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
+deletedAt | string | Fecha de eliminación del contrato
 
 ### Propiedades de ContractItemUpdated
 
