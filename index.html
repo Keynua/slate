@@ -4183,6 +4183,10 @@ Deceval para registrar la firma del participante.</li>
 <td>Serás notificado cuando el contrato o verificación de identidad ha sido completado por todos y finalizó correctamente</td>
 </tr>
 <tr>
+<td>Deleted</td>
+<td>Serás notificado cuando el contrato ha sido eliminado</td>
+</tr>
+<tr>
 <td>ItemWorking</td>
 <td>Serás notificado cada vez que se comienza a procesar un <a href="#propiedades-de-un-item">Item</a></td>
 </tr>
@@ -4267,7 +4271,7 @@ Deceval para registrar la firma del participante.</li>
 <tr>
 <td>type</td>
 <td>string</td>
-<td>Nombre del <a href="#tipos-de-eventos-webhook">tipo de evento</a> emitido. Puede ser <code>ContractCreated</code>, <code>ContractStarted</code>, <code>ContractItemUpdated</code>, <code>ContractFinished</code>, <code>IdentityVerificationCreated</code>, <code>IdentityVerificationStarted</code>, <code>IdentityVerificationFinished</code>, o <code>IdentityVerificationItemUpdated</code></td>
+<td>Nombre del <a href="#tipos-de-eventos-webhook">tipo de evento</a> emitido. Puede ser <code>ContractCreated</code>, <code>ContractStarted</code>, <code>ContractItemUpdated</code>, <code>ContractFinished</code>, <code>ContractDeleted</code>, <code>IdentityVerificationCreated</code>, <code>IdentityVerificationStarted</code>, <code>IdentityVerificationFinished</code>, o <code>IdentityVerificationItemUpdated</code></td>
 </tr>
 <tr>
 <td>accountId</td>
@@ -4300,6 +4304,10 @@ Deceval para registrar la firma del participante.</li>
 <tr>
 <td>Finished</td>
 <td><a href="#propiedades-de-contractfinished">ContractFinished</a> o <a href="#propiedades-de-identityverificationfinished">IdentityVerificationFinished</a></td>
+</tr>
+<tr>
+<td>Deleted</td>
+<td><a href="#propiedades-de-contractdeleted">ContractDeleted</a></td>
 </tr>
 <tr>
 <td>ItemWorking</td>
@@ -4670,6 +4678,125 @@ Deceval para registrar la firma del participante.</li>
 <td>documents</td>
 <td>array</td>
 <td>Arreglo de <a href="#propiedades-de-un-documento-webhook">Documentos</a> del contrato. Acá encontrarás los <strong>documentos originales del contrato</strong>, NO el documento final de firma. Si lo que quieres es el documento final de firma, podrás obtenerlo desde el <a href="#propiedades-de-un-item">Item</a> <strong>PDF</strong> en <a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a></td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-contractdeleted'>Propiedades de ContractDeleted</h3>
+<blockquote>
+<p>Ejemplo de Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ContractDeleted"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3c6ed45d-93e7-49b1-a6e4-99e274dffe15"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ref"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"contractId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0a957760-910e-11ec-a9d7-d9cff2a71c0ee1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3c6ed45d-93e7-49b1-a6e4-99e274dffe15"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-02-18T22:56:43.478Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"startedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-02-18T22:56:46.506Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"accountEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@gmail.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"organizationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"48101c38-f770-41a8-88ab-258e672d88bd"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rent contract"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"templateId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rent-template"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"docCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"itemCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">23</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"userCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"customAttr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"customData"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"deletedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2022-02-24T00:00:18.622Z"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Se emite cuando el contrato ha sido eliminado.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>language</td>
+<td>string</td>
+<td>Idima del contrato</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>Referencia del contrato</td>
+</tr>
+<tr>
+<td>contractId</td>
+<td>string</td>
+<td>Código del contrato</td>
+</tr>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>Código de la cuenta propietaria del webhook</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>string</td>
+<td>Fecha de creacion del contrato</td>
+</tr>
+<tr>
+<td>startedAt</td>
+<td>string</td>
+<td>Fecha de inicio del proceso de firma del contrato</td>
+</tr>
+<tr>
+<td>accountEmail</td>
+<td>string</td>
+<td>Email de la cuenta creadora del contrato</td>
+</tr>
+<tr>
+<td>organizationId</td>
+<td>string o undefined</td>
+<td>Código de la organización de la cuenta creadora del contrato</td>
+</tr>
+<tr>
+<td>accountName</td>
+<td>string</td>
+<td>Nombre de la persona creadora del contrato</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Titulo del contrato</td>
+</tr>
+<tr>
+<td>templateId</td>
+<td>string</td>
+<td>Identificador del Template</td>
+</tr>
+<tr>
+<td>docCount</td>
+<td>integer</td>
+<td>Cantidad de documentos que tiene el contrato</td>
+</tr>
+<tr>
+<td>itemCount</td>
+<td>integer</td>
+<td>Cantidad de items que tiene el contrato</td>
+</tr>
+<tr>
+<td>userCount</td>
+<td>integer</td>
+<td>Cantidad de usuarios que tiene el contrato</td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>integer</td>
+<td>Metada del contrato. Esta Metadata será la misma que se envió al <a href="#crear-un-contrato">crear un Contrato</a></td>
+</tr>
+<tr>
+<td>deletedAt</td>
+<td>string</td>
+<td>Fecha de eliminación del contrato</td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-contractitemupdated'>Propiedades de ContractItemUpdated</h3>
