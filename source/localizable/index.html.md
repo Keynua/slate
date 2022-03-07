@@ -978,6 +978,45 @@ otpToken | string | El token de otp necesario **solo** para los contratos que ut
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
 
+## Customizar opciones de un item por usuario
+
+Las opciones de los items que se encuentran establecidas en el template del contrato pueden ser customizadas para un usuario en especifico. Estas se indican para cada tipo de item que el usario tenga asignado en su proceso de firma. Las opciones deben ir dentro del atributo **items** de la **metadata** del usuario durante la creacion del contrato.
+
+Esta configuración de puede aplicar a los siguientes items:
+
+```json
+{
+	"name": "some:user-name",
+	"groups": ["signers"],
+	// Some user attributes...
+	"metadata": {
+		"items": {
+			"terms": {
+				"table": {
+					"title": "CONDICIONES DEL CRÉDITO",
+					"items": [
+						{
+							"title": "Monto del crédito",
+							"value": "S/ 6000.00"
+						},
+						{
+							"title": "Fecha del primer pago",
+							"value": "28/07/2021"
+						},
+						// Some items...
+					]
+				}
+			}
+		}
+	}
+}
+```
+
+### Terms:
+
+![terms-example](../images/terms-example.png)
+
+
 # Deceval
 
 Permite asociar un Pagaré emitido en el sistema de Deceval a un contrato.
