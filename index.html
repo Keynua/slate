@@ -283,7 +283,7 @@
 }
 	</style>
 	<link href="images/favicon-1a78870a.png" rel="icon" type="image/png" />
-    <link href="stylesheets/screen-b3397d56.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/screen-5ecaa0e5.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-953e3353.css" rel="stylesheet" media="print" />
       <script src="javascripts/all-e033bdd3.js"></script>
 
@@ -352,6 +352,9 @@
                   </li>
                   <li>
                     <a href="#actualizar-el-valor-de-un-item" class="toc-h2 toc-link" data-title="Actualizar el valor de un item">Actualizar el valor de un item</a>
+                  </li>
+                  <li>
+                    <a href="#customizar-opciones-de-un-item-por-usuario" class="toc-h2 toc-link" data-title="Customizar opciones de un item por usuario">Customizar opciones de un item por usuario</a>
                   </li>
               </ul>
           </li>
@@ -2060,6 +2063,37 @@ Producción: https://api.keynua.com
 </tbody></table>
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
+<h2 id='customizar-opciones-de-un-item-por-usuario'>Customizar opciones de un item por usuario</h2>
+<p>Las opciones de los items que se encuentran establecidas en el template del contrato pueden ser customizadas para un usuario en especifico. Estas se indican para cada tipo de item que el usario tenga asignado en su proceso de firma. Las opciones deben ir dentro del atributo <strong>items</strong> de la <strong>metadata</strong> del usuario durante la creacion del contrato.</p>
+
+<p>Esta configuración de puede aplicar a los siguientes items:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some:user-name"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"signers"</span><span class="p">],</span><span class="w">
+    </span><span class="err">//</span><span class="w"> </span><span class="err">Some</span><span class="w"> </span><span class="err">user</span><span class="w"> </span><span class="err">attributes...</span><span class="w">
+    </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"terms"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"table"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CONDICIONES DEL CRÉDITO"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                            </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Monto del crédito"</span><span class="p">,</span><span class="w">
+                            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"S/ 6000.00"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                            </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fecha del primer pago"</span><span class="p">,</span><span class="w">
+                            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"28/07/2021"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="err">//</span><span class="w"> </span><span class="err">Some</span><span class="w"> </span><span class="err">items...</span><span class="w">
+                    </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='terms'>Terms:</h3>
+<p><img src="images/terms-example-f9388bd7.png" alt="terms-example" /></p>
 <h1 id='deceval'>Deceval</h1>
 <p>Permite asociar un Pagaré emitido en el sistema de Deceval a un contrato.</p>
 
