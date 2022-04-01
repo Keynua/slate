@@ -682,7 +682,8 @@ Producción: https://api.keynua.com
     </span><span class="nl">"groups"</span><span class="p">:[</span><span class="w">
         </span><span class="s2">"signers"</span><span class="w">
     </span><span class="p">],</span><span class="w">
-    </span><span class="nl">"token"</span><span class="p">:</span><span class="s2">"token-value"</span><span class="w">
+    </span><span class="nl">"token"</span><span class="p">:</span><span class="s2">"token-value"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"working"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Usuarios que firman el contrato.</p>
@@ -723,6 +724,35 @@ Producción: https://api.keynua.com
 <td>token</td>
 <td>string</td>
 <td>El token del usuario que se utilizará para realizar la firma. Por ejemplo para <a href="#actualizar-el-valor-de-un-item">actualizar los valores de cada item</a></td>
+</tr>
+<tr>
+<td>state</td>
+<td>string</td>
+<td>El <a href="#estados-del-usuario">estado del usuario</a> dentro del contrato, basado en el estado de todos los items del usuario. Solo existe para contratos creados luego del 04/04/2022.</td>
+</tr>
+</tbody></table>
+<h3 id='estados-del-usuario'>Estados del Usuario</h3>
+<table><thead>
+<tr>
+<th>Valor</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>pending</td>
+<td>Estado inicial del usuario. Aún no ha enviado sus datos para la firma.</td>
+</tr>
+<tr>
+<td>working</td>
+<td>El usuario ya envió sus datos y estos están siendo procesados.</td>
+</tr>
+<tr>
+<td>error</td>
+<td>Alguno de los ítems del usuario ha presentado un error.</td>
+</tr>
+<tr>
+<td>done</td>
+<td>Todos los datos del usuario han sido validados y son correctos.</td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-un-grupo'>Propiedades de un Grupo</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
