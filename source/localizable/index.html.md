@@ -143,7 +143,8 @@ done | Cuando el contrato ha sido firmado por todos y ha finalizado correctament
 	"groups":[
 		"signers"
 	],
-	"token":"token-value"
+	"token":"token-value",
+	"state": "working"
 }
 ```
 
@@ -157,6 +158,16 @@ email | string | El correo electrónico del usuario
 phone | string | El teléfono del usuario
 groups | array | Nombre de los grupos a los que pertenece el usuario, normalmente siempre pertenece a un sólo grupo. El identificador del grupo será asignado por el equipo de Keynua
 token | string | El token del usuario que se utilizará para realizar la firma. Por ejemplo para [actualizar los valores de cada item](#actualizar-el-valor-de-un-item)
+state | string | El [estado del usuario](#estados-del-usuario) dentro del contrato, basado en el estado de todos los items del usuario. Solo existe para contratos creados luego del 04/04/2022.
+
+### Estados del Usuario
+
+Valor | Descripción
+--------- | -----------
+pending | Estado inicial del usuario. Aún no ha enviado sus datos para la firma.
+working | El usuario ya envió sus datos y estos están siendo procesados.
+error | Alguno de los ítems del usuario ha presentado un error.
+done | Todos los datos del usuario han sido validados y son correctos.
 
 ### Propiedades de un Grupo
 
