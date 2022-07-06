@@ -1703,7 +1703,7 @@ userFullName | string | Sí | Nombre completo de la persona
 userEmail | string | Sí | Email de la persona. Si se envía, no enviar el campo `userPhone` también.
 userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no enviar el campo `userEmail` también.
 reference | string | Sí | Campo útil para realizar búsquedas entre verificaciones creadas
-type | string | Sí | `selfie` o `video`. `selfie` solo pide un selfie y valida esa imagen  con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video.
+type | string | Sí | `selfie`, `video` o `liveness`. `selfie` solo pide un selfie y valida esa imagen con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. `liveness` realiza una prueba de vida 3D.
 
 ### Response body
 
