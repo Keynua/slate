@@ -1530,7 +1530,8 @@ curl --location --request PUT 'https://api.keynua.com/identity-verification/v1' 
     "title": "Identification 12345678",
     "type": "video",
     "documentType": "pe-dni",
-    "disableInitialNotification": false
+    "disableInitialNotification": false,
+    "validateDocument": true
   }'
 ```
 
@@ -1547,7 +1548,7 @@ request = Net::HTTP::Put.new(url)
 request["x-api-key"] = 'YOUR-API-KEY-HERE'
 request["authorization"] = 'YOUR-API-TOKEN-HERE'
 request["Content-Type"] = "application/json"
-request.body = "{\n  \"documentNumber\": \"12345678\",\n  \"userPhone\": \"51123456789\",\n  \"userFullName\": \"Patrick Star\",\n  \"title\": \"Identification 12345678\",\n  \"type\": \"video\",\n \"documentType\": \"pe-dni\", \"disableInitialNotification\": \"false\"\n}"
+request.body = "{\n  \"documentNumber\": \"12345678\",\n  \"userPhone\": \"51123456789\",\n  \"userFullName\": \"Patrick Star\",\n  \"title\": \"Identification 12345678\",\n  \"type\": \"video\",\n \"documentType\": \"pe-dni\",\n \"disableInitialNotification\": \"false\",\n \"validateDocument\": \"true\"\n}"
 
 response = https.request(request)
 puts response.read_body
@@ -1566,6 +1567,7 @@ payload = json.dumps({
     "type": "video",
     "documentType": "pe-dni",
     "disableInitialNotification", "false",
+    "validateDocument": "true",
 })
 headers = {
   'x-api-key': "YOUR-API-KEY-HERE",
@@ -1613,6 +1615,7 @@ var postData = JSON.stringify({
     "type": "video",
     "documentType": "pe-dni",
     "disableInitialNotification": false
+    "validateDocument": true
 });
 
 req.write(postData);
@@ -1707,7 +1710,8 @@ userEmail | string | Sí | Email de la persona. Si se envía, no enviar el campo
 userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no enviar el campo `userEmail` también.
 reference | string | Sí | Campo útil para realizar búsquedas entre verificaciones creadas
 type | string | Sí | `selfie`, `video` o `liveness`. `selfie` solo pide un selfie y valida esa imagen con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. `liveness` realiza una prueba de vida 3D.
-disableInitialNotification | boolean | Sí | Opción para desactivar la notificación inicial que se envía a la persona
+disableInitialNotification | boolean | Sí | Opción para desactivar la notificación inicial que se envía a la persona.
+validateDocument | boolean | Sí | Opcion para forzar la toma de foto de un documento cuando el país del documento cuenta con integración regional
 
 ### Response body
 
