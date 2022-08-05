@@ -1701,13 +1701,17 @@ Nombre | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
 title | string | No | Nombre que se le quiera dar a la verificación
 documentNumber | string | No | Número de documento nacional de identificación de la persona
-documentType | string | No | Tipo de documento nacional. Por ahora soportamos `pe-dni`, `pe-ce`, `mx-ife`, `co-cedula`, `br-denatran`, `cl-cedula` y `sv-dui`.
+documentType | string | No | Tipo de documento nacional. Por ahora soportamos `ch-cedula`, `br-denatran`, `cl-cedula`, `co-cedula`, `mx-ife`, `pe-ce`, `pe-dni`, `pe-dni-ce`, `sv-dui`, `pa-id`, `br-id`,`ar-id`, `bo-id`, `cr-id`, `cu-id`, `ec-id`, `gt-id`, `hn-id`, `ni-id`, `pr-id`, `py-id`, `do-id`, `us-id`,`uy-id` y `ve-id`.
 userFullName | string | Sí | Nombre completo de la persona
 userEmail | string | Sí | Email de la persona. Si se envía, no enviar el campo `userPhone` también.
 userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no enviar el campo `userEmail` también.
 reference | string | Sí | Campo útil para realizar búsquedas entre verificaciones creadas
 type | string | Sí | `selfie`, `video` o `liveness`. `selfie` solo pide un selfie y valida esa imagen con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. `liveness` realiza una prueba de vida 3D.
 disableInitialNotification | boolean | Sí | Opción para desactivar la notificación inicial que se envía a la persona
+
+### Combinaciones no soportadas por defecto
+
+Por ahora los paises que soportamos para `selfie` y `video` son `sv-dui`, `mx-ife`, `cl-cedula`, `pe-dni`, `br-denatran` y `co-cedula`. En caso se cree una identificación con `selfie` o `video` con algún país que no esté en esta lista, automáticamente se considerará el documento como `global`. La lista completa sí está soportada con el type `liveness`.
 
 ### Response body
 
