@@ -3083,7 +3083,7 @@ Deceval para registrar la firma del participante.</li>
 <td>documentType</td>
 <td>string</td>
 <td>No</td>
-<td>Tipo de documento nacional. Por ahora soportamos <code>pe-dni</code>, <code>pe-ce</code>, <code>mx-ife</code>, <code>co-cedula</code>, <code>br-denatran</code>, <code>cl-cedula</code> y <code>sv-dui</code>.</td>
+<td>Tipo de documento nacional. Por ahora soportamos <code>ch-cedula</code>, <code>br-denatran</code>, <code>cl-cedula</code>, <code>co-cedula</code>, <code>mx-ife</code>, <code>pe-ce</code>, <code>pe-dni</code>, <code>pe-dni-ce</code>, <code>sv-dui</code>, <code>pa-id</code>, <code>br-id</code>,<code>ar-id</code>, <code>bo-id</code>, <code>cr-id</code>, <code>cu-id</code>, <code>ec-id</code>, <code>gt-id</code>, <code>hn-id</code>, <code>ni-id</code>, <code>pr-id</code>, <code>py-id</code>, <code>do-id</code>, <code>us-id</code>,<code>uy-id</code> y <code>ve-id</code>.</td>
 </tr>
 <tr>
 <td>userFullName</td>
@@ -3128,6 +3128,8 @@ Deceval para registrar la firma del participante.</li>
 <td>Opcion para forzar la toma de foto de un documento cuando el país del documento cuenta con integración regional</td>
 </tr>
 </tbody></table>
+<h3 id='combinaciones-no-soportadas-por-defecto'>Combinaciones no soportadas por defecto</h3>
+<p>Por ahora los paises que soportamos para <code>selfie</code> y <code>video</code> son <code>sv-dui</code>, <code>mx-ife</code>, <code>cl-cedula</code>, <code>pe-dni</code>, <code>br-denatran</code> y <code>co-cedula</code>. En caso se cree una identificación con <code>selfie</code> o <code>video</code> con algún país que no esté en esta lista, automáticamente se considerará el documento como <code>global</code>. La lista completa sí está soportada con el type <code>liveness</code>.</p>
 <h3 id='response-body'>Response body</h3>
 <p><a href="#propiedades-de-una-verificacion-de-identidad">IdentityVerification</a></p>
 <h2 id='listar-verificaciones-de-identidad'>Listar verificaciones de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/identity-verification/v1/list'</span> <span class="se">\</span>
