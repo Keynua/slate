@@ -144,7 +144,17 @@ done | Cuando el contrato ha sido firmado por todos y ha finalizado correctament
 		"signers"
 	],
 	"token":"token-value",
-	"state": "working"
+	"state": "working",
+	"idInfo": {
+		"type": "pe-id",
+		"idNumber": "12345678",
+		"verificationDigit": "9",
+		"names": "Juan",
+		"lastName": "Perez Alvarez",
+		"birthDate": "1992-11-20",
+		"expirationDate": "2026-03-17"
+		"address": "Some address",
+	}
 }
 ```
 
@@ -159,6 +169,7 @@ phone | string | El teléfono del usuario
 groups | array | Nombre de los grupos a los que pertenece el usuario, normalmente siempre pertenece a un sólo grupo. El identificador del grupo será asignado por el equipo de Keynua
 token | string | El token del usuario que se utilizará para realizar la firma. Por ejemplo para [actualizar los valores de cada item](#actualizar-el-valor-de-un-item)
 state | string | El [estado del usuario](#estados-del-usuario) dentro del contrato, basado en el estado de todos los items del usuario. Solo existe para contratos creados luego del 04/04/2022.
+idInfo | string | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
 
 ### Estados del Usuario
 
@@ -1485,6 +1496,16 @@ Permite crear, listar y obtener verificaciones de identidad.
   "accountName": "Patrick Star",
   "timezone": "America/Lima",
   "title": "Identification 123456789",
+  "userIdInfo": {
+	"type": "pe-id",
+	"idNumber": "12345678",
+	"verificationDigit": "9",
+	"names": "Juan",
+	"lastName": "Perez Alvarez",
+	"birthDate": "1992-11-20",
+	"expirationDate": "2026-03-17"
+	"address": "Some address",
+  },
   "items": ContractItem[]
 }
 ```
@@ -1514,6 +1535,7 @@ userFullName | string | Sí | Nombre completo de la persona
 accountName | string | No | Nombre de la cuenta que creó la verificación
 timezone | string | No | Huso horario  utilizado en notificaciones y mensajes
 title | string | No | Título de la verificación
+userIdInfo | string | Sí | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento solo aplica para las Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
 items | [ContractItem](#items-del-contrato)[] | No | Lista de pasos que sigue la verificación.
 
 ## Crear verificación de identidad
@@ -1964,6 +1986,16 @@ req.end();
   "accountName": "Patrick Star",
   "timezone": "America/Lima",
   "title": "Identification 123456789",
+  "userIdInfo": {
+	"type": "pe-id",
+	"idNumber": "12345678",
+	"verificationDigit": "9",
+	"names": "Juan",
+	"lastName": "Perez Alvarez",
+	"birthDate": "1992-11-20",
+	"expirationDate": "2026-03-17"
+	"address": "Some address",
+  },
   "items": [
     {
       "id": 0,
@@ -2742,7 +2774,17 @@ documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook
 				"ref": null,
 				"groups": [
 					"signers"
-				]
+				],
+				"idInfo": {
+					"type": "pe-id",
+					"idNumber": "12345678",
+					"verificationDigit": "9",
+					"names": "Juan",
+					"lastName": "Perez Alvarez",
+					"birthDate": "1992-11-20",
+					"expirationDate": "2026-03-17"
+					"address": "Some address",
+				}
 			}
 		],
 		"documents": [
@@ -3008,7 +3050,17 @@ userToken | string | Token con el cual se puede armar el link donde se realizar�
         "title": "Identificación de 12345678",
         "userEmail": "user@mail.com",
         "userPhone": "23456789",
-        "userToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY"
+        "userToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY",
+		"userIdInfo": {
+			"type": "pe-id",
+			"idNumber": "12345678",
+			"verificationDigit": "9",
+			"names": "Juan",
+			"lastName": "Perez Alvarez",
+			"birthDate": "1992-11-20",
+			"expirationDate": "2026-03-17"
+			"address": "Some address",
+		}
 	}
 }
 ```
@@ -3032,6 +3084,7 @@ title | string | Título de la verificación
 userEmail | string | Email del verificante en el cual recibirá el link de inicio del proceso
 userPhone | string | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
 userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
+userIdInfo | string | Información obtenida del OCR del documento enviado por el firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
 
 ### Propiedades de IdentityVerificationItemUpdated
 
