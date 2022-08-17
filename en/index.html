@@ -683,7 +683,17 @@ Producción: https://api.keynua.com
         </span><span class="s2">"signers"</span><span class="w">
     </span><span class="p">],</span><span class="w">
     </span><span class="nl">"token"</span><span class="p">:</span><span class="s2">"token-value"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"working"</span><span class="w">
+    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"working"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"idInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pe-id"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"idNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"verificationDigit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"names"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Juan"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Perez Alvarez"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1992-11-20"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"expirationDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-17"</span><span class="w">
+        </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some address"</span><span class="p">,</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Usuarios que firman el contrato.</p>
@@ -729,6 +739,11 @@ Producción: https://api.keynua.com
 <td>state</td>
 <td>string</td>
 <td>El <a href="#estados-del-usuario">estado del usuario</a> dentro del contrato, basado en el estado de todos los items del usuario. Solo existe para contratos creados luego del 04/04/2022.</td>
+</tr>
+<tr>
+<td>idInfo</td>
+<td>string</td>
+<td>Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI</td>
 </tr>
 </tbody></table>
 <h3 id='estados-del-usuario'>Estados del Usuario</h3>
@@ -2728,6 +2743,16 @@ Deceval para registrar la firma del participante.</li>
   </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/Lima"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identification 123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userIdInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pe-id"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"idNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"verificationDigit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"names"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Juan"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Perez Alvarez"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1992-11-20"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"expirationDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-17"</span><span class="w">
+    </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some address"</span><span class="p">,</span><span class="w">
+  </span><span class="p">},</span><span class="w">
   </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="err">ContractItem</span><span class="p">[]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -2876,6 +2901,12 @@ Deceval para registrar la firma del participante.</li>
 <td>string</td>
 <td>No</td>
 <td>Título de la verificación</td>
+</tr>
+<tr>
+<td>userIdInfo</td>
+<td>string</td>
+<td>Sí</td>
+<td>Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento solo aplica para las Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI</td>
 </tr>
 <tr>
 <td>items</td>
@@ -3481,6 +3512,16 @@ Deceval para registrar la firma del participante.</li>
   </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/Lima"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identification 123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userIdInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pe-id"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"idNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"verificationDigit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"names"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Juan"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Perez Alvarez"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1992-11-20"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"expirationDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-17"</span><span class="w">
+    </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some address"</span><span class="p">,</span><span class="w">
+  </span><span class="p">},</span><span class="w">
   </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
@@ -4655,7 +4696,17 @@ Deceval para registrar la firma del participante.</li>
                 </span><span class="nl">"ref"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
                 </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
                     </span><span class="s2">"signers"</span><span class="w">
-                </span><span class="p">]</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nl">"idInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pe-id"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"idNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"verificationDigit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"names"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Juan"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Perez Alvarez"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1992-11-20"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"expirationDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-17"</span><span class="w">
+                    </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some address"</span><span class="p">,</span><span class="w">
+                </span><span class="p">}</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">],</span><span class="w">
         </span><span class="nl">"documents"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -5236,7 +5287,17 @@ Deceval para registrar la firma del participante.</li>
         </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identificación de 12345678"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"userEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@mail.com"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"userPhone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"23456789"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"userToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY"</span><span class="w">
+        </span><span class="nl">"userToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userIdInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pe-id"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"verificationDigit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"names"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Juan"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Perez Alvarez"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1992-11-20"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"expirationDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-17"</span><span class="w">
+            </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some address"</span><span class="p">,</span><span class="w">
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -5323,6 +5384,11 @@ Deceval para registrar la firma del participante.</li>
 <td>userToken</td>
 <td>string</td>
 <td>Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}</td>
+</tr>
+<tr>
+<td>userIdInfo</td>
+<td>string</td>
+<td>Información obtenida del OCR del documento enviado por el firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI</td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-identityverificationitemupdated'>Propiedades de IdentityVerificationItemUpdated</h3>
