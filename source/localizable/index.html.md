@@ -1711,7 +1711,7 @@ userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no env
 reference | string | Sí | Campo útil para realizar búsquedas entre verificaciones creadas
 type | string | Sí | `selfie`, `video` o `liveness`. `selfie` solo pide un selfie y valida esa imagen con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. `liveness` realiza una prueba de vida 3D.
 disableInitialNotification | boolean | Sí | Opción para desactivar la notificación inicial que se envía a la persona.
-validateDocument | boolean | Sí | Opcion para forzar la toma de foto de un documento cuando el país del documento cuenta con integración regional
+documentSide | `front` o `both` | Sí | SOLO PARA DNI DE PERÚ. Opción para indicar qué lados del DNI validar. Si no es enviado no se hará ninguna validación.
 
 ### Combinaciones no soportadas por defecto
 
