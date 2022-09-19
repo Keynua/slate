@@ -2848,7 +2848,7 @@ Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 title | string | Título del item
 url | string | URL que permite descargar el documento. **Expira en 12 horas**
-individuals | array | Arreglo de [documentos individuales](#propiedades-de-un-documento-individual) cada uno con las firmas de las personas correspondientes.
+individuals | array | Arreglo de [documentos individuales](#propiedades-de-un-documento-individual) cada uno con las firmas de las personas correspondientes. Solo es incluído en contratos configurados para producir documentos individuales.
 
 ### Propiedades de un documento individual
 
@@ -2856,7 +2856,7 @@ Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 title | string | Nombre del documento
 url | string | URL que permite descargar el documento. **Expira en 12 horas**
-userIds | array | Arreglo de números. Son los ids de los usuarios que firmaron el documento individual.
+userIds | array | Arreglo de números. Son los ids de los usuarios que firmaron el documento individual. Si el contrato no ha sido configurado para tener firmantes por documento, entonces este atributo no será incluido y se puede asumir que todos los firmantes han firmado este documento.
 
 ### Propiedades de ContractDeleted
 
