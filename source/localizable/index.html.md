@@ -2838,7 +2838,7 @@ longCode | string | Código largo del contrato
 shortCode | string | Código corto del contrato para facilitar su identificación
 users | array | Arreglo de [Usuarios](#propiedades-de-un-usuario-webhook) del Contrato
 documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook) del contrato. Acá encontrarás los **documentos originales del contrato**, NO el documento final de firma. Si lo que quieres es el documento final de firma, podrás obtenerlo desde el [Item](#propiedades-de-un-item) **PDF** en [ContractItemUpdated](#propiedades-de-contractitemupdated)
-pdfItems | array | Arreglo de [PDF Items](#propiedades-de-un-pdf-item). Este incluirá información sobre los documentos finales del contrato y te permitirá descargarlos. Para identificaciones este atributo no existe.
+pdfItems | array | Arreglo de [PDF Items](#propiedades-de-un-pdf-item). Este incluirá información sobre los documentos finales del contrato y te permitirá descargarlos. **Para identificaciones este atributo no existe.**
 
 ### Propiedades de un PDF item
 
