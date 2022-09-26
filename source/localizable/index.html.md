@@ -2794,7 +2794,25 @@ documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook
 				"size": 3028,
 				"url": "https..."
 			}
-		]
+		],
+    "pdfItems": [
+      {
+        "title": "Certificado y documentos",
+        "url": "https://cmfiles.dev.keynua.com/contracts/48ae1990...",
+        "individuals": [
+          {
+            "title": "pdf.24.1.test_contract_1.pdf",
+            "url": "https://cmfiles.dev.keynua.com/contracts/48ae1990...",
+            "userIds": [0]
+          },
+          {
+            "title": "pdf.24.1.test_contract_2.pdf",
+            "url": "https://cmfiles.dev.keynua.com/contracts/48ae1990...",
+            "userIds": [1]
+          }
+        ]
+      }
+    ]
 	}
 }
 ```
@@ -2820,6 +2838,25 @@ longCode | string | Código largo del contrato
 shortCode | string | Código corto del contrato para facilitar su identificación
 users | array | Arreglo de [Usuarios](#propiedades-de-un-usuario-webhook) del Contrato
 documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook) del contrato. Acá encontrarás los **documentos originales del contrato**, NO el documento final de firma. Si lo que quieres es el documento final de firma, podrás obtenerlo desde el [Item](#propiedades-de-un-item) **PDF** en [ContractItemUpdated](#propiedades-de-contractitemupdated)
+pdfItems | array | Arreglo de [PDF Items](#propiedades-de-un-pdf-item). Este incluirá información sobre los documentos finales del contrato y te permitirá descargarlos. **Para identificaciones este atributo no existe.**
+
+### Propiedades de un PDF item
+
+Contiene datos que permiten obtener los documentos finales del contrato.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+title | string | Título del item
+url | string | URL que permite descargar el documento. **Expira en 12 horas**
+individuals | array | Arreglo de [documentos individuales](#propiedades-de-un-documento-individual) cada uno con las firmas de las personas correspondientes. Solo es incluído en contratos configurados para producir documentos individuales.
+
+### Propiedades de un documento individual
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+title | string | Nombre del documento
+url | string | URL que permite descargar el documento. **Expira en 12 horas**
+userIds | array | Arreglo de números. Son los ids de los usuarios que firmaron el documento individual. Si el contrato no ha sido configurado para tener firmantes por documento, entonces este atributo no será incluido y se puede asumir que todos los firmantes han firmado este documento.
 
 ### Propiedades de ContractDeleted
 
