@@ -4716,7 +4716,25 @@ Deceval para registrar la firma del participante.</li>
                 </span><span class="nl">"size"</span><span class="p">:</span><span class="w"> </span><span class="mi">3028</span><span class="p">,</span><span class="w">
                 </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https..."</span><span class="w">
             </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"pdfItems"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Certificado y documentos"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.dev.keynua.com/contracts/48ae1990..."</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"individuals"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pdf.24.1.test_contract_1.pdf"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.dev.keynua.com/contracts/48ae1990..."</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"userIds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pdf.24.1.test_contract_2.pdf"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.dev.keynua.com/contracts/48ae1990..."</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"userIds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w">
+          </span><span class="p">}</span><span class="w">
         </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -4813,6 +4831,61 @@ Deceval para registrar la firma del participante.</li>
 <td>documents</td>
 <td>array</td>
 <td>Arreglo de <a href="#propiedades-de-un-documento-webhook">Documentos</a> del contrato. Acá encontrarás los <strong>documentos originales del contrato</strong>, NO el documento final de firma. Si lo que quieres es el documento final de firma, podrás obtenerlo desde el <a href="#propiedades-de-un-item">Item</a> <strong>PDF</strong> en <a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a></td>
+</tr>
+<tr>
+<td>pdfItems</td>
+<td>array</td>
+<td>Arreglo de <a href="#propiedades-de-un-pdf-item">PDF Items</a>. Este incluirá información sobre los documentos finales del contrato y te permitirá descargarlos. <strong>Para identificaciones este atributo no existe.</strong></td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-un-pdf-item'>Propiedades de un PDF item</h3>
+<p>Contiene datos que permiten obtener los documentos finales del contrato.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Título del item</td>
+</tr>
+<tr>
+<td>url</td>
+<td>string</td>
+<td>URL que permite descargar el documento. <strong>Expira en 12 horas</strong></td>
+</tr>
+<tr>
+<td>individuals</td>
+<td>array</td>
+<td>Arreglo de <a href="#propiedades-de-un-documento-individual">documentos individuales</a> cada uno con las firmas de las personas correspondientes. Solo es incluído en contratos configurados para producir documentos individuales.</td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-un-documento-individual'>Propiedades de un documento individual</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Nombre del documento</td>
+</tr>
+<tr>
+<td>url</td>
+<td>string</td>
+<td>URL que permite descargar el documento. <strong>Expira en 12 horas</strong></td>
+</tr>
+<tr>
+<td>userIds</td>
+<td>array</td>
+<td>Arreglo de números. Son los ids de los usuarios que firmaron el documento individual. Si el contrato no ha sido configurado para tener firmantes por documento, entonces este atributo no será incluido y se puede asumir que todos los firmantes han firmado este documento.</td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-contractdeleted'>Propiedades de ContractDeleted</h3>
