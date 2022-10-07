@@ -122,6 +122,115 @@ channel | string | Por qué medio se realizó el envío del código.
 resendInSec | number | En cuantos segundos se podrá solicitar el envío de un nuevo código.
 availableAttempts | number | Cuantos intentos aún quedan disponibles.
 
+## Crear código OTP
+
+```ruby
+require "uri"
+require "net/http"
+
+url = URI("https://api.stg.keynua.com/send-otp/v1/create-code")
+
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Post.new(url)
+request["Content-Type"] = 'application/json'
+request.body = "{\n\t\"auth\": {\n\t\t\"type\": \"contract\",\n\t\t\"token\": \"eyJ0eXAiOiJ...Dq_5VSiZo\"\n\t}\n}"
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+import json
+
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
+
+payload = json.dumps({
+	{
+		"auth": {
+			"type": "contract",
+			"token": "eyJ0eXAiOiJ...Dq_5VSiZo"
+		}
+	}
+})
+
+headers = {
+  'Content-Type': 'application/json'
+}
+
+conn.request("POST", "/send-otp/v1/create-code", payload, headers)
+res = conn.getresponse()
+data = res.read()
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --request POST \
+  --url https://api.stg.keynua.com/send-otp/v1/create-code \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"auth": {
+		"type": "contract",
+		"token": "eyJ0eXAiOiJKV1Q...Dq_5VSiZo"
+	}
+}'
+```
+
+```javascript
+const data = JSON.stringify({
+  "auth": {
+    "type": "contract",
+    "token": "eyJ0eXA..._2iDq_5VSiZo"
+  }
+});
+
+const xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === this.DONE) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("POST", "https://api.stg.keynua.com/send-otp/v1/create-code");
+xhr.setRequestHeader("Content-Type", "application/json");
+
+xhr.send(data);
+```
+
+> Success response
+
+```json
+{
+  "code": "qwe123",
+  "resendInSec": 60,
+  "availableAttempts": 3
+}
+```
+
+Permite crear y obtener un nuevo código OTP. De manera similar al _endpoint_ anterior y según la configuración del contrato, se limita la cantidad de códigos generados en un lapso de tiempo.
+
+### HTTP Request
+
+`POST https://api.stg.keynua.com/send-otp/v1/create-code`
+
+### Request body
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+auth | [Auth](#propiedades-de-auth) | No | Permite identificar el OTP del usuario y contrato
+
+### Response body
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+code | string | El código OTP
+resendInSec | number | En cuantos segundos se podrá solicitar un nuevo código.
+availableAttempts | number | Cuantos intentos aún quedan disponibles.
+
 ## Verificar OTP
 
 ```ruby
