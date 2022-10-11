@@ -442,6 +442,9 @@
                     <a href="#enviar-otp" class="toc-h2 toc-link" data-title="Enviar OTP">Enviar OTP</a>
                   </li>
                   <li>
+                    <a href="#crear-codigo-otp" class="toc-h2 toc-link" data-title="Crear código OTP">Crear código OTP</a>
+                  </li>
+                  <li>
                     <a href="#verificar-otp" class="toc-h2 toc-link" data-title="Verificar OTP">Verificar OTP</a>
                   </li>
                   <li>
@@ -5854,6 +5857,124 @@ uso para realizar la firma de documentos.</p>
 <td>Cuantos intentos aún quedan disponibles.</td>
 </tr>
 </tbody></table>
+<h2 id='crear-codigo-otp'>Crear código OTP</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
+<span class="nb">require</span> <span class="s2">"net/http"</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.stg.keynua.com/send-otp/v1/create-code"</span><span class="p">)</span>
+
+<span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'application/json'</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="s2">"{</span><span class="se">\n\t\"</span><span class="s2">auth</span><span class="se">\"</span><span class="s2">: {</span><span class="se">\n\t\t\"</span><span class="s2">type</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">contract</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n\t\t\"</span><span class="s2">token</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">eyJ0eXAiOiJ...Dq_5VSiZo</span><span class="se">\"\n\t</span><span class="s2">}</span><span class="se">\n</span><span class="s2">}"</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">https</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.stg.keynua.com"</span><span class="p">)</span>
+
+<span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">({</span>
+    <span class="p">{</span>
+        <span class="s">"auth"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">"type"</span><span class="p">:</span> <span class="s">"contract"</span><span class="p">,</span>
+            <span class="s">"token"</span><span class="p">:</span> <span class="s">"eyJ0eXAiOiJ...Dq_5VSiZo"</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span>
+<span class="p">}</span>
+
+<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span> <span class="s">"/send-otp/v1/create-code"</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> POST <span class="se">\</span>
+  <span class="nt">--url</span> https://api.stg.keynua.com/send-otp/v1/create-code <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--data</span> <span class="s1">'{
+    "auth": {
+        "type": "contract",
+        "token": "eyJ0eXAiOiJKV1Q...Dq_5VSiZo"
+    }
+}'</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+  <span class="dl">"</span><span class="s2">auth</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">contract</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">token</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">eyJ0eXA..._2iDq_5VSiZo</span><span class="dl">"</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="kd">const</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">XMLHttpRequest</span><span class="p">();</span>
+<span class="nx">xhr</span><span class="p">.</span><span class="nx">withCredentials</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+<span class="nx">xhr</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">readystatechange</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">readyState</span> <span class="o">===</span> <span class="k">this</span><span class="p">.</span><span class="nx">DONE</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseText</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">https://api.stg.keynua.com/send-otp/v1/create-code</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+</code></pre></div>
+<blockquote>
+<p>Success response</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"qwe123"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"resendInSec"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"availableAttempts"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Permite crear y obtener un nuevo código OTP. De manera similar al <em>endpoint</em> anterior y según la configuración del contrato, se limita la cantidad de códigos generados en un lapso de tiempo.</p>
+<h3 id='http-request-2'>HTTP Request</h3>
+<p><code>POST https://api.stg.keynua.com/send-otp/v1/create-code</code></p>
+<h3 id='request-body-2'>Request body</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Opcional</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>auth</td>
+<td><a href="#propiedades-de-auth">Auth</a></td>
+<td>No</td>
+<td>Permite identificar el OTP del usuario y contrato</td>
+</tr>
+</tbody></table>
+<h3 id='response-body-2'>Response body</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>El código OTP</td>
+</tr>
+<tr>
+<td>resendInSec</td>
+<td>number</td>
+<td>En cuantos segundos se podrá solicitar un nuevo código.</td>
+</tr>
+<tr>
+<td>availableAttempts</td>
+<td>number</td>
+<td>Cuantos intentos aún quedan disponibles.</td>
+</tr>
+</tbody></table>
 <h2 id='verificar-otp'>Verificar OTP</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
 
@@ -5931,9 +6052,9 @@ uso para realizar la firma de documentos.</p>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Permite verificar si el código OTP ingresado es correcto o no.</p>
-<h3 id='http-request-2'>HTTP Request</h3>
+<h3 id='http-request-3'>HTTP Request</h3>
 <p><code>POST https://api.stg.keynua.com/send-otp/v1</code></p>
-<h3 id='request-body-2'>Request body</h3>
+<h3 id='request-body-3'>Request body</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -5955,7 +6076,7 @@ uso para realizar la firma de documentos.</p>
 <td>Código OTP ingresado por el firmante.</td>
 </tr>
 </tbody></table>
-<h3 id='response-body-2'>Response body</h3>
+<h3 id='response-body-3'>Response body</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -6046,9 +6167,9 @@ uso para realizar la firma de documentos.</p>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Permite revisar el estado del código actual.</p>
-<h3 id='http-request-3'>HTTP Request</h3>
+<h3 id='http-request-4'>HTTP Request</h3>
 <p><code>POST https://api.stg.keynua.com/send-otp/v1/details</code></p>
-<h3 id='request-body-3'>Request body</h3>
+<h3 id='request-body-4'>Request body</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -6064,7 +6185,7 @@ uso para realizar la firma de documentos.</p>
 <td>Permite identificar el OTP del usuario y contrato</td>
 </tr>
 </tbody></table>
-<h3 id='response-body-3'>Response body</h3>
+<h3 id='response-body-4'>Response body</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
