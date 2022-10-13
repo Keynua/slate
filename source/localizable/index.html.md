@@ -261,6 +261,7 @@ Atributo | Tipo | Descripción
 banking | integer | Código de banca
 product | integer | Código de producto
 uniqueCode | integer | Código único del cliente
+creditNumber | integer | Número de crédito
 issuedDate | string | Fecha de emisión. Formato: YYYY-MM-dd
 conditionJustSign | integer | Condición del pagaré. Puede tener los siguientes valores: 1 (si) | 2 (no)
 special | integer | Indicador de pagaré especial. Puede tener los siguientes valores: 1 (si) | 2 (no)
