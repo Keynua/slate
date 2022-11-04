@@ -1283,6 +1283,11 @@ Producción: https://api.keynua.com
 <td>Id del template a usar. Puedes usar uno de los template públicos de Keynua como <code>keynua-peru-default</code>. Si es un proceso customizado, el equipo de Keynua te enviará este valor</td>
 </tr>
 <tr>
+<td>onBehalfOf</td>
+<td>string</td>
+<td>AccountId de una cuenta hija. Este campo es usado para organizaciones que necesitan crear contratos como si fueran sus cuentas hijas. Solo funciona si la cuenta hija pertenece a la misma organización de la cuenta padre y si cuenta con el permiso para crear contratos. Los accountId de las cuentas asociadas se pueden obtener <a href="https://app.keynua.com/profile/organization/?tab=members">aquí</a>, ya sea descargando todos los usuarios o copiando los Id que necesites.</td>
+</tr>
+<tr>
 <td>documents</td>
 <td>array</td>
 <td>Arreglo de los documentos PDFs encodificados en base64 que van a ser firmados. Mínimo 1 y máximo 10. El peso máximo en total no debe ser mayor a 4.5 MB. En lugar de <code>base64</code> también se puede enviar <code>storageId</code>, como por ejemplo se obtiene de <a href="#generar-documentos-rellenados">este</a> API.</td>
