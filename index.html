@@ -1308,6 +1308,53 @@ Producción: https://api.keynua.com
 <td><code>optional</code> Se podrá enviar información adicional para crear un contrato. Por ejemplo la información de <a href="#cavali">Cavali</a> para crear un contrato con Pagaré Electrónico se enviará con el key <code>cavaliData</code></td>
 </tr>
 </tbody></table>
+<h3 id='groups-y-prefilled-items'>Groups y Prefilled Items</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"users"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"firmantes-precargados"</span><span class="p">],</span><span class="w">
+            </span><span class="nl">"prefilledItems"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"documentNumber"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"444332323"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Manuel Silva"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"msilva@keynua.com"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"firmantes-especiales"</span><span class="p">],</span><span class="w">
+            </span><span class="nl">"prefilledItems"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"target"</span><span class="p">:</span><span class="w"> </span><span class="s2">"role"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                        </span><span class="nl">"text"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cliente"</span><span class="w">
+                    </span><span class="p">}</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Juan Araujo"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jaraujo@keynua.com"</span><span class="p">,</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Para conocer qué datos precargados y grupos de usuarios se pueden usar al crear un contrato, dirígete a la sección <a href="https://app.stg.keynua.com/developers/">Developers</a></p>
+
+<p>En la sección <code>Grupos e items precargados</code>, elige un template para ver esta información en formato <code>JSON</code>. Un ejemplo de la respuesta puede ser la siguiente:</p>
+
+<p><img src="https://user-images.githubusercontent.com/70590419/201201683-573f0137-a2c9-42a4-acde-47c503505124.png" alt="Image" /></p>
+
+<p>A la derecha se puede ver cómo corresponde esta respuesta a la información que se debe enviar al crear el contrato. </p>
+
+<p>Algunas observaciones importantes:</p>
+
+<ul>
+<li><code>id</code> corresponde al nombre al id del grupo, se incluye dentro del arreglo <code>groups</code>.</li>
+<li><code>target</code> corresponde al id del valor precargado, se incluye en <code>target</code>, dentro del arreglo <code>prefilledItems</code>.</li>
+<li><code>values</code> corresponde a los valores admitidos dentro de un valor precargado. Se debe escoger <em>un solo valor</em> de esta lista. Debe ir dentro de <code>text</code>.</li>
+<li>De no existir <code>values</code>, se puede incluir dentro de <code>text</code> cualquier valor (relacionado al dato que se desee precargar).</li>
+</ul>
 <h2 id='obtener-un-contrato'>Obtener un Contrato</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
 <span class="nb">require</span> <span class="s1">'net/http'</span>
 <span class="nb">require</span> <span class="s1">'openssl'</span>
