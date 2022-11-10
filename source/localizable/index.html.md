@@ -466,6 +466,58 @@ documents | array | Arreglo de los documentos PDFs encodificados en base64 que v
 users | array | Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en **groups** depende del templateId a usar. Para el caso de `keynua-peru-default`, el valor en groups debe ser `signers`. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario
 metadata | object | `optional` Metadata del contrato. Puedes enviar información en este campo como key-value para poder identificar el contrato creado por Keynua con algún Identificador interno de tu sistema.
 flags | object | `optional` Se podrá enviar información adicional para crear un contrato. Por ejemplo la información de [Cavali](#cavali) para crear un contrato con Pagaré Electrónico se enviará con el key `cavaliData`
+
+### Groups y Prefilled Items
+
+```json
+{
+	"users": [
+		{
+			"groups": ["firmantes-precargados"],
+			"prefilledItems": [
+				{
+					"target": "documentNumber",
+					"value": {
+						"text": "444332323"
+					}
+				}
+			],
+			"name": "Manuel Silva",
+			"email": "msilva@keynua.com"
+		},
+		{
+			"groups": ["firmantes-especiales"],
+			"prefilledItems": [
+				{
+					"target": "role",
+					"value": {
+						"text": "Cliente"
+					}
+				}
+			],
+			"name": "Juan Araujo",
+			"email": "jaraujo@keynua.com",
+		}
+	]
+}
+```
+
+Para conocer qué datos precargados y grupos de usuarios se pueden usar al crear un contrato, dirígete a la sección [Developers](https://app.stg.keynua.com/developers/)
+
+En la sección `Grupos e items precargados`, elige un template para ver esta información en formato `JSON`. Un ejemplo de la respuesta puede ser la siguiente:
+
+![Image](https://user-images.githubusercontent.com/70590419/201201683-573f0137-a2c9-42a4-acde-47c503505124.png)
+
+A la derecha se puede ver cómo corresponde esta respuesta a la información que se debe enviar al crear el contrato. 
+
+Algunas observaciones importantes:
+
+* `id` corresponde al nombre al id del grupo, se incluye dentro del arreglo `groups`.
+* `target` corresponde al id del valor precargado, se incluye en `target`, dentro del arreglo `prefilledItems`.
+* `values` corresponde a los valores admitidos dentro de un valor precargado. Se debe escoger *un solo valor* de esta lista. Debe ir dentro de `text`.
+* De no existir `values`, se puede incluir dentro de `text` cualquier valor (relacionado al dato que se desee precargar).
+
+
 ## Obtener un Contrato
 
 ```ruby
