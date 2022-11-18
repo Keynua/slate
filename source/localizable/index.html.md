@@ -1789,7 +1789,7 @@ type | string | Sí | `selfie`, `video` o `liveness`. `selfie` solo pide un self
 disableInitialNotification | boolean | Sí | Opción para desactivar la notificación inicial que se envía a la persona.
 documentSide | `front` o `both` | Sí | SOLO PARA DNI DE PERÚ. Opción para indicar qué lados del DNI validar. Si no es enviado no se hará ninguna validación.
 language | string | Sí | Lenguaje con el cual se creará el proceso de identificación
-accountName | string | Sí | Nombre de cuenta con el cual se creará el proceso de identificación. De no ser enviado se usará el nombre de la cuenta que está creando la identificación. 
+accountName | string | Sí | Nombre de cuenta que se usará al crear el proceso de identificación. De no ser enviado, se usará el nombre de la cuenta que está creando la identificación. 
 
 ### Combinaciones no soportadas por defecto
 
