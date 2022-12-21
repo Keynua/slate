@@ -4806,6 +4806,16 @@ Deceval para registrar la firma del participante.</li>
           </span><span class="p">}</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"alerts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"reniec"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dniExpired"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"dni"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -4908,6 +4918,11 @@ Deceval para registrar la firma del participante.</li>
 <td>pdfItems</td>
 <td>array</td>
 <td>Arreglo de <a href="#propiedades-de-un-pdf-item">PDF Items</a>. Este incluirá información sobre los documentos finales del contrato y te permitirá descargarlos. <strong>Para identificaciones este atributo no existe.</strong></td>
+</tr>
+<tr>
+<td>alerts</td>
+<td>array</td>
+<td>Arreglo de <a href="#propiedades-de-una-alerta">Alertas</a> del contrato</td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-un-pdf-item'>Propiedades de un PDF item</h3>
@@ -5442,7 +5457,17 @@ Deceval para registrar la firma del participante.</li>
             </span><span class="nl">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1992-11-20"</span><span class="p">,</span><span class="w">
             </span><span class="nl">"expirationDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-17"</span><span class="w">
             </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some address"</span><span class="p">,</span><span class="w">
-        </span><span class="p">}</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"alerts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"reniec"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dniExpired"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"dni"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -5534,6 +5559,11 @@ Deceval para registrar la firma del participante.</li>
 <td>userIdInfo</td>
 <td>string</td>
 <td>Información obtenida del OCR del documento enviado por el firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI</td>
+</tr>
+<tr>
+<td>alerts</td>
+<td>array</td>
+<td>Arreglo de <a href="#propiedades-de-una-alerta">Alertas</a> de la identificación.</td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-identityverificationitemupdated'>Propiedades de IdentityVerificationItemUpdated</h3>
@@ -5739,6 +5769,51 @@ Deceval para registrar la firma del participante.</li>
 <td>url</td>
 <td>integer</td>
 <td>Link del documento. <strong>Expira en 12 horas</strong></td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-una-alerta'>Propiedades de una Alerta</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>type</td>
+<td>string</td>
+<td>Tipo de alerta. <strong>reniec</strong></td>
+</tr>
+<tr>
+<td>data</td>
+<td>object</td>
+<td>Información de la alerta</td>
+</tr>
+</tbody></table>
+
+<p>La información de la alerta tiene las siguientes propiedades:</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>Codigo de la alerta. <strong>dniExpired</strong></td>
+</tr>
+<tr>
+<td>userId</td>
+<td>integer</td>
+<td>ID del usuario, para las identificaciones siempre es 0 ya que el flujo solo tiene un participante.</td>
+</tr>
+<tr>
+<td>dni</td>
+<td>string</td>
+<td>Número del documento expirado</td>
 </tr>
 </tbody></table>
 <h2 id='verificar-keynua-signature-webhook'>Verificar Keynua Signature Webhook</h2><div class="highlight"><pre class="highlight plaintext"><code>SHA_256(requestPayloadAsString + ts + webHookSecret)
