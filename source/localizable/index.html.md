@@ -2812,7 +2812,17 @@ documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook
           }
         ]
       }
-    ]
+    ],
+	"alerts": [
+		{
+			"type": "reniec",
+			"data": {
+				"code": "dniExpired",
+				"userId": 0,
+				"dni": "12345678"
+			}
+		}
+	]
 	}
 }
 ```
@@ -2839,6 +2849,7 @@ shortCode | string | Código corto del contrato para facilitar su identificació
 users | array | Arreglo de [Usuarios](#propiedades-de-un-usuario-webhook) del Contrato
 documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook) del contrato. Acá encontrarás los **documentos originales del contrato**, NO el documento final de firma. Si lo que quieres es el documento final de firma, podrás obtenerlo desde el [Item](#propiedades-de-un-item) **PDF** en [ContractItemUpdated](#propiedades-de-contractitemupdated)
 pdfItems | array | Arreglo de [PDF Items](#propiedades-de-un-pdf-item). Este incluirá información sobre los documentos finales del contrato y te permitirá descargarlos. **Para identificaciones este atributo no existe.**
+alerts | array | Arreglo de [Alertas](#propiedades-de-una-alerta) del contrato
 
 ### Propiedades de un PDF item
 
@@ -3097,7 +3108,17 @@ userToken | string | Token con el cual se puede armar el link donde se realizar�
 			"birthDate": "1992-11-20",
 			"expirationDate": "2026-03-17"
 			"address": "Some address",
-		}
+		},
+		"alerts": [
+			{
+				"type": "reniec",
+				"data": {
+					"code": "dniExpired",
+					"userId": 0,
+					"dni": "12345678"
+				}
+			}
+		]
 	}
 }
 ```
@@ -3122,6 +3143,7 @@ userEmail | string | Email del verificante en el cual recibirá el link de inici
 userPhone | string | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
 userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
 userIdInfo | string | Información obtenida del OCR del documento enviado por el firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
+alerts | array | Arreglo de [Alertas](#propiedades-de-una-alerta) de la identificación.
 
 ### Propiedades de IdentityVerificationItemUpdated
 
@@ -3222,6 +3244,21 @@ name | string | Nombre del documento
 type | string | Tipo del documento en formato MIME
 size | integer | Peso del documento en bytes
 url | integer | Link del documento. **Expira en 12 horas**
+
+### Propiedades de una Alerta
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+type | string | Tipo de alerta. **reniec**
+data | object | Información de la alerta
+
+La información de la alerta tiene las siguientes propiedades:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+code | string | Codigo de la alerta. **dniExpired**
+userId | integer | ID del usuario, para las identificaciones siempre es 0 ya que el flujo solo tiene un participante.
+dni | string | Número del documento expirado
 
 ## Verificar Keynua Signature Webhook
 
