@@ -1568,7 +1568,7 @@ Permite crear, listar y obtener verificaciones de identidad.
 Atributo | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
 userRealName | string | No | Nombre completo del usuario
-status | string | No | `pending`, `pending_input`, `pending_approval`, `working`, `error`, `done`, `deleted`, o `expired`
+status | string | No | `pending`, `pending_input`, `pending_approval`, `working`, `error`, `done`, `deleted`, `max_attempts`, o `expired`
 finishedAt | string | Sí | Fecha y hora de finalización en formato ISO
 language | string | No | Lenguaje con el cual se completará el proceso de identificación
 reference | string | Sí | Campo libre. Útil para realizar búsquedas.
