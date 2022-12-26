@@ -120,6 +120,7 @@ groups | array | [Grupos](#propiedades-de-un-grupo) del contrato
 documents | array | [Documentos](#propiedades-de-un-documento) del contrato
 items | array | [Items](#items-del-contrato) del contrato
 status | string | [Estado del contrato](#estados-del-contrato) actual
+alerts | array | Arreglo de [Alertas](#propiedades-de-una-alerta) del contrato
 
 ### Estados del Contrato
 
@@ -508,7 +509,7 @@ En la sección `Grupos e items precargados`, elige un template para ver esta inf
 
 ![Image](https://user-images.githubusercontent.com/70590419/201201683-573f0137-a2c9-42a4-acde-47c503505124.png)
 
-A la derecha se puede ver cómo corresponde esta respuesta a la información que se debe enviar al crear el contrato. 
+A la derecha se puede ver cómo corresponde esta respuesta a la información que se debe enviar al crear el contrato.
 
 Algunas observaciones importantes:
 
@@ -1789,7 +1790,7 @@ type | string | Sí | `selfie`, `video` o `liveness`. `selfie` solo pide un self
 disableInitialNotification | boolean | Sí | Opción para desactivar la notificación inicial que se envía a la persona.
 documentSide | `front` o `both` | Sí | SOLO PARA DNI DE PERÚ. Opción para indicar qué lados del DNI validar. Si no es enviado no se hará ninguna validación.
 language | string | Sí | Lenguaje con el cual se creará el proceso de identificación
-accountName | string | Sí | Nombre de cuenta que se usará al crear el proceso de identificación. De no ser enviado, se usará el nombre de la cuenta que está creando la identificación. 
+accountName | string | Sí | Nombre de cuenta que se usará al crear el proceso de identificación. De no ser enviado, se usará el nombre de la cuenta que está creando la identificación.
 
 ### Combinaciones no soportadas por defecto
 
