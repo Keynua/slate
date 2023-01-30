@@ -1355,13 +1355,13 @@ classesId | string | Id del registro de `Custom Classes`
 global | objeto | [Configuraciones globales](#configuraciones-globales) del template
 stages | array | Contiene las [estapas](#stages) del template
 
-## Configuraciones globales:
+## Configuraciones globales
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 maximumSigningAttempts | integer | `optional` Indica la cantidad máxima de intentos de firma de un usuario
 
-## Stages:
+## Stages
 
 Los Stages no solo contienen las configuraciones de los grupos, tambien indica cuando inicia la ejecucion de sus items puesto que se ejecutan si y solo si el stage previo finaliza.
 
@@ -1369,7 +1369,7 @@ Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 groups | array | Configuraciones de los [grupos](#grupos).
 
-### Grupos:
+### Grupos
 
 Los grupos incluyen los siguientes tipos: `viewers`, `signers` y `bulk`.
 
@@ -1394,6 +1394,7 @@ documentSides | string | Lados del documento de identidad. Puede ser `both`, `ba
 signatureTypes | array | Indica los tipos de firma. Puede ser `selfie`, `video-signature`, `draw` y `digital-signature`
 facematch | array | Indica los items a los cuales se le aplicará el reconocimiento facial. Puede ser `selfie`, `liveness`, `video-signature`, `reniec` y `document-frontal`
 liveness3D | boolean | Incluir validación 3D
+documentValidations | array | Indica las opciones de validación que puedes agregar a los documentos. Puede ser `verify-content-reniec`, para comparar que los datos de la foto del DNI coincidan con Reniec (Sólo Perú) o `expiration-date`, para comprobar que el documento de identidad no ha expirado aún
 views | object | [Vistas customizadas](#vistas-customizadas) del template
 dynamicFields | array | Agrega [items customizados](#items-customizados) al flujo
 prefilledActive | boolean | Activa los `prefilled items`, para que el creador del contrato pueda pre-rellenar el número de documento del firmante. Cuando se activa esta opción, el valor que debes ingresar como targetId dentro de cada user es **documentNumber**. Más referencia en la sección de [crear contrato](#crear-un-contrato)
