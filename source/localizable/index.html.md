@@ -504,7 +504,9 @@ templateOptions | object | `optional` [Configuración dinámica del template](#c
 }
 ```
 
-Para conocer qué datos precargados y grupos de usuarios se pueden usar al crear un contrato, dirígete a la sección [Developers](https://app.stg.keynua.com/developers/)
+Para conocer qué datos precargados y grupos de usuarios se pueden usar al crear un contrato, dirígete a la sección [Developers](https://app.stg.keynua.com/developers/).
+
+<aside class="warning">Si has usado la opción de Configuración dinámica del template, puedes saltar este paso ya que el target siempre será "documentNumber"</aside>
 
 En la sección `Grupos e items precargados`, elige un template para ver esta información en formato `JSON`. Un ejemplo de la respuesta puede ser la siguiente:
 
@@ -1108,9 +1110,6 @@ curl --request PUT \
   "userEmailNotifications": true,
   "templateOptions": {
 		"mock": true,
-		"global": {
-		   "identityCollection": true
-		},
 		"classesId": "belcorp-classes-v2",
 		"stages": [
 		   {
@@ -1218,9 +1217,6 @@ const data = JSON.stringify({
   userEmailNotifications: true,
   templateOptions: {
 		"mock": true,
-		"global": {
-		   "identityCollection": true
-		},
 		"classesId": "belcorp-classes-v2",
 		"stages": [
 		   {
@@ -1356,70 +1352,69 @@ Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 mock | boolean | Default "false" Indica si es un flujo de prueba, se remueven del flujo las validaciones de identidad
 classesId | string | Id del registro de `Custom Classes`
-global | objeto | Configuraciones globales del template
-stages | array | Contiene los grupos del template
+global | objeto | [Configuraciones globales](#configuraciones-globales) del template
+stages | array | Contiene las [estapas](#stages) del template
 
-Configuraciones globales:
+## Configuraciones globales:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-blockchain | boolean | Si está seleccionado. Creará un registro de blockchain. No hay restricciones para usarlo
-KNOM151 | boolean | NOM-151 de acuerdo a la normativa de México. Solo funcioa para convalidaciones mexicanas
-deceval | boolean | Funcionalidad para crear proveedor de promesas para Colombia. Solo funcioa para validaciones colombianas
 maximumSigningAttempts | integer | `optional` Indica la cantidad máxima de intentos de firma de un usuario
-identityCollection | boolean | Activar Colección de Identidades
 
-Stages:
+## Stages:
 
 Los Stages no solo contienen las configuraciones de los grupos, tambien indica cuando inicia la ejecucion de sus items puesto que se ejecutan si y solo si el stage previo finaliza.
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-groups | array | Configuración del grupo.
+groups | array | Configuraciones de los [grupos](#grupos).
 
-Grupos:
+### Grupos:
 
 Los grupos incluyen los siguientes tipos: `viewers`, `signers` y `bulk`.
 
-- Viewers
+**Viewers**
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
+name | string | Nombre del grupo, este mismo nombre tendrías que agregarlo a cada usuario que quieras que pertenezca a este gurpo al [crear el contrato](#crear-un-contrato)
 type | enum | `viewers`
 dynamicFields | array | Agrega [items customizados](#items-customizados) al flujo.
-removeUserInput | boolean | Indica si el visor debe completar el input `text` en el flujo
+removeUserInput | boolean | Indica si el visor debe completar el input `text` ingresando su nombre o rol en el flujo
 rejectDocuments | boolean | Indica si el visor puede rechazar el documento
 
-* Signers
+**Signers**
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
+name | string | Nombre del grupo, este mismo nombre tendrías que agregarlo a cada usuario que quieras que pertenezca a este gurpo al [crear el contrato](#crear-un-contrato)
 type | enum | `signers`
 documentType | string | El tipo de documento que se quiere validar. Ver tabla de los [tipos de documentos](#documentos-de-identidad-soportados) soportados
 documentSides | string | Lados del documento de identidad. Puede ser `both`, `back` o `frontal`
-facematch | array | Indica los items a los cuales se le aplicará el reconocimiento facial. Puede ser `selfie`, `liveness`, `video-signature`, `reniec` y `document-frontal`
 signatureTypes | array | Indica los tipos de firma. Puede ser `selfie`, `video-signature`, `draw` y `digital-signature`
+facematch | array | Indica los items a los cuales se le aplicará el reconocimiento facial. Puede ser `selfie`, `liveness`, `video-signature`, `reniec` y `document-frontal`
 liveness3D | boolean | Incluir validación 3D
 views | object | [Vistas customizadas](#vistas-customizadas) del template
 dynamicFields | array | Agrega [items customizados](#items-customizados) al flujo
-prefilledActive | boolean | Activa los `prefilled items`
-reviewEachDocument | boolean | Indica si se debe deben abrir todos los documentos durante la firma
+prefilledActive | boolean | Activa los `prefilled items`, para que el creador del contrato pueda pre-rellenar el número de documento del firmante. Cuando se activa esta opción, el valor que debes ingresar como targetId dentro de cada user es **documentNumber**. Más referencia en la sección de [crear contrato](#crear-un-contrato)
+reviewEachDocument | boolean | Indica si se debe debe obligar al firmante a abrir todos los documentos para poder continuar con la firma
 disableNotification | boolean | Indica si se quiere omitir el correo de inici
 disableReminder | boolean | Indica si se quiere omitir el recordatorio
 skipSurveyEmail | boolean | Indica si se quiere omitir la encuesta de satisfacción
 allViewsAtOnce | boolean | Esta modalidad muestra todos los pasos del flujo de firma en vertical
 maskDocumentNumberValue | boolean | Oculta el número de documento ingresado en caso de error
 validateMinAge | number | Edad minima del firmante permitida. Disponible para validaciones gubernamentales
-denyInstructionsGrade | boolean | Si activas esta opción, se devolverá un error si el DNI evaluado tiene el grado de Instrucción de Iletrado o Educación Especial
+denyInstructionsGrade | boolean | Si activas esta opción, se devolverá un error si el DNI evaluado tiene el grado de Instrucción de Iletrado o Educación Especial. **Para contratos, esta opción está activa por defecto y no se puede cambiar**
 minimumScore | objeto | Customizar la sensibilidad de las validaciones de identidad. Para más detalle consultar la sección [Customizar validaciones](#customizar-validaciones)
 matchPercent | objeto | Customizar la sensibilidad de las validaciones de reconocimiento facial. Para más detalle consultar la sección [Customizar validaciones](#customizar-validaciones)
 workingMessages | objeto | Customizar mensajes del flujo de firma en progreso. Para más detalle consultar la sección [Customizar mensajes](#customizar-mensajes)
 errorMessages | objeto | Customiar mensaje de error del flujo de firma. Para más detalle consultar la sección [Customizar mensajes](#customizar-mensajes)
 
-+ Bulk (Firma gerentes)
+**Bulk (Firma gerentes)**
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
+name | string | Nombre del grupo, este mismo nombre tendrías que agregarlo a cada usuario que quieras que pertenezca a este gurpo al [crear el contrato](#crear-un-contrato)
 type | enum | `bulk`
 requiredItems | array | El arreglo puede contener los siguientes elementos: `video`, `imagesign`, `visto` e `image`
 
