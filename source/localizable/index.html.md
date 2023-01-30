@@ -1404,7 +1404,7 @@ skipSurveyEmail | boolean | Indica si se quiere omitir la encuesta de satisfacci
 allViewsAtOnce | boolean | Esta modalidad muestra todos los pasos del flujo de firma en vertical
 maskDocumentNumberValue | boolean | Oculta el número de documento ingresado en caso de error
 validateMinAge | number | Edad minima del firmante permitida. Disponible para validaciones gubernamentales
-denyInstructionsGrade | boolean | Si activas esta opción, se devolverá un error si el DNI evaluado tiene el grado de Instrucción de Iletrado o Educación Especial. **Para contratos, esta opción está activa por defente y no se puede cambiar**
+denyInstructionsGrade | boolean | Si activas esta opción, se devolverá un error si el DNI evaluado tiene el grado de Instrucción de Iletrado o Educación Especial. **Para contratos, esta opción está activa por defecto y no se puede cambiar**
 minimumScore | objeto | Customizar la sensibilidad de las validaciones de identidad. Para más detalle consultar la sección [Customizar validaciones](#customizar-validaciones)
 matchPercent | objeto | Customizar la sensibilidad de las validaciones de reconocimiento facial. Para más detalle consultar la sección [Customizar validaciones](#customizar-validaciones)
 workingMessages | objeto | Customizar mensajes del flujo de firma en progreso. Para más detalle consultar la sección [Customizar mensajes](#customizar-mensajes)
