@@ -359,6 +359,26 @@
               </ul>
           </li>
           <li>
+            <a href="#configuracion-dinamica-del-template" class="toc-h1 toc-link" data-title="Configuración dinámica del template">Configuración dinámica del template</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#vistas-customizadas" class="toc-h2 toc-link" data-title="Vistas customizadas">Vistas customizadas</a>
+                  </li>
+                  <li>
+                    <a href="#items-customizados" class="toc-h2 toc-link" data-title="Items customizados">Items customizados</a>
+                  </li>
+                  <li>
+                    <a href="#customizar-mensajes" class="toc-h2 toc-link" data-title="Customizar mensajes">Customizar mensajes</a>
+                  </li>
+                  <li>
+                    <a href="#customizar-validaciones" class="toc-h2 toc-link" data-title="Customizar validaciones">Customizar validaciones</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#documentos-de-identidad-soportados" class="toc-h1 toc-link" data-title="Documentos de identidad soportados">Documentos de identidad soportados</a>
+          </li>
+          <li>
             <a href="#deceval" class="toc-h1 toc-link" data-title="Deceval">Deceval</a>
               <ul class="toc-list-h2">
                   <li>
@@ -1312,6 +1332,11 @@ Producción: https://api.keynua.com
 <td>object</td>
 <td><code>optional</code> Se podrá enviar información adicional para crear un contrato. Por ejemplo la información de <a href="#cavali">Cavali</a> para crear un contrato con Pagaré Electrónico se enviará con el key <code>cavaliData</code></td>
 </tr>
+<tr>
+<td>templateOptions</td>
+<td>object</td>
+<td><code>optional</code> <a href="#configuracion-dinamica-del-template">Configuración dinámica del template</a> del contrato, si mandas este campo se omite el templateId</td>
+</tr>
 </tbody></table>
 <h3 id='groups-y-prefilled-items'>Groups y Prefilled Items</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"users"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -2204,6 +2229,1030 @@ Producción: https://api.keynua.com
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='terms'>Terms:</h3>
 <p><img src="../images/terms-example-f9388bd7.png" alt="terms-example" /></p>
+<h1 id='configuracion-dinamica-del-template'>Configuración dinámica del template</h1><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> PUT <span class="se">\</span>
+  <span class="nt">--url</span> https://api.stg.keynua.com/contracts/v1 <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--data</span> <span class="s1">'{
+  "title": "Contract created by API",
+  "language": "es",
+  "userEmailNotifications": true,
+  "templateOptions": {
+        "mock": true,
+        "global": {
+           "identityCollection": true
+        },
+        "classesId": "belcorp-classes-v2",
+        "stages": [
+           {
+              "groups": [
+                 {
+                    "name": "Firmantes",
+                    "type": "signers",
+                    "views": {
+                        "nothingMore": "nothing-more-custom",
+                        "finished": "finished",
+                        "validating": "validating-custom",
+                        "items": {
+                           "terms": "terms-basic",
+                           "documents": "documents-v1",
+                           "documentNumber": "document-number-dni",
+                           "idFront": "image-front-dni",
+                           "idBack": "image-back-dni",
+                           "videoSignature": "video-signature"
+                        }
+                    },
+                    "documentSides": "both",
+                    "documentType": "pe-dni",
+                    "allowsUpdateItemTypes": [
+                       "detectlabels",
+                       "facematch",
+                       "checklabels"
+                    ],
+                    "documentValidations": [
+                       "verify-content-reniec",
+                       "expiration-date"
+                    ],
+                    "signatureTypes": [
+                       "video-signature"
+                    ],
+                    "allViewsAtOnce": true,
+                    "prefilledActive": true,
+                    "workingMessages": {
+                       "approvalMessageTitle": "Tu solicitud está en proceso. Por favor comunícate con nuestro Call Center."                  },
+                    "errorMessages": {
+                       "contentReniecUnmatchedTitle": "El número del DNI registrado: {documentNumber}, no coincide con el número del DNI de la foto",
+                       "contentReniecUnmatchedSubtitle": "Contáctanos para mayor información: belcorp_respondepe@belcorp.biz"
+                    },
+                    "dynamicFields": [
+                        {
+                            "name": "Foto recibo agua o Luz",
+                            "type": "image",
+                            "viewId": "imagereciboview",
+                            "options": {
+                                "orientation": "vertical",
+                                "overlay": true,
+                                "camera": "environment",
+                                "invalidExtensions": [
+                                  ".pdf",
+                                  ".mp4"
+                                ]
+                            }
+                        }
+                    ],
+                    "minimumScore": {
+                        "idfront": 30,
+                        "idback": 30,
+                        "liveness-detection": 50,
+                        "idfront-approval": 50,
+                        "idback-approval": 60,
+                        "reniec-video-approval": 80,
+                        "reniec-idfront-approval": 80
+                    },
+                    "matchPercent": {
+                        "reniec-idfront": 30,
+                        "reniec-video": 60
+                    },
+                    "validateMinAge": 18,
+                    "reviewEachDocument": false,
+                    "disableNotification": true,
+                    "disableReminder": true,
+                    "skipSurveyEmail": true,
+                    "maskDocumentNumberValue": true
+                 }
+              ]
+           }
+        ]
+    },
+  "documents": [
+    {
+      "name": "DocumentPdf.pdf",
+      "base64": "YOUR-BASE64-PDF-HERE"
+    }
+  ],
+  "users": [
+    {
+      "name": "Manuel Silva",
+      "email": "msilva@keynua.com",
+      "groups": [ "signers" ]
+    }
+  ]
+}'</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">https</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">https</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+  <span class="na">title</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Contract created by API</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">language</span><span class="p">:</span> <span class="dl">'</span><span class="s1">es</span><span class="dl">'</span><span class="p">,</span>
+  <span class="na">userEmailNotifications</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+  <span class="na">templateOptions</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">mock</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">global</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+           <span class="dl">"</span><span class="s2">identityCollection</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+        <span class="p">},</span>
+        <span class="dl">"</span><span class="s2">classesId</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">belcorp-classes-v2</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">stages</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+           <span class="p">{</span>
+              <span class="dl">"</span><span class="s2">groups</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+                 <span class="p">{</span>
+                    <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Firmantes</span><span class="dl">"</span><span class="p">,</span>
+                    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">signers</span><span class="dl">"</span><span class="p">,</span>
+                    <span class="dl">"</span><span class="s2">views</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="dl">"</span><span class="s2">nothingMore</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nothing-more-custom</span><span class="dl">"</span><span class="p">,</span>
+                        <span class="dl">"</span><span class="s2">finished</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">finished</span><span class="dl">"</span><span class="p">,</span>
+                        <span class="dl">"</span><span class="s2">validating</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">validating-custom</span><span class="dl">"</span><span class="p">,</span>
+                        <span class="dl">"</span><span class="s2">items</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+                           <span class="dl">"</span><span class="s2">terms</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">terms-basic</span><span class="dl">"</span><span class="p">,</span>
+                           <span class="dl">"</span><span class="s2">documents</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">documents-v1</span><span class="dl">"</span><span class="p">,</span>
+                           <span class="dl">"</span><span class="s2">documentNumber</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">document-number-dni</span><span class="dl">"</span><span class="p">,</span>
+                           <span class="dl">"</span><span class="s2">idFront</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">image-front-dni</span><span class="dl">"</span><span class="p">,</span>
+                           <span class="dl">"</span><span class="s2">idBack</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">image-back-dni</span><span class="dl">"</span><span class="p">,</span>
+                           <span class="dl">"</span><span class="s2">videoSignature</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">video-signature</span><span class="dl">"</span>
+                        <span class="p">}</span>
+                    <span class="p">},</span>
+                    <span class="dl">"</span><span class="s2">documentSides</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">both</span><span class="dl">"</span><span class="p">,</span>
+                    <span class="dl">"</span><span class="s2">documentType</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">pe-dni</span><span class="dl">"</span><span class="p">,</span>
+                    <span class="dl">"</span><span class="s2">allowsUpdateItemTypes</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+                       <span class="dl">"</span><span class="s2">detectlabels</span><span class="dl">"</span><span class="p">,</span>
+                       <span class="dl">"</span><span class="s2">facematch</span><span class="dl">"</span><span class="p">,</span>
+                       <span class="dl">"</span><span class="s2">checklabels</span><span class="dl">"</span>
+                    <span class="p">],</span>
+                    <span class="dl">"</span><span class="s2">documentValidations</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+                       <span class="dl">"</span><span class="s2">verify-content-reniec</span><span class="dl">"</span><span class="p">,</span>
+                       <span class="dl">"</span><span class="s2">expiration-date</span><span class="dl">"</span>
+                    <span class="p">],</span>
+                    <span class="dl">"</span><span class="s2">signatureTypes</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+                       <span class="dl">"</span><span class="s2">video-signature</span><span class="dl">"</span>
+                    <span class="p">],</span>
+                    <span class="dl">"</span><span class="s2">allViewsAtOnce</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="dl">"</span><span class="s2">prefilledActive</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="dl">"</span><span class="s2">workingMessages</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+                       <span class="dl">"</span><span class="s2">approvalMessageTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Tu solicitud está en proceso. Por favor comunícate con nuestro Call Center.</span><span class="dl">"</span>                  <span class="p">},</span>
+                    <span class="dl">"</span><span class="s2">errorMessages</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+                       <span class="dl">"</span><span class="s2">contentReniecUnmatchedTitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">El número del DNI registrado: {documentNumber}, no coincide con el número del DNI de la foto</span><span class="dl">"</span><span class="p">,</span>
+                       <span class="dl">"</span><span class="s2">contentReniecUnmatchedSubtitle</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Contáctanos para mayor información: belcorp_respondepe@belcorp.biz</span><span class="dl">"</span>
+                    <span class="p">},</span>
+                    <span class="dl">"</span><span class="s2">dynamicFields</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Foto recibo agua o Luz</span><span class="dl">"</span><span class="p">,</span>
+                            <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">image</span><span class="dl">"</span><span class="p">,</span>
+                            <span class="dl">"</span><span class="s2">viewId</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">imagereciboview</span><span class="dl">"</span><span class="p">,</span>
+                            <span class="dl">"</span><span class="s2">options</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="dl">"</span><span class="s2">orientation</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">vertical</span><span class="dl">"</span><span class="p">,</span>
+                                <span class="dl">"</span><span class="s2">overlay</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                                <span class="dl">"</span><span class="s2">camera</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">environment</span><span class="dl">"</span><span class="p">,</span>
+                                <span class="dl">"</span><span class="s2">invalidExtensions</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
+                                  <span class="dl">"</span><span class="s2">.pdf</span><span class="dl">"</span><span class="p">,</span>
+                                  <span class="dl">"</span><span class="s2">.mp4</span><span class="dl">"</span>
+                                <span class="p">]</span>
+                            <span class="p">}</span>
+                        <span class="p">}</span>
+                    <span class="p">],</span>
+                    <span class="dl">"</span><span class="s2">minimumScore</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="dl">"</span><span class="s2">idfront</span><span class="dl">"</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+                        <span class="dl">"</span><span class="s2">idback</span><span class="dl">"</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+                        <span class="dl">"</span><span class="s2">liveness-detection</span><span class="dl">"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+                        <span class="dl">"</span><span class="s2">idfront-approval</span><span class="dl">"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+                        <span class="dl">"</span><span class="s2">idback-approval</span><span class="dl">"</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+                        <span class="dl">"</span><span class="s2">reniec-video-approval</span><span class="dl">"</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+                        <span class="dl">"</span><span class="s2">reniec-idfront-approval</span><span class="dl">"</span><span class="p">:</span> <span class="mi">80</span>
+                    <span class="p">},</span>
+                    <span class="dl">"</span><span class="s2">matchPercent</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="dl">"</span><span class="s2">reniec-idfront</span><span class="dl">"</span><span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+                        <span class="dl">"</span><span class="s2">reniec-video</span><span class="dl">"</span><span class="p">:</span> <span class="mi">60</span>
+                    <span class="p">},</span>
+                    <span class="dl">"</span><span class="s2">validateMinAge</span><span class="dl">"</span><span class="p">:</span> <span class="mi">18</span><span class="p">,</span>
+                    <span class="dl">"</span><span class="s2">reviewEachDocument</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+                    <span class="dl">"</span><span class="s2">disableNotification</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="dl">"</span><span class="s2">disableReminder</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="dl">"</span><span class="s2">skipSurveyEmail</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+                    <span class="dl">"</span><span class="s2">maskDocumentNumberValue</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
+                 <span class="p">}</span>
+              <span class="p">]</span>
+           <span class="p">}</span>
+        <span class="p">]</span>
+    <span class="p">},</span>
+  <span class="na">documents</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">DocumentPdf.pdf</span><span class="dl">'</span><span class="p">,</span>
+      <span class="na">base64</span><span class="p">:</span> <span class="dl">'</span><span class="s1">YOUR-BASE64-PDF-HERE</span><span class="dl">'</span>
+    <span class="p">},</span>
+  <span class="p">],</span>
+  <span class="na">users</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Manuel Silva</span><span class="dl">'</span><span class="p">,</span> <span class="na">email</span><span class="p">:</span> <span class="dl">'</span><span class="s1">msilva@keynua.com</span><span class="dl">'</span><span class="p">,</span> <span class="na">groups</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">signers</span><span class="dl">'</span><span class="p">]}</span>
+  <span class="p">]</span>
+<span class="p">});</span>
+
+<span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">PUT</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">hostname</span><span class="p">:</span> <span class="dl">"</span><span class="s2">api.stg.keynua.com</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">path</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/contracts/v1</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-KEY-HERE</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">authorization</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-TOKEN-HERE</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">content-type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">content-length</span><span class="dl">"</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">https</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
+  <span class="p">});</span>
+
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">end</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+
+
+<span class="nx">req</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">error</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span>
+<span class="p">});</span>
+
+<span class="nx">req</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+</code></pre></div>
+<blockquote>
+<p>Si el contrato fue creado satisfactoramente, el API retorna un Json estructurado como aparece en la sección de <a href="#contratos">Contratos</a></p>
+</blockquote>
+
+<p>Describe las opciones que podemos enviar en el atributo <code>templateOptions</code> al crear el contrato</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>mock</td>
+<td>boolean</td>
+<td>Default &quot;false&quot; Indica si es un flujo de prueba, se remueven del flujo las validaciones de identidad</td>
+</tr>
+<tr>
+<td>classesId</td>
+<td>string</td>
+<td>Id del registro de <code>Custom Classes</code></td>
+</tr>
+<tr>
+<td>global</td>
+<td>objeto</td>
+<td>Configuraciones globales del template</td>
+</tr>
+<tr>
+<td>stages</td>
+<td>array</td>
+<td>Contiene los grupos del template</td>
+</tr>
+</tbody></table>
+
+<p>Configuraciones globales:</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>blockchain</td>
+<td>boolean</td>
+<td>Si está seleccionado. Creará un registro de blockchain. No hay restricciones para usarlo</td>
+</tr>
+<tr>
+<td>KNOM151</td>
+<td>boolean</td>
+<td>NOM-151 de acuerdo a la normativa de México. Solo funcioa para convalidaciones mexicanas</td>
+</tr>
+<tr>
+<td>deceval</td>
+<td>boolean</td>
+<td>Funcionalidad para crear proveedor de promesas para Colombia. Solo funcioa para validaciones colombianas</td>
+</tr>
+<tr>
+<td>maximumSigningAttempts</td>
+<td>integer</td>
+<td><code>optional</code> Indica la cantidad máxima de intentos de firma de un usuario</td>
+</tr>
+<tr>
+<td>identityCollection</td>
+<td>boolean</td>
+<td>Activar Colección de Identidades</td>
+</tr>
+</tbody></table>
+
+<p>Stages:</p>
+
+<p>Los Stages no solo contienen las configuraciones de los grupos, tambien indica cuando inicia la ejecucion de sus items puesto que se ejecutan si y solo si el stage previo finaliza.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>groups</td>
+<td>array</td>
+<td>Configuración del grupo.</td>
+</tr>
+</tbody></table>
+
+<p>Grupos:</p>
+
+<p>Los grupos incluyen los siguientes tipos: <code>viewers</code>, <code>signers</code> y <code>bulk</code>.</p>
+
+<ul>
+<li>Viewers</li>
+</ul>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>type</td>
+<td>enum</td>
+<td><code>viewers</code></td>
+</tr>
+<tr>
+<td>dynamicFields</td>
+<td>array</td>
+<td>Agrega <a href="#items-customizados">items customizados</a> al flujo.</td>
+</tr>
+<tr>
+<td>removeUserInput</td>
+<td>boolean</td>
+<td>Indica si el visor debe completar el input <code>text</code> en el flujo</td>
+</tr>
+<tr>
+<td>rejectDocuments</td>
+<td>boolean</td>
+<td>Indica si el visor puede rechazar el documento</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>Signers</li>
+</ul>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>type</td>
+<td>enum</td>
+<td><code>signers</code></td>
+</tr>
+<tr>
+<td>documentType</td>
+<td>string</td>
+<td>El tipo de documento que se quiere validar. Ver tabla de los <a href="#documentos-de-identidad-soportados">tipos de documentos</a> soportados</td>
+</tr>
+<tr>
+<td>documentSides</td>
+<td>string</td>
+<td>Lados del documento de identidad. Puede ser <code>both</code>, <code>back</code> o <code>frontal</code></td>
+</tr>
+<tr>
+<td>facematch</td>
+<td>array</td>
+<td>Indica los items a los cuales se le aplicará el reconocimiento facial. Puede ser <code>selfie</code>, <code>liveness</code>, <code>video-signature</code>, <code>reniec</code> y <code>document-frontal</code></td>
+</tr>
+<tr>
+<td>signatureTypes</td>
+<td>array</td>
+<td>Indica los tipos de firma. Puede ser <code>selfie</code>, <code>video-signature</code>, <code>draw</code> y <code>digital-signature</code></td>
+</tr>
+<tr>
+<td>liveness3D</td>
+<td>boolean</td>
+<td>Incluir validación 3D</td>
+</tr>
+<tr>
+<td>views</td>
+<td>object</td>
+<td><a href="#vistas-customizadas">Vistas customizadas</a> del template</td>
+</tr>
+<tr>
+<td>dynamicFields</td>
+<td>array</td>
+<td>Agrega <a href="#items-customizados">items customizados</a> al flujo</td>
+</tr>
+<tr>
+<td>prefilledActive</td>
+<td>boolean</td>
+<td>Activa los <code>prefilled items</code></td>
+</tr>
+<tr>
+<td>reviewEachDocument</td>
+<td>boolean</td>
+<td>Indica si se debe deben abrir todos los documentos durante la firma</td>
+</tr>
+<tr>
+<td>disableNotification</td>
+<td>boolean</td>
+<td>Indica si se quiere omitir el correo de inici</td>
+</tr>
+<tr>
+<td>disableReminder</td>
+<td>boolean</td>
+<td>Indica si se quiere omitir el recordatorio</td>
+</tr>
+<tr>
+<td>skipSurveyEmail</td>
+<td>boolean</td>
+<td>Indica si se quiere omitir la encuesta de satisfacción</td>
+</tr>
+<tr>
+<td>allViewsAtOnce</td>
+<td>boolean</td>
+<td>Esta modalidad muestra todos los pasos del flujo de firma en vertical</td>
+</tr>
+<tr>
+<td>maskDocumentNumberValue</td>
+<td>boolean</td>
+<td>Oculta el número de documento ingresado en caso de error</td>
+</tr>
+<tr>
+<td>validateMinAge</td>
+<td>number</td>
+<td>Edad minima del firmante permitida. Disponible para validaciones gubernamentales</td>
+</tr>
+<tr>
+<td>denyInstructionsGrade</td>
+<td>boolean</td>
+<td>Si activas esta opción, se devolverá un error si el DNI evaluado tiene el grado de Instrucción de Iletrado o Educación Especial</td>
+</tr>
+<tr>
+<td>minimumScore</td>
+<td>objeto</td>
+<td>Customizar la sensibilidad de las validaciones de identidad. Para más detalle consultar la sección <a href="#customizar-validaciones">Customizar validaciones</a></td>
+</tr>
+<tr>
+<td>matchPercent</td>
+<td>objeto</td>
+<td>Customizar la sensibilidad de las validaciones de reconocimiento facial. Para más detalle consultar la sección <a href="#customizar-validaciones">Customizar validaciones</a></td>
+</tr>
+<tr>
+<td>workingMessages</td>
+<td>objeto</td>
+<td>Customizar mensajes del flujo de firma en progreso. Para más detalle consultar la sección <a href="#customizar-mensajes">Customizar mensajes</a></td>
+</tr>
+<tr>
+<td>errorMessages</td>
+<td>objeto</td>
+<td>Customiar mensaje de error del flujo de firma. Para más detalle consultar la sección <a href="#customizar-mensajes">Customizar mensajes</a></td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>Bulk (Firma gerentes)</li>
+</ul>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>type</td>
+<td>enum</td>
+<td><code>bulk</code></td>
+</tr>
+<tr>
+<td>requiredItems</td>
+<td>array</td>
+<td>El arreglo puede contener los siguientes elementos: <code>video</code>, <code>imagesign</code>, <code>visto</code> e <code>image</code></td>
+</tr>
+</tbody></table>
+<h3 id='vistas-customizadas'>Vistas customizadas</h3>
+<p>Las vistas personalizadas permiten modificar la apariencia del Widget dinámicamente.</p>
+
+<p>El atributo de <code>views</code> debe completarse con la siguiente estructura:</p>
+
+<p><img src="../images/custom-views-c632a1d3.png" alt="views" /></p>
+
+<table><thead>
+<tr>
+<th>Nombre</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>expired</code></td>
+<td>Personalizar vista de expiración del contrato</td>
+</tr>
+<tr>
+<td><code>finished</code></td>
+<td>Personalizar vista de finalización del contrato</td>
+</tr>
+<tr>
+<td><code>deleted</code></td>
+<td>Personalizar vista de contrato eliminado</td>
+</tr>
+<tr>
+<td><code>nothingMore</code></td>
+<td>Personalizar vista de firma enviada</td>
+</tr>
+<tr>
+<td><code>validating</code></td>
+<td>Personalizar vista de validación de firma</td>
+</tr>
+<tr>
+<td><code>maxAttempts</code></td>
+<td>Personalizar vista de bloqueo por máximo de intentos de firma</td>
+</tr>
+<tr>
+<td><code>pending</code></td>
+<td>Personalizar vista de flujo de firma pendiente</td>
+</tr>
+<tr>
+<td><code>viewers</code></td>
+<td>Personalizar vista de Vistos buenos</td>
+</tr>
+<tr>
+<td><code>terms</code></td>
+<td>Vista asignada al <code>input</code> de términos y condiciones.</td>
+</tr>
+<tr>
+<td><code>documents</code></td>
+<td>Vista asignada al <code>input</code> de Documentos.</td>
+</tr>
+<tr>
+<td><code>documentNumber</code></td>
+<td>Vista asignada al <code>input</code> de Número de documento.</td>
+</tr>
+<tr>
+<td><code>idFront</code></td>
+<td>Vista asignada al <code>input</code> de Foto frotal del documento de identidad.</td>
+</tr>
+<tr>
+<td><code>idBack</code></td>
+<td>Vista asignada al <code>input</code> de Foto posterior del documento de identidad.</td>
+</tr>
+<tr>
+<td><code>drawnSignature</code></td>
+<td>Vista asignada al <code>input</code> de firma dibujada.</td>
+</tr>
+<tr>
+<td><code>selfie</code></td>
+<td>Vista asignada al <code>input</code> de Foto Selfie.</td>
+</tr>
+<tr>
+<td><code>videoSignature</code></td>
+<td>Vista asignada al <code>input</code> de Video firma.</td>
+</tr>
+</tbody></table>
+<h3 id='items-customizados'>Items customizados</h3>
+<p>Los items customizado tienen una estructura base en cual cambian los <code>options</code> acorde a su tipo. Los tipos disponibles: <code>image</code>, <code>text</code> y <code>video</code>.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>Nombre del item</td>
+</tr>
+<tr>
+<td>type</td>
+<td>string</td>
+<td>Puede ser <code>image</code>, <code>text</code> o <code>video</code></td>
+</tr>
+<tr>
+<td>prefilledId</td>
+<td>string</td>
+<td>Si tenemos el atributo <code>prefilledActive</code> activado podemos especificar el id de referencia para ingresar el valor del item</td>
+</tr>
+<tr>
+<td>viewId</td>
+<td>string</td>
+<td>Id de la vista customizada</td>
+</tr>
+<tr>
+<td>options</td>
+<td>object</td>
+<td>Opciones del item</td>
+</tr>
+</tbody></table>
+
+<p>Opciones del item:</p>
+
+<ul>
+<li>Imagen (<code>image</code>)</li>
+</ul>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>btnLabel</td>
+<td>string</td>
+<td>Texto del botón principal</td>
+</tr>
+<tr>
+<td>invalidExtensions</td>
+<td>array</td>
+<td>Extensiones inválidas</td>
+</tr>
+<tr>
+<td>placeholderImgName</td>
+<td>string</td>
+<td>Id de la ilustración del item</td>
+</tr>
+<tr>
+<td>orientation</td>
+<td>string</td>
+<td>Orientación de la cámara. Puede ser <code>horizontal</code> o <code>vertical</code></td>
+</tr>
+<tr>
+<td>camera</td>
+<td>string</td>
+<td>Tipo de cámara. Puede ser <code>environment</code> o <code>user</code></td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>Texto (<code>text</code>)</li>
+</ul>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>regex</td>
+<td>string</td>
+<td>Validación del formato</td>
+</tr>
+<tr>
+<td>type</td>
+<td>string</td>
+<td>Tipo del input. Puede ser <code>text</code>, <code>number</code> o <code>tel</code></td>
+</tr>
+<tr>
+<td>minLength</td>
+<td>number</td>
+<td>Longitud máxima del input</td>
+</tr>
+<tr>
+<td>maxLength</td>
+<td>number</td>
+<td>Longitud mínima del input</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>Video (<code>video</code>)</li>
+</ul>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>btnLabel</td>
+<td>string</td>
+<td>Texto del botón principal</td>
+</tr>
+<tr>
+<td>invalidExtensions</td>
+<td>array</td>
+<td>Extensiones inválidas</td>
+</tr>
+<tr>
+<td>placeholderImgName</td>
+<td>string</td>
+<td>Id de la ilustración del item</td>
+</tr>
+<tr>
+<td>orientation</td>
+<td>string</td>
+<td>Orientación de la cámara. Puede ser <code>horizontal</code> o <code>vertical</code></td>
+</tr>
+<tr>
+<td>camera</td>
+<td>string</td>
+<td>Tipo de cámara. Puede ser <code>environment</code> o <code>user</code></td>
+</tr>
+<tr>
+<td>hideNativeButton</td>
+<td>boolean</td>
+<td>Oculta botón de la cámara nativa</td>
+</tr>
+</tbody></table>
+<h3 id='customizar-mensajes'>Customizar mensajes</h3>
+<p>Customizar mensajes de un flujo en proceso:</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>approvalMessageTitle</td>
+<td>string</td>
+<td>Título de la aprobación manual</td>
+</tr>
+<tr>
+<td>approvalMessageSubtitle</td>
+<td>string</td>
+<td>Subtítulo de la aprobación manual</td>
+</tr>
+</tbody></table>
+
+<p>Customizar mensajes de error:</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>idNumberUnmatchedTitle</td>
+<td>string</td>
+<td>Título del mensaje cuando el número de documeto es inválido</td>
+</tr>
+<tr>
+<td>idNumberUnmatchedSubtitle</td>
+<td>string</td>
+<td>Subtítulo del mensaje cuando el número de documeto es inválido</td>
+</tr>
+<tr>
+<td>contentReniecUnmatchedTitle</td>
+<td>string</td>
+<td>Título del mensaje cuando el contenido del documento es inválido</td>
+</tr>
+<tr>
+<td>contentReniecUnmatchedSubtitle</td>
+<td>string</td>
+<td>Subtítulo del mensaje cuando el contenido del documento es inválido</td>
+</tr>
+</tbody></table>
+<h3 id='customizar-validaciones'>Customizar validaciones</h3>
+<p>Customizar validaciones de identidad:</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>idfront</td>
+<td>number</td>
+<td>Validación del formato frontal del documento</td>
+</tr>
+<tr>
+<td>idback</td>
+<td>number</td>
+<td>Validación del formato posterior del documento</td>
+</tr>
+<tr>
+<td>idfront-approval</td>
+<td>number</td>
+<td>Aprobación manual de la parte frontal del documento</td>
+</tr>
+<tr>
+<td>idback-approval</td>
+<td>number</td>
+<td>Aprobación manual de la parte posterior del documento</td>
+</tr>
+<tr>
+<td>liveness-detection</td>
+<td>number</td>
+<td>Aprobación manual de la prueba de vida</td>
+</tr>
+<tr>
+<td>video-idfront-approval</td>
+<td>number</td>
+<td>Aprobación manual entre video y la parte frontal del documento</td>
+</tr>
+<tr>
+<td>reniec-idfront-approval</td>
+<td>number</td>
+<td>Aprobación manual entre reniec y la parte frontal del documento</td>
+</tr>
+<tr>
+<td>reniec-video-approval</td>
+<td>number</td>
+<td>Aprobación manual entre reniec y la video firma</td>
+</tr>
+<tr>
+<td>reniec-liveness-approval</td>
+<td>number</td>
+<td>Aprobación manual entre reniec y prueba de vida</td>
+</tr>
+<tr>
+<td>video-liveness-approval</td>
+<td>number</td>
+<td>Aprobación manual entre video firma y prueba de vida</td>
+</tr>
+<tr>
+<td>selfie-reniec-approval</td>
+<td>number</td>
+<td>Aprobación manual entre selfie y reniec</td>
+</tr>
+<tr>
+<td>selfie-idfront-approval</td>
+<td>number</td>
+<td>Aprobación manual entre selfie y la parte frontal del documento</td>
+</tr>
+</tbody></table>
+
+<p>Customizar validaciones de reconocimiento facial:</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>video-idfront</td>
+<td>number</td>
+<td>Facematch entre video firma y la parte frontal del documento</td>
+</tr>
+<tr>
+<td>reniec-idfront</td>
+<td>number</td>
+<td>Facematch entre reniec y la parte frontal del documento</td>
+</tr>
+<tr>
+<td>reniec-video</td>
+<td>number</td>
+<td>Facematch entre reniec y video firma</td>
+</tr>
+<tr>
+<td>reniec-liveness</td>
+<td>number</td>
+<td>Facematch entre reniec y prueba de vida</td>
+</tr>
+<tr>
+<td>video-liveness</td>
+<td>number</td>
+<td>Facematch entre video firma y prueba de vida</td>
+</tr>
+<tr>
+<td>selfie-reniec</td>
+<td>number</td>
+<td>Facematch entre selfie y reniec</td>
+</tr>
+<tr>
+<td>selfie-idfront</td>
+<td>number</td>
+<td>Facematch entre selfie y la parte frontal del documento</td>
+</tr>
+</tbody></table>
+<h1 id='documentos-de-identidad-soportados'>Documentos de identidad soportados</h1>
+<table><thead>
+<tr>
+<th>id</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>pe-dni</code></td>
+<td>Documento de identidad Perú</td>
+</tr>
+<tr>
+<td><code>pe-ce</code></td>
+<td>Carné de extrangerīa Perú</td>
+</tr>
+<tr>
+<td><code>passport</code></td>
+<td>Pasaporte</td>
+</tr>
+<tr>
+<td><code>co-cedula</code></td>
+<td>Cédula Colombiana</td>
+</tr>
+<tr>
+<td><code>br-denatran</code></td>
+<td>Denatran Brasil</td>
+</tr>
+<tr>
+<td><code>cl-cedula</code></td>
+<td>Cédula Chile</td>
+</tr>
+<tr>
+<td><code>mx-ife</code></td>
+<td>Documento de identidad Mexico (IFE)</td>
+</tr>
+<tr>
+<td><code>sv-dui</code></td>
+<td>DUI (El Salvador)</td>
+</tr>
+<tr>
+<td><code>pa-id</code></td>
+<td>Cédula panameña</td>
+</tr>
+<tr>
+<td><code>ar-id</code></td>
+<td>Cédula argentina</td>
+</tr>
+<tr>
+<td><code>br-id</code></td>
+<td>Cédula brasilera</td>
+</tr>
+<tr>
+<td><code>bo-id</code></td>
+<td>Cédula boliviana</td>
+</tr>
+<tr>
+<td><code>cr-id</code></td>
+<td>Cédula costarricense</td>
+</tr>
+<tr>
+<td><code>cu-id</code></td>
+<td>Cédula cubana</td>
+</tr>
+<tr>
+<td><code>ec-id</code></td>
+<td>Cédula ecuatoriana</td>
+</tr>
+<tr>
+<td><code>gt-id</code></td>
+<td>Cédula guatemalteca</td>
+</tr>
+<tr>
+<td><code>hn-id</code></td>
+<td>Cédula hondureña</td>
+</tr>
+<tr>
+<td><code>ni-id</code></td>
+<td>Cédula nicaraguense</td>
+</tr>
+<tr>
+<td><code>py-id</code></td>
+<td>Cédula paraguaya</td>
+</tr>
+<tr>
+<td><code>pr-id</code></td>
+<td>Cédula puertorriqueña</td>
+</tr>
+<tr>
+<td><code>do-id</code></td>
+<td>Cédula dominicana</td>
+</tr>
+<tr>
+<td><code>uy-id</code></td>
+<td>Cédula uruguaya</td>
+</tr>
+<tr>
+<td><code>us-id</code></td>
+<td>Licencia de conducir</td>
+</tr>
+<tr>
+<td><code>ve-id</code></td>
+<td>Cédula venezolana</td>
+</tr>
+<tr>
+<td><code>ch-cedula</code></td>
+<td>Cédula chilena</td>
+</tr>
+<tr>
+<td><code>global</code></td>
+<td>Global</td>
+</tr>
+</tbody></table>
 <h1 id='deceval'>Deceval</h1>
 <p>Permite asociar un Pagaré emitido en el sistema de Deceval a un contrato.</p>
 
