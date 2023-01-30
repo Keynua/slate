@@ -362,16 +362,10 @@
             <a href="#configuracion-dinamica-del-template" class="toc-h1 toc-link" data-title="Configuración dinámica del template">Configuración dinámica del template</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#vistas-customizadas" class="toc-h2 toc-link" data-title="Vistas customizadas">Vistas customizadas</a>
+                    <a href="#configuraciones-globales" class="toc-h2 toc-link" data-title="Configuraciones globales:">Configuraciones globales:</a>
                   </li>
                   <li>
-                    <a href="#items-customizados" class="toc-h2 toc-link" data-title="Items customizados">Items customizados</a>
-                  </li>
-                  <li>
-                    <a href="#customizar-mensajes" class="toc-h2 toc-link" data-title="Customizar mensajes">Customizar mensajes</a>
-                  </li>
-                  <li>
-                    <a href="#customizar-validaciones" class="toc-h2 toc-link" data-title="Customizar validaciones">Customizar validaciones</a>
+                    <a href="#stages" class="toc-h2 toc-link" data-title="Stages:">Stages:</a>
                   </li>
               </ul>
           </li>
@@ -1369,7 +1363,9 @@ Producción: https://api.keynua.com
     </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Para conocer qué datos precargados y grupos de usuarios se pueden usar al crear un contrato, dirígete a la sección <a href="https://app.stg.keynua.com/developers/">Developers</a></p>
+<p>Para conocer qué datos precargados y grupos de usuarios se pueden usar al crear un contrato, dirígete a la sección <a href="https://app.stg.keynua.com/developers/">Developers</a>.</p>
+
+<aside class="warning">Si has usado la opción de Configuración dinámica del template, puedes saltar este paso ya que el target siempre será "documentNumber"</aside>
 
 <p>En la sección <code>Grupos e items precargados</code>, elige un template para ver esta información en formato <code>JSON</code>. Un ejemplo de la respuesta puede ser la siguiente:</p>
 
@@ -2240,9 +2236,6 @@ Producción: https://api.keynua.com
   "userEmailNotifications": true,
   "templateOptions": {
         "mock": true,
-        "global": {
-           "identityCollection": true
-        },
         "classesId": "belcorp-classes-v2",
         "stages": [
            {
@@ -2347,9 +2340,6 @@ Producción: https://api.keynua.com
   <span class="na">userEmailNotifications</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
   <span class="na">templateOptions</span><span class="p">:</span> <span class="p">{</span>
         <span class="dl">"</span><span class="s2">mock</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
-        <span class="dl">"</span><span class="s2">global</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-           <span class="dl">"</span><span class="s2">identityCollection</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
-        <span class="p">},</span>
         <span class="dl">"</span><span class="s2">classesId</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">belcorp-classes-v2</span><span class="dl">"</span><span class="p">,</span>
         <span class="dl">"</span><span class="s2">stages</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span>
            <span class="p">{</span>
@@ -2502,17 +2492,15 @@ Producción: https://api.keynua.com
 <tr>
 <td>global</td>
 <td>objeto</td>
-<td>Configuraciones globales del template</td>
+<td><a href="#configuraciones-globales">Configuraciones globales</a> del template</td>
 </tr>
 <tr>
 <td>stages</td>
 <td>array</td>
-<td>Contiene los grupos del template</td>
+<td>Contiene las <a href="#stages">estapas</a> del template</td>
 </tr>
 </tbody></table>
-
-<p>Configuraciones globales:</p>
-
+<h2 id='configuraciones-globales'>Configuraciones globales:</h2>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -2521,34 +2509,12 @@ Producción: https://api.keynua.com
 </tr>
 </thead><tbody>
 <tr>
-<td>blockchain</td>
-<td>boolean</td>
-<td>Si está seleccionado. Creará un registro de blockchain. No hay restricciones para usarlo</td>
-</tr>
-<tr>
-<td>KNOM151</td>
-<td>boolean</td>
-<td>NOM-151 de acuerdo a la normativa de México. Solo funcioa para convalidaciones mexicanas</td>
-</tr>
-<tr>
-<td>deceval</td>
-<td>boolean</td>
-<td>Funcionalidad para crear proveedor de promesas para Colombia. Solo funcioa para validaciones colombianas</td>
-</tr>
-<tr>
 <td>maximumSigningAttempts</td>
 <td>integer</td>
 <td><code>optional</code> Indica la cantidad máxima de intentos de firma de un usuario</td>
 </tr>
-<tr>
-<td>identityCollection</td>
-<td>boolean</td>
-<td>Activar Colección de Identidades</td>
-</tr>
 </tbody></table>
-
-<p>Stages:</p>
-
+<h2 id='stages'>Stages:</h2>
 <p>Los Stages no solo contienen las configuraciones de los grupos, tambien indica cuando inicia la ejecucion de sus items puesto que se ejecutan si y solo si el stage previo finaliza.</p>
 
 <table><thead>
@@ -2561,17 +2527,13 @@ Producción: https://api.keynua.com
 <tr>
 <td>groups</td>
 <td>array</td>
-<td>Configuración del grupo.</td>
+<td>Configuraciones de los <a href="#grupos">grupos</a>.</td>
 </tr>
 </tbody></table>
-
-<p>Grupos:</p>
-
+<h3 id='grupos'>Grupos:</h3>
 <p>Los grupos incluyen los siguientes tipos: <code>viewers</code>, <code>signers</code> y <code>bulk</code>.</p>
 
-<ul>
-<li>Viewers</li>
-</ul>
+<p><strong>Viewers</strong></p>
 
 <table><thead>
 <tr>
@@ -2580,6 +2542,11 @@ Producción: https://api.keynua.com
 <th>Descripción</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>Nombre del grupo, este mismo nombre tendrías que agregarlo a cada usuario que quieras que pertenezca a este gurpo al <a href="#crear-un-contrato">crear el contrato</a></td>
+</tr>
 <tr>
 <td>type</td>
 <td>enum</td>
@@ -2593,7 +2560,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>removeUserInput</td>
 <td>boolean</td>
-<td>Indica si el visor debe completar el input <code>text</code> en el flujo</td>
+<td>Indica si el visor debe completar el input <code>text</code> ingresando su nombre o rol en el flujo</td>
 </tr>
 <tr>
 <td>rejectDocuments</td>
@@ -2602,9 +2569,7 @@ Producción: https://api.keynua.com
 </tr>
 </tbody></table>
 
-<ul>
-<li>Signers</li>
-</ul>
+<p><strong>Signers</strong></p>
 
 <table><thead>
 <tr>
@@ -2613,6 +2578,11 @@ Producción: https://api.keynua.com
 <th>Descripción</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>Nombre del grupo, este mismo nombre tendrías que agregarlo a cada usuario que quieras que pertenezca a este gurpo al <a href="#crear-un-contrato">crear el contrato</a></td>
+</tr>
 <tr>
 <td>type</td>
 <td>enum</td>
@@ -2629,14 +2599,14 @@ Producción: https://api.keynua.com
 <td>Lados del documento de identidad. Puede ser <code>both</code>, <code>back</code> o <code>frontal</code></td>
 </tr>
 <tr>
-<td>facematch</td>
-<td>array</td>
-<td>Indica los items a los cuales se le aplicará el reconocimiento facial. Puede ser <code>selfie</code>, <code>liveness</code>, <code>video-signature</code>, <code>reniec</code> y <code>document-frontal</code></td>
-</tr>
-<tr>
 <td>signatureTypes</td>
 <td>array</td>
 <td>Indica los tipos de firma. Puede ser <code>selfie</code>, <code>video-signature</code>, <code>draw</code> y <code>digital-signature</code></td>
+</tr>
+<tr>
+<td>facematch</td>
+<td>array</td>
+<td>Indica los items a los cuales se le aplicará el reconocimiento facial. Puede ser <code>selfie</code>, <code>liveness</code>, <code>video-signature</code>, <code>reniec</code> y <code>document-frontal</code></td>
 </tr>
 <tr>
 <td>liveness3D</td>
@@ -2656,12 +2626,12 @@ Producción: https://api.keynua.com
 <tr>
 <td>prefilledActive</td>
 <td>boolean</td>
-<td>Activa los <code>prefilled items</code></td>
+<td>Activa los <code>prefilled items</code>, para que el creador del contrato pueda pre-rellenar el número de documento del firmante. Cuando se activa esta opción, el valor que debes ingresar como targetId dentro de cada user es <strong>documentNumber</strong>. Más referencia en la sección de <a href="#crear-un-contrato">crear contrato</a></td>
 </tr>
 <tr>
 <td>reviewEachDocument</td>
 <td>boolean</td>
-<td>Indica si se debe deben abrir todos los documentos durante la firma</td>
+<td>Indica si se debe debe obligar al firmante a abrir todos los documentos para poder continuar con la firma</td>
 </tr>
 <tr>
 <td>disableNotification</td>
@@ -2696,7 +2666,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>denyInstructionsGrade</td>
 <td>boolean</td>
-<td>Si activas esta opción, se devolverá un error si el DNI evaluado tiene el grado de Instrucción de Iletrado o Educación Especial</td>
+<td>Si activas esta opción, se devolverá un error si el DNI evaluado tiene el grado de Instrucción de Iletrado o Educación Especial. <strong>Para contratos, esta opción está activa por defecto y no se puede cambiar</strong></td>
 </tr>
 <tr>
 <td>minimumScore</td>
@@ -2720,9 +2690,7 @@ Producción: https://api.keynua.com
 </tr>
 </tbody></table>
 
-<ul>
-<li>Bulk (Firma gerentes)</li>
-</ul>
+<p><strong>Bulk (Firma gerentes)</strong></p>
 
 <table><thead>
 <tr>
@@ -2731,6 +2699,11 @@ Producción: https://api.keynua.com
 <th>Descripción</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>Nombre del grupo, este mismo nombre tendrías que agregarlo a cada usuario que quieras que pertenezca a este gurpo al <a href="#crear-un-contrato">crear el contrato</a></td>
+</tr>
 <tr>
 <td>type</td>
 <td>enum</td>
