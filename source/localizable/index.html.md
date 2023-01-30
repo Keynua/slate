@@ -467,6 +467,7 @@ documents | array | Arreglo de los documentos PDFs encodificados en base64 que v
 users | array | Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en **groups** depende del templateId a usar. Para el caso de `keynua-peru-default`, el valor en groups debe ser `signers`. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario
 metadata | object | `optional` Metadata del contrato. Puedes enviar información en este campo como key-value para poder identificar el contrato creado por Keynua con algún Identificador interno de tu sistema.
 flags | object | `optional` Se podrá enviar información adicional para crear un contrato. Por ejemplo la información de [Cavali](#cavali) para crear un contrato con Pagaré Electrónico se enviará con el key `cavaliData`
+templateOptions | object | `optional` [Configuración dinámica del template](#configuracion-dinamica-del-template) del contrato, si mandas este campo se omite el templateId
 
 ### Groups y Prefilled Items
 
@@ -1093,6 +1094,485 @@ Esta configuración de puede aplicar a los siguientes items:
 
 ![terms-example](../images/terms-example.png)
 
+# Configuración dinámica del template
+
+```shell
+curl --request PUT \
+  --url https://api.stg.keynua.com/contracts/v1 \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'content-type: application/json' \
+  --data '{
+  "title": "Contract created by API",
+  "language": "es",
+  "userEmailNotifications": true,
+  "templateOptions": {
+		"mock": true,
+		"global": {
+		   "identityCollection": true
+		},
+		"classesId": "belcorp-classes-v2",
+		"stages": [
+		   {
+			  "groups": [
+				 {
+					"name": "Firmantes",
+					"type": "signers",
+					"views": {
+						"nothingMore": "nothing-more-custom",
+						"finished": "finished",
+						"validating": "validating-custom",
+						"items": {
+						   "terms": "terms-basic",
+						   "documents": "documents-v1",
+						   "documentNumber": "document-number-dni",
+						   "idFront": "image-front-dni",
+						   "idBack": "image-back-dni",
+						   "videoSignature": "video-signature"
+						}
+					},
+					"documentSides": "both",
+					"documentType": "pe-dni",
+					"allowsUpdateItemTypes": [
+					   "detectlabels",
+					   "facematch",
+					   "checklabels"
+					],
+					"documentValidations": [
+					   "verify-content-reniec",
+					   "expiration-date"
+					],
+					"signatureTypes": [
+					   "video-signature"
+					],
+					"allViewsAtOnce": true,
+					"prefilledActive": true,
+					"workingMessages": {
+					   "approvalMessageTitle": "Tu solicitud está en proceso. Por favor comunícate con nuestro Call Center."					},
+					"errorMessages": {
+					   "contentReniecUnmatchedTitle": "El número del DNI registrado: {documentNumber}, no coincide con el número del DNI de la foto",
+					   "contentReniecUnmatchedSubtitle": "Contáctanos para mayor información: belcorp_respondepe@belcorp.biz"
+					},
+					"dynamicFields": [
+						{
+							"name": "Foto recibo agua o Luz",
+							"type": "image",
+							"viewId": "imagereciboview",
+							"options": {
+								"orientation": "vertical",
+								"overlay": true,
+								"camera": "environment",
+								"invalidExtensions": [
+								  ".pdf",
+								  ".mp4"
+								]
+							}
+						}
+					],
+					"minimumScore": {
+						"idfront": 30,
+						"idback": 30,
+						"liveness-detection": 50,
+						"idfront-approval": 50,
+						"idback-approval": 60,
+						"reniec-video-approval": 80,
+						"reniec-idfront-approval": 80
+					},
+					"matchPercent": {
+						"reniec-idfront": 30,
+						"reniec-video": 60
+					},
+					"validateMinAge": 18,
+					"reviewEachDocument": false,
+					"disableNotification": true,
+					"disableReminder": true,
+					"skipSurveyEmail": true,
+					"maskDocumentNumberValue": true
+				 }
+			  ]
+		   }
+		]
+	},
+  "documents": [
+    {
+      "name": "DocumentPdf.pdf",
+      "base64": "YOUR-BASE64-PDF-HERE"
+    }
+  ],
+  "users": [
+    {
+      "name": "Manuel Silva",
+      "email": "msilva@keynua.com",
+	  "groups": [ "signers" ]
+    }
+  ]
+}'
+```
+
+```javascript
+const https = require("https");
+
+const data = JSON.stringify({
+  title: 'Contract created by API',
+  language: 'es',
+  userEmailNotifications: true,
+  templateOptions: {
+		"mock": true,
+		"global": {
+		   "identityCollection": true
+		},
+		"classesId": "belcorp-classes-v2",
+		"stages": [
+		   {
+			  "groups": [
+				 {
+					"name": "Firmantes",
+					"type": "signers",
+					"views": {
+						"nothingMore": "nothing-more-custom",
+						"finished": "finished",
+						"validating": "validating-custom",
+						"items": {
+						   "terms": "terms-basic",
+						   "documents": "documents-v1",
+						   "documentNumber": "document-number-dni",
+						   "idFront": "image-front-dni",
+						   "idBack": "image-back-dni",
+						   "videoSignature": "video-signature"
+						}
+					},
+					"documentSides": "both",
+					"documentType": "pe-dni",
+					"allowsUpdateItemTypes": [
+					   "detectlabels",
+					   "facematch",
+					   "checklabels"
+					],
+					"documentValidations": [
+					   "verify-content-reniec",
+					   "expiration-date"
+					],
+					"signatureTypes": [
+					   "video-signature"
+					],
+					"allViewsAtOnce": true,
+					"prefilledActive": true,
+					"workingMessages": {
+					   "approvalMessageTitle": "Tu solicitud está en proceso. Por favor comunícate con nuestro Call Center."					},
+					"errorMessages": {
+					   "contentReniecUnmatchedTitle": "El número del DNI registrado: {documentNumber}, no coincide con el número del DNI de la foto",
+					   "contentReniecUnmatchedSubtitle": "Contáctanos para mayor información: belcorp_respondepe@belcorp.biz"
+					},
+					"dynamicFields": [
+						{
+							"name": "Foto recibo agua o Luz",
+							"type": "image",
+							"viewId": "imagereciboview",
+							"options": {
+								"orientation": "vertical",
+								"overlay": true,
+								"camera": "environment",
+								"invalidExtensions": [
+								  ".pdf",
+								  ".mp4"
+								]
+							}
+						}
+					],
+					"minimumScore": {
+						"idfront": 30,
+						"idback": 30,
+						"liveness-detection": 50,
+						"idfront-approval": 50,
+						"idback-approval": 60,
+						"reniec-video-approval": 80,
+						"reniec-idfront-approval": 80
+					},
+					"matchPercent": {
+						"reniec-idfront": 30,
+						"reniec-video": 60
+					},
+					"validateMinAge": 18,
+					"reviewEachDocument": false,
+					"disableNotification": true,
+					"disableReminder": true,
+					"skipSurveyEmail": true,
+					"maskDocumentNumberValue": true
+				 }
+			  ]
+		   }
+		]
+	},
+  documents: [
+    {
+      name: 'DocumentPdf.pdf',
+      base64: 'YOUR-BASE64-PDF-HERE'
+    },
+  ],
+  users: [
+    {name: 'Manuel Silva', email: 'msilva@keynua.com', groups: ['signers']}
+  ]
+});
+
+const options = {
+  method: "PUT",
+  hostname: "api.stg.keynua.com",
+  path: "/contracts/v1",
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE",
+    "content-type": "application/json",
+    "content-length": data.length
+  }
+};
+
+const req = https.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+
+req.on('error', (error) => {
+  console.error(error)
+});
+
+req.write(data);
+req.end();
+```
+
+> Si el contrato fue creado satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
+
+Describe las opciones que podemos enviar en el atributo `templateOptions` al crear el contrato
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+mock | boolean | Default "false" Indica si es un flujo de prueba, se remueven del flujo las validaciones de identidad
+classesId | string | Id del registro de `Custom Classes`
+global | objeto | Configuraciones globales del template
+stages | array | Contiene los grupos del template
+
+Configuraciones globales:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+blockchain | boolean | Si está seleccionado. Creará un registro de blockchain. No hay restricciones para usarlo
+KNOM151 | boolean | NOM-151 de acuerdo a la normativa de México. Solo funcioa para convalidaciones mexicanas
+deceval | boolean | Funcionalidad para crear proveedor de promesas para Colombia. Solo funcioa para validaciones colombianas
+maximumSigningAttempts | integer | `optional` Indica la cantidad máxima de intentos de firma de un usuario
+identityCollection | boolean | Activar Colección de Identidades
+
+Stages:
+
+Los Stages no solo contienen las configuraciones de los grupos, tambien indica cuando inicia la ejecucion de sus items puesto que se ejecutan si y solo si el stage previo finaliza.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+groups | array | Configuración del grupo.
+
+Grupos:
+
+Los grupos incluyen los siguientes tipos: `viewers`, `signers` y `bulk`.
+
+- Viewers
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+type | enum | `viewers`
+dynamicFields | array | Agrega [items customizados](#items-customizados) al flujo.
+removeUserInput | boolean | Indica si el visor debe completar el input `text` en el flujo
+rejectDocuments | boolean | Indica si el visor puede rechazar el documento
+
+* Signers
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+type | enum | `signers`
+documentType | string | El tipo de documento que se quiere validar. Ver tabla de los [tipos de documentos](#documentos-de-identidad-soportados) soportados
+documentSides | string | Lados del documento de identidad. Puede ser `both`, `back` o `frontal`
+facematch | array | Indica los items a los cuales se le aplicará el reconocimiento facial. Puede ser `selfie`, `liveness`, `video-signature`, `reniec` y `document-frontal`
+signatureTypes | array | Indica los tipos de firma. Puede ser `selfie`, `video-signature`, `draw` y `digital-signature`
+liveness3D | boolean | Incluir validación 3D
+views | object | [Vistas customizadas](#vistas-customizadas) del template
+dynamicFields | array | Agrega [items customizados](#items-customizados) al flujo
+prefilledActive | boolean | Activa los `prefilled items`
+reviewEachDocument | boolean | Indica si se debe deben abrir todos los documentos durante la firma
+disableNotification | boolean | Indica si se quiere omitir el correo de inici
+disableReminder | boolean | Indica si se quiere omitir el recordatorio
+skipSurveyEmail | boolean | Indica si se quiere omitir la encuesta de satisfacción
+allViewsAtOnce | boolean | Esta modalidad muestra todos los pasos del flujo de firma en vertical
+maskDocumentNumberValue | boolean | Oculta el número de documento ingresado en caso de error
+validateMinAge | number | Edad minima del firmante permitida. Disponible para validaciones gubernamentales
+denyInstructionsGrade | boolean | Si activas esta opción, se devolverá un error si el DNI evaluado tiene el grado de Instrucción de Iletrado o Educación Especial
+minimumScore | objeto | Customizar la sensibilidad de las validaciones de identidad. Para más detalle consultar la sección [Customizar validaciones](#customizar-validaciones)
+matchPercent | objeto | Customizar la sensibilidad de las validaciones de reconocimiento facial. Para más detalle consultar la sección [Customizar validaciones](#customizar-validaciones)
+workingMessages | objeto | Customizar mensajes del flujo de firma en progreso. Para más detalle consultar la sección [Customizar mensajes](#customizar-mensajes)
+errorMessages | objeto | Customiar mensaje de error del flujo de firma. Para más detalle consultar la sección [Customizar mensajes](#customizar-mensajes)
+
++ Bulk (Firma gerentes)
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+type | enum | `bulk`
+requiredItems | array | El arreglo puede contener los siguientes elementos: `video`, `imagesign`, `visto` e `image`
+
+### Vistas customizadas
+
+Las vistas personalizadas permiten modificar la apariencia del Widget dinámicamente.
+
+El atributo de `views` debe completarse con la siguiente estructura:
+
+![views](../images/custom-views.png)
+
+Nombre | Descripción
+--------- | -----------
+`expired` | Personalizar vista de expiración del contrato
+`finished` | Personalizar vista de finalización del contrato
+`deleted` | Personalizar vista de contrato eliminado
+`nothingMore` | Personalizar vista de firma enviada
+`validating` | Personalizar vista de validación de firma
+`maxAttempts` | Personalizar vista de bloqueo por máximo de intentos de firma
+`pending` | Personalizar vista de flujo de firma pendiente
+`viewers` | Personalizar vista de Vistos buenos
+`terms` | Vista asignada al `input` de términos y condiciones.
+`documents` | Vista asignada al `input` de Documentos.
+`documentNumber` | Vista asignada al `input` de Número de documento.
+`idFront` | Vista asignada al `input` de Foto frotal del documento de identidad.
+`idBack` | Vista asignada al `input` de Foto posterior del documento de identidad.
+`drawnSignature` | Vista asignada al `input` de firma dibujada.
+`selfie` | Vista asignada al `input` de Foto Selfie.
+`videoSignature` | Vista asignada al `input` de Video firma.
+
+### Items customizados
+
+Los items customizado tienen una estructura base en cual cambian los `options` acorde a su tipo. Los tipos disponibles: `image`, `text` y `video`.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+name | string | Nombre del item
+type | string | Puede ser `image`, `text` o `video`
+prefilledId | string | Si tenemos el atributo `prefilledActive` activado podemos especificar el id de referencia para ingresar el valor del item
+viewId | string | Id de la vista customizada
+options | object | Opciones del item
+
+Opciones del item:
+
+- Imagen (`image`)
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+btnLabel | string | Texto del botón principal
+invalidExtensions | array | Extensiones inválidas
+placeholderImgName | string | Id de la ilustración del item
+orientation | string | Orientación de la cámara. Puede ser `horizontal` o `vertical`
+camera | string | Tipo de cámara. Puede ser `environment` o `user`
+
+* Texto (`text`)
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+regex | string | Validación del formato
+type | string | Tipo del input. Puede ser `text`, `number` o `tel`
+minLength | number | Longitud máxima del input
+maxLength | number | Longitud mínima del input
+
++ Video (`video`)
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+btnLabel | string | Texto del botón principal
+invalidExtensions | array | Extensiones inválidas
+placeholderImgName | string | Id de la ilustración del item
+orientation | string | Orientación de la cámara. Puede ser `horizontal` o `vertical`
+camera | string | Tipo de cámara. Puede ser `environment` o `user`
+hideNativeButton | boolean | Oculta botón de la cámara nativa
+
+### Customizar mensajes
+
+Customizar mensajes de un flujo en proceso:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+approvalMessageTitle | string | Título de la aprobación manual
+approvalMessageSubtitle | string | Subtítulo de la aprobación manual
+
+Customizar mensajes de error:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+idNumberUnmatchedTitle | string | Título del mensaje cuando el número de documeto es inválido
+idNumberUnmatchedSubtitle | string | Subtítulo del mensaje cuando el número de documeto es inválido
+contentReniecUnmatchedTitle | string | Título del mensaje cuando el contenido del documento es inválido
+contentReniecUnmatchedSubtitle | string | Subtítulo del mensaje cuando el contenido del documento es inválido
+
+### Customizar validaciones
+
+Customizar validaciones de identidad:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+idfront | number | Validación del formato frontal del documento
+idback | number | Validación del formato posterior del documento
+idfront-approval | number | Aprobación manual de la parte frontal del documento
+idback-approval | number | Aprobación manual de la parte posterior del documento
+liveness-detection | number | Aprobación manual de la prueba de vida
+video-idfront-approval | number | Aprobación manual entre video y la parte frontal del documento
+reniec-idfront-approval | number | Aprobación manual entre reniec y la parte frontal del documento
+reniec-video-approval | number | Aprobación manual entre reniec y la video firma
+reniec-liveness-approval | number | Aprobación manual entre reniec y prueba de vida
+video-liveness-approval | number | Aprobación manual entre video firma y prueba de vida
+selfie-reniec-approval | number | Aprobación manual entre selfie y reniec
+selfie-idfront-approval | number | Aprobación manual entre selfie y la parte frontal del documento
+
+Customizar validaciones de reconocimiento facial:
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+video-idfront | number | Facematch entre video firma y la parte frontal del documento
+reniec-idfront | number | Facematch entre reniec y la parte frontal del documento
+reniec-video | number | Facematch entre reniec y video firma
+reniec-liveness | number | Facematch entre reniec y prueba de vida
+video-liveness | number | Facematch entre video firma y prueba de vida
+selfie-reniec | number | Facematch entre selfie y reniec
+selfie-idfront | number | Facematch entre selfie y la parte frontal del documento
+
+# Documentos de identidad soportados
+
+id | Descripción
+--------- | -----------
+`pe-dni` | Documento de identidad Perú
+`pe-ce` | Carné de extrangerīa Perú
+`passport` | Pasaporte
+`co-cedula` | Cédula Colombiana
+`br-denatran` | Denatran Brasil
+`cl-cedula` | Cédula Chile
+`mx-ife` | Documento de identidad Mexico (IFE)
+`sv-dui` | DUI (El Salvador)
+`pa-id` | Cédula panameña
+`ar-id` | Cédula argentina
+`br-id` | Cédula brasilera
+`bo-id` | Cédula boliviana
+`cr-id` | Cédula costarricense
+`cu-id` | Cédula cubana
+`ec-id` | Cédula ecuatoriana
+`gt-id` | Cédula guatemalteca
+`hn-id` | Cédula hondureña
+`ni-id` | Cédula nicaraguense
+`py-id` | Cédula paraguaya
+`pr-id` | Cédula puertorriqueña
+`do-id` | Cédula dominicana
+`uy-id` | Cédula uruguaya
+`us-id` | Licencia de conducir
+`ve-id` | Cédula venezolana
+`ch-cedula` | Cédula chilena
+`global` | Global
 
 # Deceval
 
