@@ -362,10 +362,10 @@
             <a href="#configuracion-dinamica-del-template" class="toc-h1 toc-link" data-title="Configuración dinámica del template">Configuración dinámica del template</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#configuraciones-globales" class="toc-h2 toc-link" data-title="Configuraciones globales:">Configuraciones globales:</a>
+                    <a href="#configuraciones-globales" class="toc-h2 toc-link" data-title="Configuraciones globales">Configuraciones globales</a>
                   </li>
                   <li>
-                    <a href="#stages" class="toc-h2 toc-link" data-title="Stages:">Stages:</a>
+                    <a href="#stages" class="toc-h2 toc-link" data-title="Stages">Stages</a>
                   </li>
               </ul>
           </li>
@@ -2500,7 +2500,7 @@ Producción: https://api.keynua.com
 <td>Contiene las <a href="#stages">estapas</a> del template</td>
 </tr>
 </tbody></table>
-<h2 id='configuraciones-globales'>Configuraciones globales:</h2>
+<h2 id='configuraciones-globales'>Configuraciones globales</h2>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -2514,7 +2514,7 @@ Producción: https://api.keynua.com
 <td><code>optional</code> Indica la cantidad máxima de intentos de firma de un usuario</td>
 </tr>
 </tbody></table>
-<h2 id='stages'>Stages:</h2>
+<h2 id='stages'>Stages</h2>
 <p>Los Stages no solo contienen las configuraciones de los grupos, tambien indica cuando inicia la ejecucion de sus items puesto que se ejecutan si y solo si el stage previo finaliza.</p>
 
 <table><thead>
@@ -2530,7 +2530,7 @@ Producción: https://api.keynua.com
 <td>Configuraciones de los <a href="#grupos">grupos</a>.</td>
 </tr>
 </tbody></table>
-<h3 id='grupos'>Grupos:</h3>
+<h3 id='grupos'>Grupos</h3>
 <p>Los grupos incluyen los siguientes tipos: <code>viewers</code>, <code>signers</code> y <code>bulk</code>.</p>
 
 <p><strong>Viewers</strong></p>
@@ -2612,6 +2612,11 @@ Producción: https://api.keynua.com
 <td>liveness3D</td>
 <td>boolean</td>
 <td>Incluir validación 3D</td>
+</tr>
+<tr>
+<td>documentValidations</td>
+<td>array</td>
+<td>Indica las opciones de validación que puedes agregar a los documentos. Puede ser <code>verify-content-reniec</code>, para comparar que los datos de la foto del DNI coincidan con Reniec (Sólo Perú) o <code>expiration-date</code>, para comprobar que el documento de identidad no ha expirado aún o <code>verify-id-number</code>, para comprobar que el número de documento ingresado en el flujo de firma se encuentre en el documento.</td>
 </tr>
 <tr>
 <td>views</td>
