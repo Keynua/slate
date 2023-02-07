@@ -63,8 +63,8 @@ Keynua utiliza **API Keys** y **Authorization tokens** para acceder al API. Una 
 
 Header | Description
 --------- | -----------
-x-api-key | API Key para acceder al servicio.
-authorization | Token único de autorización.
+x-api-key | API Key para acceder al servicio. **Debes usar el valor Secret, NO el ID**
+authorization | Token único de autorización. **Debes usar el valor Secret, NO el ID**
 
 <aside class="notice">Si ya estás listo para integrar en producción, por favor contacta al equipo de <code>Keynua</code></aside>
 
