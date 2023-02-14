@@ -2072,7 +2072,7 @@ items | [ContractItem](#items-del-contrato)[] | No | Lista de pasos que sigue la
 ## Crear verificación de identidad
 
 ```shell
-curl --location --request PUT 'https://api.keynua.com/identity-verification/v2' \
+curl --location --request PUT 'https://api.keynua.com/identity-verification/v1' \
   --header 'x-api-key: YOUR-API-KEY-HERE' \
   --header 'authorization: YOUR-API-TOKEN-HERE' \
   --header 'Content-Type: application/json' \
@@ -2092,7 +2092,7 @@ curl --location --request PUT 'https://api.keynua.com/identity-verification/v2' 
 require "uri"
 require "net/http"
 
-url = URI("https://api.dev.keynua.com/identity-verification/v2")
+url = URI("https://api.dev.keynua.com/identity-verification/v1")
 
 https = Net::HTTP.new(url.host, url.port)
 https.use_ssl = true
@@ -2127,7 +2127,7 @@ headers = {
   'authorization': "YOUR-API-TOKEN-HERE",
   'Content-Type': 'application/json'
 }
-conn.request("PUT", "/identity-verification/v2", payload, headers)
+conn.request("PUT", "/identity-verification/v1", payload, headers)
 res = conn.getresponse()
 data = res.read()
 print(data.decode("utf-8"))
@@ -2139,7 +2139,7 @@ const http = require("https");
 const options = {
   "method": "PUT",
   "hostname": "api.keynua.com",
-  "path": "/identity-verification/v2",
+  "path": "/identity-verification/v1",
   "headers": {
     "x-api-key": "YOUR-API-KEY-HERE",
     "authorization": "YOUR-API-TOKEN-HERE",
@@ -2242,7 +2242,7 @@ req.end();
 
 ### HTTP Request
 
-`PUT /identity-verification/v2`
+`PUT /identity-verification/v1`
 
 ### Headers
 
@@ -2279,7 +2279,7 @@ Por ahora los paises que soportamos para `selfie` y `video` son `sv-dui`, `mx-if
 ## Listar verificaciones de identidad
 
 ```shell
-curl --location --request GET 'https://api.keynua.com/identity-verification/v2/list' \
+curl --location --request GET 'https://api.keynua.com/identity-verification/v1/list' \
   --header 'x-api-key: YOUR-API-KEY-HERE' \
   --header 'authorization: YOUR-API-TOKEN-HERE'
 ```
@@ -2288,7 +2288,7 @@ curl --location --request GET 'https://api.keynua.com/identity-verification/v2/l
 require "uri"
 require "net/http"
 
-url = URI("https://api.dev.keynua.com/identity-verification/v2/list")
+url = URI("https://api.dev.keynua.com/identity-verification/v1/list")
 
 https = Net::HTTP.new(url.host, url.port)
 https.use_ssl = true
@@ -2309,7 +2309,7 @@ headers = {
   'x-api-key': "YOUR-API-KEY-HERE",
   'authorization': "YOUR-API-TOKEN-HERE",
 }
-conn.request("GET", "/identity-verification/v2/list", None, headers)
+conn.request("GET", "/identity-verification/v1/list", None, headers)
 res = conn.getresponse()
 data = res.read()
 print(data.decode("utf-8"))
@@ -2321,7 +2321,7 @@ const http = require("https");
 const options = {
   "method": "GET",
   "hostname": "api.keynua.com",
-  "path": "/identity-verification/v2/list",
+  "path": "/identity-verification/v1/list",
   "headers": {
     "x-api-key": "YOUR-API-KEY-HERE",
     "authorization": "YOUR-API-TOKEN-HERE"
@@ -2376,9 +2376,9 @@ Permite obtener una lista de verificaciones de identidad creadas.
 
 ### HTTP Request
 
-`GET /identity-verification/v2/list` obtiene las de tu cuenta
+`GET /identity-verification/v1/list` obtiene las de tu cuenta
 
-`GET /identity-verification/v2/list-org` obtiene las de tu organización
+`GET /identity-verification/v1/list-org` obtiene las de tu organización
 
 ### Headers
 
@@ -2428,7 +2428,7 @@ accountName | string | Sí | Nombre de la cuenta que creó la verificación
 ## Obtener verificación de identidad
 
 ```shell
-curl --location --request GET 'https://api.keynua.com/identity-verification/v2/{verification_id}' \
+curl --location --request GET 'https://api.keynua.com/identity-verification/v1/{verification_id}' \
   --header 'x-api-key: YOUR-API-KEY-HERE' \
   --header 'authorization: YOUR-API-TOKEN-HERE'
 ```
@@ -2437,7 +2437,7 @@ curl --location --request GET 'https://api.keynua.com/identity-verification/v2/{
 require "uri"
 require "net/http"
 
-url = URI("https://api.dev.keynua.com/identity-verification/v2/{verification_id}")
+url = URI("https://api.dev.keynua.com/identity-verification/v1/{verification_id}")
 
 https = Net::HTTP.new(url.host, url.port)
 https.use_ssl = true
@@ -2458,7 +2458,7 @@ headers = {
   'x-api-key': "YOUR-API-KEY-HERE",
   'authorization': "YOUR-API-TOKEN-HERE",
 }
-conn.request("GET", "/identity-verification/v2/{verification_id}", None, headers)
+conn.request("GET", "/identity-verification/v1/{verification_id}", None, headers)
 res = conn.getresponse()
 data = res.read()
 print(data.decode("utf-8"))
@@ -2470,7 +2470,7 @@ const http = require("https");
 const options = {
   "method": "GET",
   "hostname": "api.keynua.com",
-  "path": "/identity-verification/v2/{verification_id}",
+  "path": "/identity-verification/v1/{verification_id}",
   "headers": {
     "x-api-key": "YOUR-API-KEY-HERE",
     "authorization": "YOUR-API-TOKEN-HERE"
@@ -2571,7 +2571,7 @@ Permite obtener una verificación de identidad
 
 ### HTTP Request
 
-`GET /identity-verification/v2/{verification_id}`
+`GET /identity-verification/v1/{verification_id}`
 
 ### Headers
 
