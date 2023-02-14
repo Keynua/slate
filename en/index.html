@@ -4007,7 +4007,7 @@ Deceval para registrar la firma del participante.</li>
 <td>Lista de pasos que sigue la verificación.</td>
 </tr>
 </tbody></table>
-<h2 id='crear-verificacion-de-identidad'>Crear verificación de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> PUT <span class="s1">'https://api.keynua.com/identity-verification/v2'</span> <span class="se">\</span>
+<h2 id='crear-verificacion-de-identidad'>Crear verificación de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> PUT <span class="s1">'https://api.keynua.com/identity-verification/v1'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
@@ -4024,7 +4024,7 @@ Deceval para registrar la firma del participante.</li>
 </code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v2"</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v1"</span><span class="p">)</span>
 
 <span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
@@ -4056,7 +4056,7 @@ Deceval para registrar la firma del participante.</li>
   <span class="s">'authorization'</span><span class="p">:</span> <span class="s">"YOUR-API-TOKEN-HERE"</span><span class="p">,</span>
   <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span>
 <span class="p">}</span>
-<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"PUT"</span><span class="p">,</span> <span class="s">"/identity-verification/v2"</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"PUT"</span><span class="p">,</span> <span class="s">"/identity-verification/v1"</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
 <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
@@ -4065,7 +4065,7 @@ Deceval para registrar la firma del participante.</li>
 <span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
   <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">PUT</span><span class="dl">"</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">hostname</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">api.keynua.com</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/identity-verification/v2</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/identity-verification/v1</span><span class="dl">"</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">headers</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-KEY-HERE</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">authorization</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-TOKEN-HERE</span><span class="dl">"</span><span class="p">,</span>
@@ -4164,7 +4164,7 @@ Deceval para registrar la firma del participante.</li>
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='http-request-9'>HTTP Request</h3>
-<p><code>PUT /identity-verification/v2</code></p>
+<p><code>PUT /identity-verification/v1</code></p>
 <h3 id='headers-7'>Headers</h3>
 <table><thead>
 <tr>
@@ -4267,13 +4267,13 @@ Deceval para registrar la firma del participante.</li>
 <p>Por ahora los paises que soportamos para <code>selfie</code> y <code>video</code> son <code>sv-dui</code>, <code>mx-ife</code>, <code>cl-cedula</code>, <code>pe-dni</code>, <code>br-denatran</code> y <code>co-cedula</code>. En caso se cree una identificación con <code>selfie</code> o <code>video</code> con algún país que no esté en esta lista, automáticamente se considerará el documento como <code>global</code>. La lista completa sí está soportada con el type <code>liveness</code>.</p>
 <h3 id='response-body'>Response body</h3>
 <p><a href="#propiedades-de-una-verificacion-de-identidad">IdentityVerification</a></p>
-<h2 id='listar-verificaciones-de-identidad'>Listar verificaciones de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/identity-verification/v2/list'</span> <span class="se">\</span>
+<h2 id='listar-verificaciones-de-identidad'>Listar verificaciones de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/identity-verification/v1/list'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span>
 </code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v2/list"</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v1/list"</span><span class="p">)</span>
 
 <span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
@@ -4291,7 +4291,7 @@ Deceval para registrar la firma del participante.</li>
   <span class="s">'x-api-key'</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
   <span class="s">'authorization'</span><span class="p">:</span> <span class="s">"YOUR-API-TOKEN-HERE"</span><span class="p">,</span>
 <span class="p">}</span>
-<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"/identity-verification/v2/list"</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"/identity-verification/v1/list"</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
 <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
@@ -4300,7 +4300,7 @@ Deceval para registrar la firma del participante.</li>
 <span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
   <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">GET</span><span class="dl">"</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">hostname</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">api.keynua.com</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/identity-verification/v2/list</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/identity-verification/v1/list</span><span class="dl">"</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">headers</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-KEY-HERE</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">authorization</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-TOKEN-HERE</span><span class="dl">"</span>
@@ -4351,9 +4351,9 @@ Deceval para registrar la firma del participante.</li>
 </span></code></pre></div>
 <p>Permite obtener una lista de verificaciones de identidad creadas.</p>
 <h3 id='http-request-10'>HTTP Request</h3>
-<p><code>GET /identity-verification/v2/list</code> obtiene las de tu cuenta</p>
+<p><code>GET /identity-verification/v1/list</code> obtiene las de tu cuenta</p>
 
-<p><code>GET /identity-verification/v2/list-org</code> obtiene las de tu organización</p>
+<p><code>GET /identity-verification/v1/list-org</code> obtiene las de tu organización</p>
 <h3 id='headers-8'>Headers</h3>
 <table><thead>
 <tr>
@@ -4535,13 +4535,13 @@ Deceval para registrar la firma del participante.</li>
 <td>Nombre de la cuenta que creó la verificación</td>
 </tr>
 </tbody></table>
-<h2 id='obtener-verificacion-de-identidad'>Obtener verificación de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/identity-verification/v2/{verification_id}'</span> <span class="se">\</span>
+<h2 id='obtener-verificacion-de-identidad'>Obtener verificación de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/identity-verification/v1/{verification_id}'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span>
 </code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v2/{verification_id}"</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v1/{verification_id}"</span><span class="p">)</span>
 
 <span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
@@ -4559,7 +4559,7 @@ Deceval para registrar la firma del participante.</li>
   <span class="s">'x-api-key'</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
   <span class="s">'authorization'</span><span class="p">:</span> <span class="s">"YOUR-API-TOKEN-HERE"</span><span class="p">,</span>
 <span class="p">}</span>
-<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"/identity-verification/v2/{verification_id}"</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"GET"</span><span class="p">,</span> <span class="s">"/identity-verification/v1/{verification_id}"</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
 <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
@@ -4568,7 +4568,7 @@ Deceval para registrar la firma del participante.</li>
 <span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
   <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">GET</span><span class="dl">"</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">hostname</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">api.keynua.com</span><span class="dl">"</span><span class="p">,</span>
-  <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/identity-verification/v2/{verification_id}</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">path</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/identity-verification/v1/{verification_id}</span><span class="dl">"</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">headers</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-KEY-HERE</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">authorization</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-TOKEN-HERE</span><span class="dl">"</span>
@@ -4665,7 +4665,7 @@ Deceval para registrar la firma del participante.</li>
 </span></code></pre></div>
 <p>Permite obtener una verificación de identidad</p>
 <h3 id='http-request-11'>HTTP Request</h3>
-<p><code>GET /identity-verification/v2/{verification_id}</code></p>
+<p><code>GET /identity-verification/v1/{verification_id}</code></p>
 <h3 id='headers-9'>Headers</h3>
 <table><thead>
 <tr>
