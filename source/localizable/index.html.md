@@ -887,7 +887,8 @@ Para poder actualizar el valor de cada item, se debe utilizar la información qu
   "method": "PUT",
   "headers": {
     "Content-Type": "image/jpeg",
-    "Content-MD5": "solo si se envió md5"
+    "Content-MD5": "solo si se envió md5",
+    "x-amz-tagging": "account-id={accountId}"
   }
 }
 ```
@@ -917,12 +918,13 @@ curl --request PUT \
   --url 'https://some:url:for:upload' \
   --header 'content-type: image/jpeg' \
   --header 'Content-MD5: contentMD5' \
+  --header 'another-key: another-val' \
   --data some_file.jpeg
 ```
 
 > Si no hubo errores al subir el archivo, se retornará el código de estado 200
 
-Con la información obtenida en el paso 1, se subirá el archivo.
+Con la información obtenida en el paso 1, se subirá el archivo. **Ten en cuenta enviar los headers recibidos en el paso 1**
 
 ### HTTP Request
 
@@ -934,6 +936,7 @@ Key | Value
 --------- | -----------
 Content-Type | {Content-Type-Step-1}
 Content-MD5 | contentMD5
+{another-key} | {another-value} (Hace referencia a otro header que se puede haber enviado en el paso1)
 ### Body
 
 El archivo en Base64
