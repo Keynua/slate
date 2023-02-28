@@ -1985,7 +1985,8 @@ Producción: https://api.keynua.com
   </span><span class="nl">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PUT"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"headers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"Content-Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/jpeg"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"Content-MD5"</span><span class="p">:</span><span class="w"> </span><span class="s2">"solo si se envió md5"</span><span class="w">
+    </span><span class="nl">"Content-MD5"</span><span class="p">:</span><span class="w"> </span><span class="s2">"solo si se envió md5"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"x-amz-tagging"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account-id={accountId}"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='http-request-4'>HTTP Request</h3>
@@ -2030,13 +2031,14 @@ Producción: https://api.keynua.com
   --url 'https://some:url:for:upload' \
   --header 'content-type: image/jpeg' \
   --header 'Content-MD5: contentMD5' \
+  --header 'another-key: another-val' \
   --data some_file.jpeg
 </code></pre></div>
 <blockquote>
 <p>Si no hubo errores al subir el archivo, se retornará el código de estado 200</p>
 </blockquote>
 
-<p>Con la información obtenida en el paso 1, se subirá el archivo.</p>
+<p>Con la información obtenida en el paso 1, se subirá el archivo. <strong>Ten en cuenta enviar los headers recibidos en el paso 1</strong></p>
 <h3 id='http-request-5'>HTTP Request</h3>
 <p><code>POST {URL-STEP-1}</code></p>
 <h3 id='headers-3'>Headers</h3>
@@ -2053,6 +2055,10 @@ Producción: https://api.keynua.com
 <tr>
 <td>Content-MD5</td>
 <td>contentMD5</td>
+</tr>
+<tr>
+<td>{another-key}</td>
+<td>{another-value} (Hace referencia a otro header que se puede haber enviado en el paso1)</td>
 </tr>
 </tbody></table>
 <h3 id='body-3'>Body</h3>
