@@ -888,7 +888,7 @@ Para poder actualizar el valor de cada item, se debe utilizar la información qu
   "headers": {
     "Content-Type": "image/jpeg",
     "Content-MD5": "solo si se envió md5",
-	"x-amz-tagging": "account-id={accountId}"
+    "x-amz-tagging": "account-id={accountId}"
   }
 }
 ```
