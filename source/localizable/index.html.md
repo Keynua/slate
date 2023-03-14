@@ -3742,7 +3742,7 @@ userPhone | string | Teléfono celular del verificante en el cual recibirá el l
 userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
 item | object | [Item](#propiedades-de-un-item) del contrato que ha cambiado de estado
 
-### Propiedades de IdentityVerificationItemUpdated
+### Propiedades de OTPCreated
 
 > Ejemplo de Body
 
