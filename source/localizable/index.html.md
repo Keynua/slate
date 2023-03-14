@@ -3106,6 +3106,7 @@ Deleted | Serás notificado cuando el contrato ha sido eliminado
 ItemWorking | Serás notificado cada vez que se comienza a procesar un [Item](#propiedades-de-un-item)
 ItemSuccess | Serás notificado cada vez que un [Item](#propiedades-de-un-item) ha concluído satisactoriamente
 ItemError | Serás notificado cada vez que ocurre un error en un [Item](#propiedades-de-un-item)
+OTPCreated | Serás notificado cada vez que se envíe un [OTP](#otp) de tipo `webhook` al usuario
 
 Una vez configurado el Webhook, te llegará un email de confirmación al correo que ingresaste. Luego, debes seleccionar la opción **Habilitar** para poder activar el Webhook. Keynua enviará un HTTP POST al API configurado y será activado si cumple estos requisitos:
 
@@ -3157,7 +3158,7 @@ x-keynua-webhook-token | Token unico generado por request con una integridad de 
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-type | string | Nombre del [tipo de evento](#tipos-de-eventos-webhook) emitido. Puede ser `ContractCreated`, `ContractStarted`, `ContractItemUpdated`, `ContractFinished`, `ContractDeleted`, `IdentityVerificationCreated`, `IdentityVerificationStarted`, `IdentityVerificationFinished`, o `IdentityVerificationItemUpdated`
+type | string | Nombre del [tipo de evento](#tipos-de-eventos-webhook) emitido. Puede ser `ContractCreated`, `ContractStarted`, `ContractItemUpdated`, `ContractFinished`, `ContractDeleted`, `IdentityVerificationCreated`, `IdentityVerificationStarted`, `IdentityVerificationFinished`, `IdentityVerificationItemUpdated`, o `OTPCreated`
 accountId | string | Codigo de la cuenta propietaria del webhook
 payload | object | Datos del evento que varian segun el valor de [type](#tipos-de-eventos-webhook)
 
@@ -3173,6 +3174,7 @@ Deleted | [ContractDeleted](#propiedades-de-contractdeleted)
 ItemWorking | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `working`
 ItemSuccess | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `success`
 ItemError | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `error`
+OTPCreated | [OTPCreated](#propiedades-de-otpcreated)
 
 ### Propiedades de ContractCreated
 
@@ -3739,6 +3741,46 @@ userEmail | string | Email del verificante en el cual recibirá el link de inici
 userPhone | string | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
 userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
 item | object | [Item](#propiedades-de-un-item) del contrato que ha cambiado de estado
+
+### Propiedades de IdentityVerificationItemUpdated
+
+> Ejemplo de Body
+
+```json
+{
+  "type": "OTPCreated",
+  "accountId": "00000000-0000-0000-0000-000000000001",
+  "payload": {
+    "refId": "00000000-0000-0000-0000-000000000002",
+    "userId": "0",
+    "accountId": "00000000-0000-0000-0000-000000000001",
+    "organizationId": "00000000-0000-0000-0000-000000000001",
+    "reference": "Referencia",
+    "userName": "Manuel Silva",
+    "code": "55sm9z",
+    "resendInSec": 480,
+    "availableAttempts": 5,
+    "language": "es",
+    "metadata": {}
+  }
+}
+```
+
+Se emite cuando se envía un [OTP](#otp) de tipo webhook al usuario.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+refId | string | Identificador único del contrato
+userId | string | Identificador único del usuario en el contrato
+accountId | string | Identificador único de la cuenta con la que se creó el contrato
+organizationId | string | Identificador único de la organización con la que se creó el contrato
+reference | string | Referencia del contrato
+userName | string | El nombre del usuario
+code | string | Código OTP generado
+resendInSec | integer | En cuantos segundos se podrá solicitar el envío de un nuevo código
+availableAttempts | integer | Cuantos intentos aún quedan disponibles
+language | string | Lenguaje del contrato
+metadata | object | Metadata del contrato
 
 ### Propiedades de un Usuario Webhook
 
