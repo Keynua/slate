@@ -2265,7 +2265,7 @@ userFullName | string | Sí | Nombre completo de la persona
 userEmail | string | Sí | Email de la persona. Si se envía, no enviar el campo `userPhone` también.
 userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no enviar el campo `userEmail` también.
 reference | string | Sí | Campo útil para realizar búsquedas entre verificaciones creadas
-type | string | Sí | `selfie`, `video` o `liveness`. `selfie` solo pide un selfie y valida esa imagen con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. `liveness` realiza una prueba de vida 3D.
+type | string | Sí | `selfie`, `video`, `smile` o `liveness`. `selfie` solo pide un selfie y valida esa imagen con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. `smile` solicita que se grabe un video sonriendo, y realiza una prueba de vida utilizando el video (BETA). `liveness` realiza una prueba de vida 3D.
 disableInitialNotification | boolean | Sí | Opción para desactivar la notificación inicial que se envía a la persona.
 documentSide | `front` o `both` | Sí | SOLO PARA DNI DE PERÚ. Opción para indicar qué lados del DNI validar. Si no es enviado no se hará ninguna validación.
 language | string | Sí | Lenguaje con el cual se creará el proceso de identificación
