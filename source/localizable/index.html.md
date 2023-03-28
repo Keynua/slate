@@ -723,13 +723,8 @@ http.use_ssl = true
 http.verify_mode = OpenSSL::SSL::VERIFY_NONE
 
 request = Net::HTTP::Post.new(url)
-request["authorization"] =
 request["x-api-key"] = 'YOUR-API-KEY-HERE'
 request["authorization"] = 'YOUR-API-TOKEN-HERE'
-
-request = Net::HTTP::Put.new(url)
-request["authorization"] = 'YOUR-API-TOKEN-HERE'
-request["x-api-key"] = 'YOUR-API-KEY-HERE'
 request["content-type"] = 'application/json'
 request.body = "{\n  \"contractId\": \"CONTRACT-ID\",\n  \"message\": \"Crédito aprobado\"}\n"
 
