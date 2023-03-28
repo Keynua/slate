@@ -1484,6 +1484,7 @@ stages | array | Contiene las [estapas](#stages) del template
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 maximumSigningAttempts | integer | `optional` Indica la cantidad máxima de intentos de firma de un usuario
+contractApproval | boolean | `optional` Activa la funcionalidad de aprobación de contratos, ver detalle del api para [Aprobar un Contrato](#aprobar-un-contrato)
 
 ## Stages
 
