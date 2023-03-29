@@ -129,6 +129,7 @@ Valor | Descripción
 pending_input | Estado inicial del contrato, cuando ha sido creado pero aún nadie ha comenzado el proceso de firma
 working | Cuando los Items del contrato están en proceso de ejecución
 pending_approval | Cuando existe un Item pendiente a ser aprobado manualmente por el dueño del contrato
+contract_approval | Cuando la aprobación del contrato se encuentra en progreso
 error | Cuando existe un error sin resolver en uno de los Items del contrato
 deleted | Cuando el contrato ha sido eliminado
 done | Cuando el contrato ha sido firmado por todos y ha finalizado correctamente
@@ -820,7 +821,7 @@ req.end();
 }
 ```
 
-Este API Aprueba un Contrato
+Este API Aprueba un Contrato, solo retornará un resultado exitoso si el contrato se encuentra en el estado: `contract_approval`. Este estado se asigna cuando el item de tipo `contractapproval` se pone en `working`. Para obtener el evento que asigna el estado puede integrar el webhook `ItemWorking` y validar que el atributo `type` sea igual al mencionado.
 
 ### HTTP Request
 
@@ -892,6 +893,7 @@ Cavali - Perú | cavali | `no` | Proceso que indica el registro de un Pagaré el
 Blockchain | blockchain | `no` | Proceso que indica si se registró correctamente el hash del documento de firma electrónica final(certificado) en Blockchain
 Normativa NOM151 - México | knom151 | `no` | Proceso que indica si se generó correctamente la constancia de conservación según la norma Méxicana NOM151
 Firma Múltiple | bulksignature | `no` | Indica si se solicitó firmar al usuario de firma múltiple o si firmó satsifactoriamente. El estado "error" no está implementado por el momento en este Item.
+Aprobación de contrato | contractapproval | `no` | Solicita aprobación por parte del administrador para finalizar el contrato.
 
 ## Errores por tipo de Item
 
