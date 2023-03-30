@@ -354,6 +354,9 @@
                     <a href="#actualizar-el-valor-de-un-item" class="toc-h2 toc-link" data-title="Actualizar el valor de un item">Actualizar el valor de un item</a>
                   </li>
                   <li>
+                    <a href="#enviar-informacion-de-firma" class="toc-h2 toc-link" data-title="Enviar información de firma">Enviar información de firma</a>
+                  </li>
+                  <li>
                     <a href="#customizar-opciones-de-un-item-por-usuario" class="toc-h2 toc-link" data-title="Customizar opciones de un item por usuario">Customizar opciones de un item por usuario</a>
                   </li>
               </ul>
@@ -2149,7 +2152,7 @@ Producción: https://api.keynua.com
 <p>Si la actualización fue exitosa, se devolverá el cuerpo del <a href="#items-del-contrato">item</a> actualizado</p>
 </blockquote>
 
-<p>En este paso se realizará la actualización de la imagen o el video del item.</p>
+<p>En este paso se realizará la actualización de la imagen o el video del item. También puedes usar el API de <a href="#enviar-información-de-firma">Enviar información de firma</a> para enviar todos los Items en un sólo API.</p>
 <h3 id='http-request-6'>HTTP Request</h3>
 <p><code>PUT /contracts/v1/sign</code></p>
 <h3 id='headers-4'>Headers</h3>
@@ -2185,7 +2188,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>version</td>
 <td>integer</td>
-<td>La versión del item del que se actualizará el valor</td>
+<td>La versión del item del que se actualizará el valor. Ten en cuenta que en caso de un error, este version aumentará y deberás usar siempre el último valor.</td>
 </tr>
 <tr>
 <td>value</td>
@@ -2200,6 +2203,177 @@ Producción: https://api.keynua.com
 </tbody></table>
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
+<h2 id='enviar-informacion-de-firma'>Enviar información de firma</h2>
+<p>Este API se usa para poder enviar la información de varios Items, como por ejemplo la aceptación de Términos y Condiciones, la visualización de Documentos y los archivos multimedia como imagen y video.</p>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> PUT <span class="se">\</span>
+  <span class="nt">--url</span> https://api.stg.keynua.com/contracts/v2/sign/batch <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--data</span> <span class="s1">'{
+    "token": "USER-TOKEN-HERE",
+    "items": [
+        {
+            "itemId": 0,
+            "version": 0,
+            "value": {
+                "viewedAt": "2023-03-30T20:15:30.001Z"
+            }
+        },
+        {
+            "itemId": 1,
+            "version": 0,
+            "value": {
+                "opened": true
+            }
+        },
+        {
+            "itemId": 2,
+            "version": 0,
+            "value": {
+                "text": "46464646"
+            }
+        },
+        {
+            "itemId": 3,
+            "version": 0,
+            "value": {
+                "linkId": "LINK-ID-HERE"
+            }
+        }
+    ]
+
+}'</span>
+</code></pre></div><h3 id='http-request-7'>HTTP Request</h3>
+<p><code>PUT /contracts/v2/sign/batch</code></p>
+<h3 id='headers-5'>Headers</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Content-Type</td>
+<td>application/json</td>
+</tr>
+</tbody></table>
+<h3 id='body-5'>Body</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>token</td>
+<td>string</td>
+<td>El token del usuario del cual se actualizará la información</td>
+</tr>
+<tr>
+<td>items</td>
+<td>array</td>
+<td>Arreglo de <a href="#item-values">Item Values</a> a enviar</td>
+</tr>
+<tr>
+<td>otpToken</td>
+<td>string</td>
+<td>El token de otp necesario <strong>solo</strong> para los contratos que utilizan otp.</td>
+</tr>
+</tbody></table>
+<h3 id='response-body'>Response body</h3>
+<table><thead>
+<tr>
+<th>Nombre</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ok</td>
+<td>boolean</td>
+<td>Si se ha recibido la información correctamente, obtendrás <code>true</code></td>
+</tr>
+</tbody></table>
+<h3 id='item-values'>Item Values</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>itemId</td>
+<td>integer</td>
+<td>El identificador del item del que se actualizará el valor</td>
+</tr>
+<tr>
+<td>version</td>
+<td>integer</td>
+<td>La versión del item del que se actualizará el valor. Ten en cuenta que en caso de un error, este version aumentará y deberás usar siempre el último valor.</td>
+</tr>
+<tr>
+<td>value</td>
+<td>object</td>
+<td>El value a enviar por cada tipo de Item será distinto.</td>
+</tr>
+</tbody></table>
+<h3 id='item-de-terminos-y-condiciones'>Item de Términos y Condiciones</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>viewedAt</td>
+<td>string</td>
+<td>ISO String de la fecha</td>
+</tr>
+</tbody></table>
+<h3 id='item-de-documentos'>Item de Documentos</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>opened</td>
+<td>boolean</td>
+<td>Si los archivos fueron abiertos</td>
+</tr>
+</tbody></table>
+<h3 id='item-de-texto'>Item de Texto</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>text</td>
+<td>string</td>
+<td>Valor del texto</td>
+</tr>
+</tbody></table>
+<h3 id='archivos-multimedia-image-video'>Archivos multimedia (image/video)</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>linkId</td>
+<td>string</td>
+<td>linkId obtenido en el paso 1 de <a href="#actualizar-el-valor-de-un-item">Actualizar el valor de un item</a></td>
+</tr>
+</tbody></table>
 <h2 id='customizar-opciones-de-un-item-por-usuario'>Customizar opciones de un item por usuario</h2>
 <p>Las opciones de los items que se encuentran establecidas en el template del contrato pueden ser customizadas para un usuario en especifico. Estas se indican para cada tipo de item que el usario tenga asignado en su proceso de firma. Las opciones deben ir dentro del atributo <strong>items</strong> de la <strong>metadata</strong> del usuario durante la creacion del contrato.</p>
 
@@ -3371,9 +3545,9 @@ Deceval para registrar la firma del participante.</li>
 <blockquote>
 <p>Los participantes del Pagaré deben ser registrados como giradores antes de crear un proceso de firma con Deceval.</p>
 </blockquote>
-<h3 id='http-request-7'>HTTP Request</h3>
+<h3 id='http-request-8'>HTTP Request</h3>
 <p><code>POST /deceval/v1/crear-girador-natural</code></p>
-<h3 id='headers-5'>Headers</h3>
+<h3 id='headers-6'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -3393,7 +3567,7 @@ Deceval para registrar la firma del participante.</li>
 <td>application/json</td>
 </tr>
 </tbody></table>
-<h3 id='body-5'>Body</h3>
+<h3 id='body-6'>Body</h3>
 <p>Para crear el girador, se tiene que enviar la data como un objeto JSON</p>
 
 <table><thead>
@@ -3560,9 +3734,9 @@ Deceval para registrar la firma del participante.</li>
 
 <span class="nx">req</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
 <span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
-</code></pre></div><h3 id='http-request-8'>HTTP Request</h3>
+</code></pre></div><h3 id='http-request-9'>HTTP Request</h3>
 <p><code>POST /deceval/v1/obtener-girador</code></p>
-<h3 id='headers-6'>Headers</h3>
+<h3 id='headers-7'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -3582,7 +3756,7 @@ Deceval para registrar la firma del participante.</li>
 <td>application/json</td>
 </tr>
 </tbody></table>
-<h3 id='body-6'>Body</h3>
+<h3 id='body-7'>Body</h3>
 <p>Para obtener el girador, se tiene que enviar la data como un objeto JSON</p>
 
 <table><thead>
@@ -4169,9 +4343,9 @@ Deceval para registrar la firma del participante.</li>
     </span><span class="err">...</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='http-request-9'>HTTP Request</h3>
+</span></code></pre></div><h3 id='http-request-10'>HTTP Request</h3>
 <p><code>PUT /identity-verification/v1</code></p>
-<h3 id='headers-7'>Headers</h3>
+<h3 id='headers-8'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -4271,7 +4445,7 @@ Deceval para registrar la firma del participante.</li>
 </tbody></table>
 <h3 id='combinaciones-no-soportadas-por-defecto'>Combinaciones no soportadas por defecto</h3>
 <p>Por ahora los paises que soportamos para <code>selfie</code> y <code>video</code> son <code>sv-dui</code>, <code>mx-ife</code>, <code>cl-cedula</code>, <code>pe-dni</code>, <code>br-denatran</code> y <code>co-cedula</code>. En caso se cree una identificación con <code>selfie</code> o <code>video</code> con algún país que no esté en esta lista, automáticamente se considerará el documento como <code>global</code>. La lista completa sí está soportada con el type <code>liveness</code>.</p>
-<h3 id='response-body'>Response body</h3>
+<h3 id='response-body-2'>Response body</h3>
 <p><a href="#propiedades-de-una-verificacion-de-identidad">IdentityVerification</a></p>
 <h2 id='listar-verificaciones-de-identidad'>Listar verificaciones de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/identity-verification/v1/list'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
@@ -4356,11 +4530,11 @@ Deceval para registrar la firma del participante.</li>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Permite obtener una lista de verificaciones de identidad creadas.</p>
-<h3 id='http-request-10'>HTTP Request</h3>
+<h3 id='http-request-11'>HTTP Request</h3>
 <p><code>GET /identity-verification/v1/list</code> obtiene las de tu cuenta</p>
 
 <p><code>GET /identity-verification/v1/list-org</code> obtiene las de tu organización</p>
-<h3 id='headers-8'>Headers</h3>
+<h3 id='headers-9'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -4416,7 +4590,7 @@ Deceval para registrar la firma del participante.</li>
 <td><code>true</code> si se quiere más detalle en cada item de la lista.</td>
 </tr>
 </tbody></table>
-<h3 id='response-body-2'>Response body</h3>
+<h3 id='response-body-3'>Response body</h3>
 <table><thead>
 <tr>
 <th>Nombre</th>
@@ -4670,9 +4844,9 @@ Deceval para registrar la firma del participante.</li>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Permite obtener una verificación de identidad</p>
-<h3 id='http-request-11'>HTTP Request</h3>
+<h3 id='http-request-12'>HTTP Request</h3>
 <p><code>GET /identity-verification/v1/{verification_id}</code></p>
-<h3 id='headers-9'>Headers</h3>
+<h3 id='headers-10'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -4688,7 +4862,7 @@ Deceval para registrar la firma del participante.</li>
 <td>your-api-token</td>
 </tr>
 </tbody></table>
-<h3 id='response-body-3'>Response body</h3>
+<h3 id='response-body-4'>Response body</h3>
 <p><a href="#propiedades-de-una-verificacion-de-identidad">IdentityVerification</a></p>
 <h1 id='plantillas-de-documento'>Plantillas de documento</h1>
 <p>Permite listar, obtener y rellenar plantillas de documentos PDF.</p>
@@ -4966,9 +5140,9 @@ Deceval para registrar la firma del participante.</li>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Permite obtener una lista de las plantillas de documento que pertenecen al usuario o a su organización.</p>
-<h3 id='http-request-12'>HTTP Request</h3>
+<h3 id='http-request-13'>HTTP Request</h3>
 <p><code>GET /contract-manager-document-templates/api</code></p>
-<h3 id='headers-10'>Headers</h3>
+<h3 id='headers-11'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -5012,7 +5186,7 @@ Deceval para registrar la firma del participante.</li>
 <td><code>true</code> si se quiere las plantillas de documento de la organización</td>
 </tr>
 </tbody></table>
-<h3 id='response-body-4'>Response body</h3>
+<h3 id='response-body-5'>Response body</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -5144,9 +5318,9 @@ Deceval para registrar la firma del participante.</li>
 </blockquote>
 
 <p>Permite obtener una plantilla de documento.</p>
-<h3 id='http-request-13'>HTTP Request</h3>
+<h3 id='http-request-14'>HTTP Request</h3>
 <p><code>GET /contract-manager-document-templates/api/{templateId}</code></p>
-<h3 id='headers-11'>Headers</h3>
+<h3 id='headers-12'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -5297,9 +5471,9 @@ Deceval para registrar la firma del participante.</li>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>En base a cada documento de una plantilla, este API genera otros documentos pdf que incluyen el valor de cada campo enviado.</p>
-<h3 id='http-request-14'>HTTP Request</h3>
+<h3 id='http-request-15'>HTTP Request</h3>
 <p><code>POST /contract-manager-document-templates/api/create-filled-files/{templateId}</code></p>
-<h3 id='headers-12'>Headers</h3>
+<h3 id='headers-13'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -5319,7 +5493,7 @@ Deceval para registrar la firma del participante.</li>
 <td>application/json</td>
 </tr>
 </tbody></table>
-<h3 id='body-7'>Body</h3>
+<h3 id='body-8'>Body</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -5448,7 +5622,7 @@ Deceval para registrar la firma del participante.</li>
 <aside class="notice">Si ya estás listo para integrar en producción, por favor contacta al equipo de <code>Keynua</code></aside>
 <h2 id='especificacion-del-webhook'>Especificación del Webhook</h2>
 <p>El request tendrá la siguiente estructura</p>
-<h3 id='headers-13'>Headers</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='headers-14'>Headers</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"headers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
         </span><span class="nl">"Content-Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"application/json"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"X-Keynua-Webhook-Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ContractFinished"</span><span class="p">,</span><span class="w">
@@ -5490,7 +5664,7 @@ Deceval para registrar la firma del participante.</li>
 <td>Token unico generado por request con una integridad de 24 horas</td>
 </tr>
 </tbody></table>
-<h3 id='body-8'>Body</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='body-9'>Body</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ContractFinished"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d6c5ce27-fa63-4fb8-8f0f-83278c6b7985"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span><span class="w">
