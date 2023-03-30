@@ -79,3 +79,12 @@ Thanks to the following people who have submitted major pull requests:
 - [@cvkef](https://github.com/cvkef)
 
 Also, thanks to [Sauce Labs](http://saucelabs.com) for sponsoring the development of the responsive styles.
+
+## Correr Slate localmente
+
+Para correr Slate localmente es necesario hacer estos pasos. Estos pasos se han probado también en una Mac M1
+```
+$ docker pull slatedocs/slate
+$ docker build . -t slatedocs/slate
+$ docker run --rm --name slate -p 4567:4567 -v <ruta_slate>/source:/srv/slate/source slatedocs/slate serve
+```

@@ -1038,7 +1038,7 @@ puts response.read_body
 
 > Si la actualización fue exitosa, se devolverá el cuerpo del [item](#items-del-contrato) actualizado
 
-En este paso se realizará la actualización de la imagen o el video del item.
+En este paso se realizará la actualización de la imagen o el video del item. También puedes usar el API de [Enviar información de firma](#enviar-información-de-firma) para enviar todos los Items en un sólo API.
 ### HTTP Request
 
 `PUT /contracts/v1/sign`
@@ -1055,11 +1055,111 @@ Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 token | string | El token del usuario del cual se actualizará el item
 itemId | integer | El identificador del item del que se actualizará el valor
-version | integer | La versión del item del que se actualizará el valor
+version | integer | La versión del item del que se actualizará el valor. Ten en cuenta que en caso de un error, este version aumentará y deberás usar siempre el último valor.
 value | object | Dentro del objeto value debes enviar el linkId obtenido en el paso 1 con el key `linkId`
 otpToken | string | El token de otp necesario **solo** para los contratos que utilizan otp.
 
 <aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
+
+## Enviar información de firma
+
+Este API se usa para poder enviar la información de varios Items, como por ejemplo la aceptación de Términos y Condiciones, la visualización de Documentos y los archivos multimedia como imagen y video.
+
+```shell
+curl --request PUT \
+  --url https://api.stg.keynua.com/contracts/v2/sign/batch \
+  --header 'Content-Type: application/json' \
+  --data '{
+	"token": "USER-TOKEN-HERE",
+	"items": [
+		{
+			"itemId": 0,
+			"version": 0,
+			"value": {
+				"viewedAt": "2023-03-30T20:15:30.001Z"
+			}
+		},
+		{
+			"itemId": 1,
+			"version": 0,
+			"value": {
+				"opened": true
+			}
+		},
+		{
+			"itemId": 2,
+			"version": 0,
+			"value": {
+				"text": "46464646"
+			}
+		},
+		{
+			"itemId": 3,
+			"version": 0,
+			"value": {
+				"linkId": "LINK-ID-HERE"
+			}
+		}
+	]
+
+}'
+```
+
+### HTTP Request
+
+`PUT /contracts/v2/sign/batch`
+
+### Headers
+
+Key | Value
+--------- | -----------
+Content-Type | application/json
+
+### Body
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+token | string | El token del usuario del cual se actualizará la información
+items | array | Arreglo de [Item Values](#item-values) a enviar
+otpToken | string | El token de otp necesario **solo** para los contratos que utilizan otp.
+
+### Response body
+
+Nombre | Tipo | Descripción
+--------- | ----------- | -----------
+ok | boolean | Si se ha recibido la información correctamente, obtendrás `true`
+
+### Item Values
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+itemId | integer | El identificador del item del que se actualizará el valor
+version | integer | La versión del item del que se actualizará el valor. Ten en cuenta que en caso de un error, este version aumentará y deberás usar siempre el último valor.
+value | object | El value a enviar por cada tipo de Item será distinto.
+
+### Item de Términos y Condiciones
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+viewedAt | string | ISO String de la fecha
+
+### Item de Documentos
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+opened | boolean | Si los archivos fueron abiertos
+
+### Item de Texto
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+text | string | Valor del texto
+
+### Archivos multimedia (image/video)
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+linkId | string | linkId obtenido en el paso 1 de [Actualizar el valor de un item](#actualizar-el-valor-de-un-item)
 
 ## Customizar opciones de un item por usuario
 
