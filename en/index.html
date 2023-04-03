@@ -453,13 +453,16 @@
             <a href="#otp" class="toc-h1 toc-link" data-title="OTP">OTP</a>
               <ul class="toc-list-h2">
                   <li>
+                    <a href="#metodos-de-envio" class="toc-h2 toc-link" data-title="Métodos de envío">Métodos de envío</a>
+                  </li>
+                  <li>
                     <a href="#propiedades-de-auth" class="toc-h2 toc-link" data-title="Propiedades de Auth">Propiedades de Auth</a>
                   </li>
                   <li>
                     <a href="#enviar-otp" class="toc-h2 toc-link" data-title="Enviar OTP">Enviar OTP</a>
                   </li>
                   <li>
-                    <a href="#crear-codigo-otp" class="toc-h2 toc-link" data-title="Crear código OTP">Crear código OTP</a>
+                    <a href="#crear-codigo-otp-como-owner" class="toc-h2 toc-link" data-title="Crear código OTP como Owner">Crear código OTP como Owner</a>
                   </li>
                   <li>
                     <a href="#verificar-otp" class="toc-h2 toc-link" data-title="Verificar OTP">Verificar OTP</a>
@@ -5607,6 +5610,10 @@ Deceval para registrar la firma del participante.</li>
 <td>ItemError</td>
 <td>Serás notificado cada vez que ocurre un error en un <a href="#propiedades-de-un-item">Item</a></td>
 </tr>
+<tr>
+<td>OTPCreated</td>
+<td>Serás notificado cada vez que se envíe un <a href="#otp">OTP</a> de tipo <code>webhook</code> al usuario</td>
+</tr>
 </tbody></table>
 
 <p>Una vez configurado el Webhook, te llegará un email de confirmación al correo que ingresaste. Luego, debes seleccionar la opción <strong>Habilitar</strong> para poder activar el Webhook. Keynua enviará un HTTP POST al API configurado y será activado si cumple estos requisitos:</p>
@@ -5680,7 +5687,7 @@ Deceval para registrar la firma del participante.</li>
 <tr>
 <td>type</td>
 <td>string</td>
-<td>Nombre del <a href="#tipos-de-eventos-webhook">tipo de evento</a> emitido. Puede ser <code>ContractCreated</code>, <code>ContractStarted</code>, <code>ContractItemUpdated</code>, <code>ContractFinished</code>, <code>ContractDeleted</code>, <code>IdentityVerificationCreated</code>, <code>IdentityVerificationStarted</code>, <code>IdentityVerificationFinished</code>, o <code>IdentityVerificationItemUpdated</code></td>
+<td>Nombre del <a href="#tipos-de-eventos-webhook">tipo de evento</a> emitido. Puede ser <code>ContractCreated</code>, <code>ContractStarted</code>, <code>ContractItemUpdated</code>, <code>ContractFinished</code>, <code>ContractDeleted</code>, <code>IdentityVerificationCreated</code>, <code>IdentityVerificationStarted</code>, <code>IdentityVerificationFinished</code>, <code>IdentityVerificationItemUpdated</code>, o <code>OTPCreated</code></td>
 </tr>
 <tr>
 <td>accountId</td>
@@ -5729,6 +5736,10 @@ Deceval para registrar la firma del participante.</li>
 <tr>
 <td>ItemError</td>
 <td><a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a> o <a href="#propiedades-de-identityverificationitemupdated">IdentityVerificationItemUpdated</a>. Item.state <code>error</code></td>
+</tr>
+<tr>
+<td>OTPCreated</td>
+<td><a href="#propiedades-de-otpcreated">OTPCreated</a></td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-contractcreated'>Propiedades de ContractCreated</h3>
@@ -6904,6 +6915,93 @@ Deceval para registrar la firma del participante.</li>
 <td><a href="#propiedades-de-un-item">Item</a> del contrato que ha cambiado de estado</td>
 </tr>
 </tbody></table>
+<h3 id='propiedades-de-otpcreated'>Propiedades de OTPCreated</h3>
+<blockquote>
+<p>Ejemplo de Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"OTPCreated"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000001"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"refId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000002"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000001"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"organizationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000001"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Referencia"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"userName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Manuel Silva"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"55sm9z"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"resendInSec"</span><span class="p">:</span><span class="w"> </span><span class="mi">480</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"availableAttempts"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Se emite cuando se envía un <a href="#otp">OTP</a> de tipo webhook al usuario.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>refId</td>
+<td>string</td>
+<td>Identificador único del contrato</td>
+</tr>
+<tr>
+<td>userId</td>
+<td>string</td>
+<td>Identificador único del usuario en el contrato</td>
+</tr>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>Identificador único de la cuenta con la que se creó el contrato</td>
+</tr>
+<tr>
+<td>organizationId</td>
+<td>string</td>
+<td>Identificador único de la organización con la que se creó el contrato</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>Referencia del contrato</td>
+</tr>
+<tr>
+<td>userName</td>
+<td>string</td>
+<td>El nombre del usuario</td>
+</tr>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>Código OTP generado</td>
+</tr>
+<tr>
+<td>resendInSec</td>
+<td>integer</td>
+<td>En cuantos segundos se podrá solicitar el envío de un nuevo código</td>
+</tr>
+<tr>
+<td>availableAttempts</td>
+<td>integer</td>
+<td>Cuantos intentos aún quedan disponibles</td>
+</tr>
+<tr>
+<td>language</td>
+<td>string</td>
+<td>Lenguaje del contrato</td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>object</td>
+<td>Metadata del contrato</td>
+</tr>
+</tbody></table>
 <h3 id='propiedades-de-un-usuario-webhook'>Propiedades de un Usuario Webhook</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
     </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
@@ -7061,7 +7159,30 @@ Deceval para registrar la firma del participante.</li>
 <h1 id='otp'>OTP</h1>
 <p>Conjunto de APIs que permiten enviar, verificar y revisar códigos de un solo
 uso para realizar la firma de documentos.</p>
-<h2 id='propiedades-de-auth'>Propiedades de Auth</h2>
+<h2 id='metodos-de-envio'>Métodos de envío</h2>
+<p>Existen diferentes canales de comunicación por OTP y los firmantes. El canal
+es definido en el template y tiene los siguientes valores:</p>
+
+<table><thead>
+<tr>
+<th>Canal</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>sms</td>
+<td>Se envía el código al número del firmante a través de un sms.</td>
+</tr>
+<tr>
+<td>email</td>
+<td>Se envía el código al correo del firmante.</td>
+</tr>
+<tr>
+<td>webhook</td>
+<td>Se envía el código al webhook definido por la cuenta que creo el contrato a través del evento <code>OTPCreated</code></td>
+</tr>
+</tbody></table>
+<h2 id='propiedades-de-auth'>Propiedades de Auth</h2><h3 id='contractauth'>ContractAuth</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -7072,20 +7193,64 @@ uso para realizar la firma de documentos.</p>
 </thead><tbody>
 <tr>
 <td>type</td>
-<td><code>contract</code> o <code>generic</code></td>
+<td><code>contract</code></td>
 <td>No</td>
-<td>Tipo de autenticación</td>
+<td>Tipo de autenticación.</td>
 </tr>
 <tr>
 <td>token</td>
 <td>string</td>
-<td>No (<code>type=&#39;contract&#39;</code>)</td>
+<td>No</td>
 <td>El token del usuario dado al crear el contrato.</td>
+</tr>
+</tbody></table>
+<h3 id='ownerauth'>OwnerAuth</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Opcional</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>type</td>
+<td><code>owner</code></td>
+<td>No</td>
+<td>Tipo de autenticación.</td>
+</tr>
+<tr>
+<td>contractId</td>
+<td>string</td>
+<td>No</td>
+<td>Identificador único del contrato</td>
+</tr>
+<tr>
+<td>userId</td>
+<td>string</td>
+<td>No</td>
+<td>Identificador único del usuario en el contrato</td>
+</tr>
+</tbody></table>
+<h3 id='genericauth'>GenericAuth</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Opcional</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>type</td>
+<td><code>generic</code></td>
+<td>No</td>
+<td>Tipo de autenticación.</td>
 </tr>
 <tr>
 <td>id</td>
 <td>string</td>
-<td>No (<code>type=&#39;generic&#39;</code>)</td>
+<td>No</td>
 <td>Identificador genérico.</td>
 </tr>
 </tbody></table>
@@ -7179,7 +7344,7 @@ uso para realizar la firma de documentos.</p>
 </thead><tbody>
 <tr>
 <td>auth</td>
-<td><a href="#propiedades-de-auth">Auth</a></td>
+<td><a href="#contractauth">ContractAuth</a></td>
 <td>No</td>
 <td>Permite identificar el OTP del usuario y contrato</td>
 </tr>
@@ -7213,17 +7378,19 @@ uso para realizar la firma de documentos.</p>
 <td>Cuantos intentos aún quedan disponibles.</td>
 </tr>
 </tbody></table>
-<h2 id='crear-codigo-otp'>Crear código OTP</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
+<h2 id='crear-codigo-otp-como-owner'>Crear código OTP como Owner</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.stg.keynua.com/send-otp/v1/create-code"</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.stg.keynua.com/send-otp/v1/create-code-as-owner"</span><span class="p">)</span>
 
 <span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
 
 <span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Post</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"x-api-key"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-KEY-HERE'</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-TOKEN-HERE'</span>
 <span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'application/json'</span>
-<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="s2">"{</span><span class="se">\n\t\"</span><span class="s2">auth</span><span class="se">\"</span><span class="s2">: {</span><span class="se">\n\t\t\"</span><span class="s2">type</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">contract</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n\t\t\"</span><span class="s2">token</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">eyJ0eXAiOiJ...Dq_5VSiZo</span><span class="se">\"\n\t</span><span class="s2">}</span><span class="se">\n</span><span class="s2">}"</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="s2">"{</span><span class="se">\n\t\"</span><span class="s2">type</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">owner</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n\t\"</span><span class="s2">contractId</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">00000000-0000-0000-0000-000000000001</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n\t\"</span><span class="s2">userId</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">0</span><span class="se">\"\n</span><span class="s2">}"</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">https</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
 <span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
@@ -7235,33 +7402,40 @@ uso para realizar la firma de documentos.</p>
 <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">({</span>
     <span class="p">{</span>
         <span class="s">"auth"</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s">"type"</span><span class="p">:</span> <span class="s">"contract"</span><span class="p">,</span>
-            <span class="s">"token"</span><span class="p">:</span> <span class="s">"eyJ0eXAiOiJ...Dq_5VSiZo"</span>
+            <span class="s">"type"</span><span class="p">:</span> <span class="s">"owner"</span><span class="p">,</span>
+            <span class="s">"contractId"</span><span class="p">:</span> <span class="s">"00000000-0000-0000-0000-000000000001"</span><span class="p">,</span>
+            <span class="s">"userId"</span><span class="p">:</span> <span class="s">"0"</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">})</span>
 
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s">'x-api-key'</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
+  <span class="s">'authorization'</span><span class="p">:</span> <span class="s">"YOUR-API-TOKEN-HERE"</span><span class="p">,</span>
   <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span>
 <span class="p">}</span>
 
-<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span> <span class="s">"/send-otp/v1/create-code"</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span> <span class="s">"/send-otp/v1/create-code-as-owner"</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
 <span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
 <span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
 </code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> POST <span class="se">\</span>
-  <span class="nt">--url</span> https://api.stg.keynua.com/send-otp/v1/create-code <span class="se">\</span>
+  <span class="nt">--url</span> https://api.stg.keynua.com/send-otp/v1/create-code-as-owner <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
   <span class="nt">--data</span> <span class="s1">'{
-    "auth": {
-        "type": "contract",
-        "token": "eyJ0eXAiOiJKV1Q...Dq_5VSiZo"
-    }
+  "auth": {
+      "type": "owner",
+      "contractId": "00000000-0000-0000-0000-000000000001",
+      "userId": "0"
+  }
 }'</span>
 </code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
   <span class="dl">"</span><span class="s2">auth</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">contract</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">token</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">eyJ0eXA..._2iDq_5VSiZo</span><span class="dl">"</span>
+    <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">owner</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">contractId</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">00000000-0000-0000-0000-000000000001</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">userId</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0</span><span class="dl">"</span>
   <span class="p">}</span>
 <span class="p">});</span>
 
@@ -7274,7 +7448,9 @@ uso para realizar la firma de documentos.</p>
   <span class="p">}</span>
 <span class="p">});</span>
 
-<span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">https://api.stg.keynua.com/send-otp/v1/create-code</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">xhr</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">https://api.stg.keynua.com/send-otp/v1/create-code-as-owner</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">YOUR-API-KEY-HERE</span><span class="dl">"</span><span class="p">);</span>
+<span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="dl">"</span><span class="s2">authorization</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">YOUR-API-TOKEN-HERE</span><span class="dl">"</span><span class="p">);</span>
 <span class="nx">xhr</span><span class="p">.</span><span class="nx">setRequestHeader</span><span class="p">(</span><span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span><span class="p">);</span>
 
 <span class="nx">xhr</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
@@ -7288,9 +7464,31 @@ uso para realizar la firma de documentos.</p>
   </span><span class="nl">"availableAttempts"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Permite crear y obtener un nuevo código OTP. De manera similar al <em>endpoint</em> anterior y según la configuración del contrato, se limita la cantidad de códigos generados en un lapso de tiempo.</p>
+<p>Permite crear y obtener un nuevo código OTP (Sin enviarle el código al usuario).
+De manera similar al <em>endpoint</em> anterior y según la configuración del contrato,
+se limita la cantidad de códigos generados en un lapso de tiempo.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://api.stg.keynua.com/send-otp/v1/create-code</code></p>
+<p><code>POST https://api.stg.keynua.com/send-otp/v1/create-code-as-owner</code></p>
+<h3 id='headers'>Headers</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>x-api-key</td>
+<td>your-api-key</td>
+</tr>
+<tr>
+<td>authorization</td>
+<td>your-api-token</td>
+</tr>
+<tr>
+<td>Content-Type</td>
+<td>application/json</td>
+</tr>
+</tbody></table>
 <h3 id='request-body-2'>Request body</h3>
 <table><thead>
 <tr>
@@ -7302,7 +7500,7 @@ uso para realizar la firma de documentos.</p>
 </thead><tbody>
 <tr>
 <td>auth</td>
-<td><a href="#propiedades-de-auth">Auth</a></td>
+<td><a href="#ownerauth">OwnerAuth</a> o <a href="#contractauth">ContractAuth</a></td>
 <td>No</td>
 <td>Permite identificar el OTP del usuario y contrato</td>
 </tr>
@@ -7421,7 +7619,7 @@ uso para realizar la firma de documentos.</p>
 </thead><tbody>
 <tr>
 <td>auth</td>
-<td><a href="#propiedades-de-auth">Auth</a></td>
+<td><a href="#contractauth">ContractAuth</a></td>
 <td>No</td>
 <td>Permite identificar el OTP del usuario y contrato</td>
 </tr>
@@ -7536,7 +7734,7 @@ uso para realizar la firma de documentos.</p>
 </thead><tbody>
 <tr>
 <td>auth</td>
-<td><a href="#propiedades-de-auth">Auth</a></td>
+<td><a href="#contractauth">ContractAuth</a></td>
 <td>No</td>
 <td>Permite identificar el OTP del usuario y contrato</td>
 </tr>
