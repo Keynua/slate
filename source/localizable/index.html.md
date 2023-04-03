@@ -129,6 +129,7 @@ Valor | Descripción
 pending_input | Estado inicial del contrato, cuando ha sido creado pero aún nadie ha comenzado el proceso de firma
 working | Cuando los Items del contrato están en proceso de ejecución
 pending_approval | Cuando existe un Item pendiente a ser aprobado manualmente por el dueño del contrato
+contract_approval | Cuando la aprobación del contrato se encuentra en progreso
 error | Cuando existe un error sin resolver en uno de los Items del contrato
 deleted | Cuando el contrato ha sido eliminado
 done | Cuando el contrato ha sido firmado por todos y ha finalizado correctamente
@@ -709,6 +710,130 @@ contractId | El ID del Contrato a eliminar
 
 <aside class="warning">No se puede eliminar un contrato que su estado es <code>done</code>. Si eliminas un contrato que aún no ha sido iniciado por el firmante, la transacción utilizada será reintegrada a tu saldo. Si el contrato ya fue iniciado por el firmante, se tomará como una transacción utilizada.</aside>
 
+## Aprobar un Contrato
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'openssl'
+
+url = URI("https://api.stg.keynua.com/contracts/v1/approve-contract")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Post.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+request["content-type"] = 'application/json'
+request.body = "{\n  \"contractId\": \"CONTRACT-ID\",\n  \"message\": \"Crédito aprobado\"}\n"
+
+response = http.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
+
+payload = "{\n  \"contractId\": \"CONTRACT-ID\",\n  \"message\": \"Crédito aprobado\"}\n"
+
+
+headers = {
+    'x-api-key': "YOUR-API-KEY-HERE",
+    'authorization': "YOUR-API-TOKEN-HERE"
+    'content-type': "application/json"
+    }
+
+conn.request("POST", "/contracts/v1/approve-contract", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --request DELETE \
+  --url https://api.stg.keynua.com/contracts/v1/approve-contract \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'content-type: application/json' \
+  --data '{
+  "contractId": "CONTRACT-ID",
+  "message": "Crédito aprobado",
+}'
+```
+
+```javascript
+const https = require("https");
+
+const data = JSON.stringify({
+  contractId: 'CONTRACT-ID',
+  message: 'Crédito aprobado',
+});
+
+const options = {
+  method: "POST",
+  hostname: "api.stg.keynua.com",
+  path: "/contracts/v1/approve-contract",
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE"
+    "content-type": "application/json",
+    "content-length": data.length
+  }
+};
+
+const req = https.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.on('error', (error) => {
+  console.error(error)
+});
+
+req.write(data);
+req.end();
+```
+
+> Si el contrato fue aprobado, el API retornará un JSON como el siguiente:
+
+```json
+{
+  "success": true,
+  "item": {
+	"itemId": 1,
+	"itemState": "s",
+	"itemVersion": 1
+  }
+}
+```
+
+Este API Aprueba un Contrato, solo retornará un resultado exitoso si el contrato se encuentra en el estado: `contract_approval`. Este estado se asigna cuando el item de tipo `contractapproval` se pone en `working`. Para obtener el evento que asigna el estado puede integrar el webhook `ItemWorking` y validar que el atributo `type` sea igual al mencionado.
+
+### HTTP Request
+
+`POST /contracts/v1/approve-contract`
+
+### Body
+
+Parámetro | Descripción
+--------- | -----------
+contractId | El ID del Contrato a eliminar
+message | Motivo de aprobación
+
 # Items del Contrato
 Para llevar a cabo el flujo de firma de un contrato, cada uno de los usuarios deberá ingresar la información necesaria para firmar. Por ejemplo: la foto de su DNI, el video diciendo el código corto o el número de su DNI. También hace referencia a los procesos internos llevados a cabo por Keynua, por ejemplo la generación del PDF final o validación biométrica. A cada uno de estos elementos los llamamos **Item**
 ## Propiedades de un Item
@@ -768,6 +893,7 @@ Cavali - Perú | cavali | `no` | Proceso que indica el registro de un Pagaré el
 Blockchain | blockchain | `no` | Proceso que indica si se registró correctamente el hash del documento de firma electrónica final(certificado) en Blockchain
 Normativa NOM151 - México | knom151 | `no` | Proceso que indica si se generó correctamente la constancia de conservación según la norma Méxicana NOM151
 Firma Múltiple | bulksignature | `no` | Indica si se solicitó firmar al usuario de firma múltiple o si firmó satsifactoriamente. El estado "error" no está implementado por el momento en este Item.
+Aprobación de contrato | contractapproval | `no` | Solicita aprobación por parte del administrador para finalizar el contrato.
 
 ## Errores por tipo de Item
 
@@ -1463,6 +1589,7 @@ stages | array | Contiene las [estapas](#stages) del template
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 maximumSigningAttempts | integer | `optional` Indica la cantidad máxima de intentos de firma de un usuario
+contractApproval | boolean | `optional` Activa la funcionalidad de aprobación de contratos, ver detalle del api para [Aprobar un Contrato](#aprobar-un-contrato)
 
 ## Stages
 
