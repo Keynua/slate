@@ -290,7 +290,7 @@ El cliente del pagaré. El elemento está compuesto por:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-userId | integer | Id del firmante. Es el indice del elemento al que hace referencia en el atributo `users`
+userId | integer | Id del firmante. Es el índice del elemento al que hace referencia en el atributo `users`
 civilStatus | integer |  Estado civil del cliente. Puede tener los siguientes valores: `1 (SOLTERO)`, `2 (CASADO)`, `3 (DIVORCIADO)`, `4 (VIUDO)`
 domicile | string | Domicilio del cliente `Máximo 100 de longitud`
 
@@ -299,14 +299,14 @@ Representante del cliente. El elemento está compuesto por:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-userId | integer | Id del firmante. Es el indice del elemento al que hace referencia en el atributo `users`
+userId | integer | Id del firmante. Es el índice del elemento al que hace referencia en el atributo `users`
 
 ### Garantías Cavali
 Garantía del cliente. El elemento está compuesto por:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-userId | integer | Id del firmante. Es el indice del elemento al que hace referencia en el atributo `users`
+userId | integer | Id del firmante. Es el índice del elemento al que hace referencia en el atributo `users`
 civilStatus | integer | Estado civil. Puede tener los siguientes valores: `1 (SOLTERO)`, `2 (CASADO)`, `3 (DIVORCIADO)`, `4 (VIUDO)`
 domicile | string | Domicilio `Máximo 100 de longitud`
 representative | array | Arreglo de [Representantes](#representantes-cavali)
