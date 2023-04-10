@@ -1068,7 +1068,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>userId</td>
 <td>integer</td>
-<td>Id del firmante</td>
+<td>Id del firmante. Es el índice del elemento al que hace referencia en el atributo <code>users</code> al <a href="#crear-un-contrato">crear contrato</a></td>
 </tr>
 <tr>
 <td>civilStatus</td>
@@ -1094,7 +1094,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>userId</td>
 <td>integer</td>
-<td>Id del firmante</td>
+<td>Id del firmante. Es el índice del elemento al que hace referencia en el atributo <code>users</code> al <a href="#crear-un-contrato">crear contrato</a></td>
 </tr>
 </tbody></table>
 <h3 id='garantias-cavali'>Garantías Cavali</h3>
@@ -1110,7 +1110,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>userId</td>
 <td>integer</td>
-<td>Id del firmante</td>
+<td>Id del firmante. Es el índice del elemento al que hace referencia en el atributo <code>users</code> al <a href="#crear-un-contrato">crear contrato</a></td>
 </tr>
 <tr>
 <td>civilStatus</td>
@@ -1394,6 +1394,10 @@ Producción: https://api.keynua.com
 <li><code>values</code> corresponde a los valores admitidos dentro de un valor precargado. Se debe escoger <em>un solo valor</em> de esta lista. Debe ir dentro de <code>text</code>.</li>
 <li>De no existir <code>values</code>, se puede incluir dentro de <code>text</code> cualquier valor (relacionado al dato que se desee precargar).</li>
 </ul>
+
+<aside class="success">
+Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_blank”>módulo de desarrollo</a> del portal Keynua puedes encontrar la sección <code>Crear contrato en modo desarrollo</code> e iniciar el modo para generar los <code>payloads</code> del api mediante la UI
+</aside>
 <h2 id='obtener-un-contrato'>Obtener un Contrato</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
 <span class="nb">require</span> <span class="s1">'net/http'</span>
 <span class="nb">require</span> <span class="s1">'openssl'</span>
