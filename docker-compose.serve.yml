@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+    serve_slate:
+        container_name: serve_slate_v2
+        ports:
+            - '4567:4567'
+        volumes:
+            - './source:/srv/slate/source'
+        image: slatedocs/slate:2.0
+        command:
+            - serve

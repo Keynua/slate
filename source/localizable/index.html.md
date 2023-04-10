@@ -290,7 +290,7 @@ El cliente del pagaré. El elemento está compuesto por:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-userId | integer | Id del firmante
+userId | integer | Id del firmante. Es el indice del elemento al que hace referencia en el atributo `users`
 civilStatus | integer |  Estado civil del cliente. Puede tener los siguientes valores: `1 (SOLTERO)`, `2 (CASADO)`, `3 (DIVORCIADO)`, `4 (VIUDO)`
 domicile | string | Domicilio del cliente `Máximo 100 de longitud`
 
@@ -299,14 +299,14 @@ Representante del cliente. El elemento está compuesto por:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-userId | integer | Id del firmante
+userId | integer | Id del firmante. Es el indice del elemento al que hace referencia en el atributo `users`
 
 ### Garantías Cavali
 Garantía del cliente. El elemento está compuesto por:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-userId | integer | Id del firmante
+userId | integer | Id del firmante. Es el indice del elemento al que hace referencia en el atributo `users`
 civilStatus | integer | Estado civil. Puede tener los siguientes valores: `1 (SOLTERO)`, `2 (CASADO)`, `3 (DIVORCIADO)`, `4 (VIUDO)`
 domicile | string | Domicilio `Máximo 100 de longitud`
 representative | array | Arreglo de [Representantes](#representantes-cavali)
@@ -522,6 +522,9 @@ Algunas observaciones importantes:
 * `values` corresponde a los valores admitidos dentro de un valor precargado. Se debe escoger *un solo valor* de esta lista. Debe ir dentro de `text`.
 * De no existir `values`, se puede incluir dentro de `text` cualquier valor (relacionado al dato que se desee precargar).
 
+<aside class="success">
+Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_blank”>módulo de desarrollo</a> del portal Keynua puedes encontrar la sección <code>Crear contrato en modo desarrollo</code> e iniciar el modo para generar los <code>payloads</code> del api mediante la UI
+</aside>
 
 ## Obtener un Contrato
 
