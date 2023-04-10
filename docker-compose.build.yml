@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+    build_slate:
+        container_name: build_slate_v2
+        volumes:
+            - './build:/srv/slate/build'
+            - './source:/srv/slate/source'
+        build: .
+        image: slatedocs/slate:2.0
