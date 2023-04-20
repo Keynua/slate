@@ -2950,6 +2950,11 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>Agrega <a href="#items-customizados">items customizados</a> al flujo</td>
 </tr>
 <tr>
+<td>maxNamesDifference</td>
+<td>float</td>
+<td>Porcentaje de similitud entre los nombres y apellidos que extrae del documento y reniec, la sensibilidad se encuentra en el intervalo de 0 a 1, mientras más se acerque a 0 la validación es más estricta. Por ejemplo: 0.5 indica una sensibilidad intermedia.</td>
+</tr>
+<tr>
 <td>prefilledActive</td>
 <td>boolean</td>
 <td>Activa los <code>prefilled items</code>, para que el creador del contrato pueda pre-rellenar el número de documento del firmante. Cuando se activa esta opción, el valor que debes ingresar como targetId dentro de cada user es <strong>documentNumber</strong>. Más referencia en la sección de <a href="#crear-un-contrato">crear contrato</a></td>
@@ -2992,7 +2997,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <tr>
 <td>denyInstructionsGrade</td>
 <td>boolean</td>
-<td>Si activas esta opción, se devolverá un error si el DNI evaluado tiene el grado de Instrucción de Iletrado o Educación Especial. <strong>Para contratos, esta opción está activa por defecto y no se puede cambiar</strong></td>
+<td>Si activas esta opción, se devolverá un error si el DNI evaluado tiene el grado de Instrucción de Iletrado o Educación Especial. <strong>Para contratos, esta opción está activa por defecto</strong></td>
 </tr>
 <tr>
 <td>minimumScore</td>
