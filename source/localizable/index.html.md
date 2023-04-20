@@ -1629,6 +1629,7 @@ liveness3D | boolean | Incluir validación 3D
 documentValidations | array | Indica las opciones de validación que puedes agregar a los documentos. Puede ser `verify-content-reniec`, para comparar que los datos de la foto del DNI coincidan con Reniec (Sólo Perú) o `expiration-date`, para comprobar que el documento de identidad no ha expirado aún o `verify-id-number`, para comprobar que el número de documento ingresado en el flujo de firma se encuentre en el documento.
 views | object | [Vistas customizadas](#vistas-customizadas) del template
 dynamicFields | array | Agrega [items customizados](#items-customizados) al flujo
+maxNamesDifference | float | Porcentaje de similitud entre los nombres y apellidos que extrae del documento y reniec, la sensibilidad se encuentra en el intervalo de 0 a 1, mientras más se acerque a 0 la validación es más estricta. Por ejemplo: 0.5 indica una sensibilidad intermedia.
 prefilledActive | boolean | Activa los `prefilled items`, para que el creador del contrato pueda pre-rellenar el número de documento del firmante. Cuando se activa esta opción, el valor que debes ingresar como targetId dentro de cada user es **documentNumber**. Más referencia en la sección de [crear contrato](#crear-un-contrato)
 reviewEachDocument | boolean | Indica si se debe debe obligar al firmante a abrir todos los documentos para poder continuar con la firma
 disableNotification | boolean | Indica si se quiere omitir el correo de inici
