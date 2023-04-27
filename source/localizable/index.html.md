@@ -169,7 +169,7 @@ name | string | El nombre del usuario
 email | string | El correo electrónico del usuario
 phone | string | El teléfono del usuario
 groups | array | Nombre de los grupos a los que pertenece el usuario, normalmente siempre pertenece a un sólo grupo. El identificador del grupo será asignado por el equipo de Keynua
-token | string | El token del usuario que se utilizará para realizar la firma. Por ejemplo para [actualizar los valores de cada item](#actualizar-el-valor-de-un-item)
+token | string | El token del usuario que se utilizará para realizar la firma. Por ejemplo para [enviar un archivo multimedia](#enviar-un-archivo-multimedia)
 state | string | El [estado del usuario](#estados-del-usuario) dentro del contrato, basado en el estado de todos los items del usuario. Solo existe para contratos creados luego del 04/04/2022.
 idInfo | string | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
 
@@ -869,7 +869,7 @@ stageIndex | integer | El índice del nivel al que pertenece el item
 value | object | El valor del item. La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key **url** el cual contiene la URL firmada para poder descargar el archivo. **Las URLs firmadas tienen una duración máxima de 12 horas**. Cuando el item tenga estado Error, se obtendrá el siguiente detalle de [error por tipo de Item](#errores-por-tipo-de-item)
 
 ## Tipos de Item
-En la siguiente tabla podrás ver los Tipos de Items que existen en Keynua
+En la siguiente tabla podrás ver los Tipos de Items que existen en Keynua. Los Items **"User Input"** se refieren a los Items que deben ser enviados por los usuarios.
 
 Item | Id | User Input | Descripción
 --------- | ----------- | ----------- | -----------
@@ -986,11 +986,160 @@ Code | Descripción
 --------- | -----------
 ManualApproveRejected | El item ha sido rechazado por el administrador del contrato.
 
-## Actualizar el valor de un item
+## Customizar opciones de un item por usuario
 
-<aside class="notice">Este procedimiento sólo será realizado en caso quieran construir su propio proceso de firma. Keynua ofrece el proceso de firmar sin costo adicional bajo el propio dominio de Keynua o la posibilidad de incrustar el proceso de firma bajo tu dominio o App móvil mediante nuestro <code><a href="https://github.com/Keynua/public-docs/wiki/Widget">Keynua Widget</a></code></aside>
+Las opciones de los items que se encuentran establecidas en el template del contrato pueden ser customizadas para un usuario en especifico. Estas se indican para cada tipo de item que el usario tenga asignado en su proceso de firma. Las opciones deben ir dentro del atributo **items** de la **metadata** del usuario durante la creacion del contrato.
 
-Para poder actualizar el valor de cada item, se debe utilizar la información que se obtiene luego de crear un certificado o de obtener un certificado por id. Así, podemos saber los tipos (type) de cada item y seguir los siguientes pasos para realizar la actualización.
+Esta configuración de puede aplicar a los siguientes items:
+
+```json
+{
+	"name": "some:user-name",
+	"groups": ["signers"],
+	// Some user attributes...
+	"metadata": {
+		"items": {
+			"terms": {
+				"table": {
+					"title": "CONDICIONES DEL CRÉDITO",
+					"items": [
+						{
+							"title": "Monto del crédito",
+							"value": "S/ 6000.00"
+						},
+						{
+							"title": "Fecha del primer pago",
+							"value": "28/07/2021"
+						},
+						// Some items...
+					]
+				}
+			}
+		}
+	}
+}
+```
+
+### Terms:
+
+![terms-example](../images/terms-example.png)
+
+# Proceso de firma vía API
+
+Por defecto, Keynua ofrece al usuario completar el flujo de firma mediante la web de Keynua, sin necesidad de descargar un App o hacer algún registro previo. Esta web de Keynua puedes integrarla a tu propio dominio o tu App móvil mediante un WebView, siguiendo las instrucciones que se detallan en esta [documentación](https://github.com/Keynua/public-docs/wiki/Widget)
+
+Puedes usar las APIs de esta sección si lo que quieres es crear tu front personalizado para el flujo de firma. Luego de recibir los inputs del usuario, los procesaremos y validaremos según el flujo de firma que estés usando.
+
+Antes de comenzar con este flujo, debes reconocer los Items que necesitas enviar de acuerdo a los [Tipos de Item](#tipos-de-item) userInputs que tiene el template que estás usando.
+
+<aside class="warning">Cada template, puede tener distintos itemIds y tipos de Items. Por ello es importante validar esta información para cada uno de los templateIds que estés usando</aside>
+
+## Obtener Items pendientes
+
+Con este API podrás obtener un resumen de los Items que están pendientes a ser enviados, es muy importante obtener el tipo de item que está pendiente a ser enviado, el itemId y el itemVersion. El itemVersion cambiará por cada intento de envío que hagas. Por ejemplo, si subes una foto de un documento que no es reconocido como el documento del país, devolveremos un error en el item de validación de formato del documento, pero el itemId y version que debes enviar es el item que corresponde a la imagen del documento.
+
+```json
+{
+  "id": "4d50f870-xxxx-xxxx-xxxx-1b50872e31d5e1",
+  "templateId": "keynua-peru-default",
+  "userName": "Usuario Prueba",
+  "views": [
+    {
+      "id": "view_2_0",
+      "type": "input",
+      "input": {
+        "id": 2,
+        "type": "terms",
+        "userId": 0,
+        "version": 0,
+        "title": "Aceptación de Términos"
+      }
+    },
+    {
+      "id": "view_3_0",
+      "type": "input",
+      "input": {
+        "id": 3,
+        "type": "documents",
+        "userId": 0,
+        "version": 0,
+        "title": "Revisión de Documentos"
+      }
+    },
+    {
+      "id": "dniView",
+      "type": "input",
+      "input": {
+        "id": 4,
+        "type": "text",
+        "userId": 0,
+        "version": 0,
+        "title": "Nº DNI"
+      }
+    },
+    {
+      "id": "imageDniView",
+      "type": "input",
+      "input": {
+        "id": 5,
+        "type": "image",
+        "userId": 0,
+        "version": 0,
+        "title": "Foto del DNI"
+      }
+    },
+    {
+      "id": "videoView",
+      "type": "input",
+      "input": {
+        "id": 6,
+        "type": "video",
+        "userId": 0,
+        "version": 0,
+        "title": "Videofirma"
+      }
+    }
+  ]
+}
+
+```
+
+### HTTP Request
+
+`POST /contracts/v1/sign`
+
+### Headers
+
+Key | Value
+--------- | -----------
+Content-Type | application/json
+
+### Body
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+token | string | El token del usuario del cual se obtendrá la información
+
+### Response body
+
+Nombre | Tipo | Descripción
+-------|------|------------
+id | string | Identificador único del contrato (contractId)
+templateId | string | Identificador de la plantilla utilizada
+userName | string | Nombres del usuario que firma el contrato
+views | array | Lista de vistas del contrato
+views.id | string | Identificador único de la vista
+views.type | string | Tipo de vista, puede ser `info` o `input`. Los que nos interesan son sólo los de tipo `input`
+views.input | object | Si es un view de tipo `input`, obtendrás este objeto con más detalle
+views.input.type | string | Tipo de Item, estos tipos pueden ser los que aparecen en [ItemValues](#item-values)
+views.input.id | number | Id del item, corresponde al valor de itemId
+views.input.version | number | Versión actual del item
+views.input.userId | number | Identificador del usuario
+views.input.title | string | Título del item
+
+## Enviar un archivo multimedia
+
+Para poder enviar un archivo multimedia, se debe utilizar la información que se obtiene luego de crear un contrato. Así, podemos saber los [tipos de items](#tipos-de-item) que los usuarios deben enviar, y seguir los siguientes pasos para realizar el envío de información.
 
 <aside class="warning">Este procedimiento solo aplica para los items del tipo <code>image</code> y <code>video</code></aside>
 
@@ -1016,10 +1165,12 @@ Para poder actualizar el valor de cada item, se debe utilizar la información qu
   "headers": {
     "Content-Type": "image/jpeg",
     "Content-MD5": "solo si se envió md5",
-    "x-amz-tagging": "account-id={accountId}"
+    "x-amz-tagging": "account-id={accountId}",
+	"{another-key}": "{another-val}"
   }
 }
 ```
+> Ten en cuenta que {another-key} y {another-val} se refieren a posibles valores que podemos devolver y que deben ser enviados en el paso 2
 
 ### HTTP Request
 
@@ -1041,18 +1192,44 @@ md5 | string | `opcional` El valor md5 del archivo
 
 ### Paso 2: subir el contenido del archivo
 
-```
+```shell
 curl --request PUT \
   --url 'https://some:url:for:upload' \
   --header 'content-type: image/jpeg' \
-  --header 'Content-MD5: contentMD5' \
-  --header 'another-key: another-val' \
-  --data some_file.jpeg
+  --header {another-key}: {another-val} \
+  --data-binary "@some_file.jpg"
 ```
 
-> Si no hubo errores al subir el archivo, se retornará el código de estado 200
+```javascript
+const axios = require("axios");
+const fs = require("fs");
 
-Con la información obtenida en el paso 1, se subirá el archivo. **Ten en cuenta enviar los headers recibidos en el paso 1**
+// Read image file
+const image = fs.readFileSync("some_file.jpg");
+
+// Send PUT request
+axios
+  .put(
+    "https://some:url:for:upload",
+    image,
+    {
+      headers: {
+        "Content-Type": "image/jpeg",
+		{another-key}: {another-val}
+      },
+    }
+  )
+  .then((response) => {
+    console.log(response.data);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+```
+
+> Ten en cuenta que {another-key} y {another-val} se refieren a posibles valores que se retornarán en el paso 1 y que deben ser enviados obligatoriamente en este paso. Si no hubo errores al subir el archivo, se retornará el código de estado 200
+
+Con la información obtenida en el paso 1, se subirá el archivo. **IMPORTANTE: Ten en cuenta enviar los headers recibidos en el paso 1**
 
 ### HTTP Request
 
@@ -1063,135 +1240,17 @@ Con la información obtenida en el paso 1, se subirá el archivo. **Ten en cuent
 Key | Value
 --------- | -----------
 Content-Type | {Content-Type-Step-1}
-Content-MD5 | contentMD5
 {another-key} | {another-value} (Hace referencia a otro header que se puede haber enviado en el paso1)
-### Body
 
-El archivo en Base64
-
-### Paso 3: actualizar el valor del item
-
-```shell
-curl --request PUT \
-  --url https://api.stg.keynua.com/contracts/v1/sign \
-  --header 'content-type: application/json' \
-  --data '{
-	"token": "USER-TOKEN-HERE",
-	"itemId": 2,
-	"version": 8,
-	"value": {
-		"linkId": "LINK-ID-HERE"
-	}
-}'
-```
-
-```javascript
-const http = require("https");
-
-const data = JSON.stringify({
-  token: 'USER-TOKEN-HERE',
-  itemId: 2,
-  version: 8,
-  value: {
-    linkId: 'LINK-ID-HERE'
-  }
-});
-
-const options = {
-  method: "PUT",
-  hostname: "api.stg.keynua.com",
-  path: "/contracts/v1/sign",
-  headers: {
-    "content-type": "application/json",
-    "content-length": data.length
-  }
-};
-
-const req = http.request(options, function (res) {
-  const chunks = [];
-
-  res.on("data", function (chunk) {
-    chunks.push(chunk);
-  });
-
-  res.on("end", function () {
-    const body = Buffer.concat(chunks);
-    console.log(body.toString());
-  });
-});
-
-req.on('error', (error) => {
-  console.error(error)
-});
-
-req.write(data);
-req.end();
-```
-
-```python
-import http.client
-
-conn = http.client.HTTPSConnection("api.stg.keynua.com")
-
-payload = "{\n\t\"token\": \"USER-TOKEN-HERE\",\n\t\"itemId\": 2,\n\t\"version\": 8,\n\t\"value\": {\n\t\t\"linkId\": \"LINK-ID-HERE\"\n\t}\n}"
-
-headers = { 'content-type': "application/json" }
-
-conn.request("PUT", "/contracts/v1/sign", payload, headers)
-
-res = conn.getresponse()
-data = res.read()
-
-print(data.decode("utf-8"))
-```
-
-```ruby
-require 'uri'
-require 'net/http'
-require 'openssl'
-
-url = URI("https://api.stg.keynua.com/contracts/v1/sign")
-
-http = Net::HTTP.new(url.host, url.port)
-http.use_ssl = true
-http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-request = Net::HTTP::Put.new(url)
-request["content-type"] = 'application/json'
-request.body = "{\n\t\"token\": \"USER-TOKEN-HERE\",\n\t\"itemId\": 2,\n\t\"version\": 8,\n\t\"value\": {\n\t\t\"linkId\": \"LINK-ID-HERE\"\n\t}\n}"
-
-response = http.request(request)
-puts response.read_body
-```
-
-> Si la actualización fue exitosa, se devolverá el cuerpo del [item](#items-del-contrato) actualizado
-
-En este paso se realizará la actualización de la imagen o el video del item. También puedes usar el API de [Enviar información de firma](#enviar-información-de-firma) para enviar todos los Items en un sólo API.
-### HTTP Request
-
-`PUT /contracts/v1/sign`
-
-### Headers
-
-Key | Value
---------- | -----------
-Content-Type | application/json
+<aside class="warning">Ten en cuenta que <code>{another-key}</code> y <code>{another-val}</code> se refieren a posibles valores que se retornarán en el paso 1 y que deben ser enviados obligatoriamente en este paso</aside>
 
 ### Body
 
-Atributo | Tipo | Descripción
---------- | ----------- | -----------
-token | string | El token del usuario del cual se actualizará el item
-itemId | integer | El identificador del item del que se actualizará el valor
-version | integer | La versión del item del que se actualizará el valor. Ten en cuenta que en caso de un error, este version aumentará y deberás usar siempre el último valor.
-value | object | Dentro del objeto value debes enviar el linkId obtenido en el paso 1 con el key `linkId`
-otpToken | string | El token de otp necesario **solo** para los contratos que utilizan otp.
-
-<aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
+El archivo en binario, revisa el ejemplo para más detalle
 
 ## Enviar información de firma
 
-Este API se usa para poder enviar la información de varios Items, como por ejemplo la aceptación de Términos y Condiciones, la visualización de Documentos y los archivos multimedia como imagen y video.
+Luego de detectar los Items que debes enviar, puedes usar este API para finalmente enviar la información de firma por cada Item. Los Items que podrás enviar son los Items userInput como por ejemplo la aceptación de Términos y Condiciones, la visualización de Documentos, un texto y los archivos multimedia como imagen y video.
 
 ```shell
 curl --request PUT \
@@ -1261,9 +1320,9 @@ ok | boolean | Si se ha recibido la información correctamente, obtendrás `true
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-itemId | integer | El identificador del item del que se actualizará el valor
-version | integer | La versión del item del que se actualizará el valor. Ten en cuenta que en caso de un error, este version aumentará y deberás usar siempre el último valor.
-value | object | El value a enviar por cada tipo de Item será distinto.
+itemId | integer | El identificador del item
+version | integer | La versión actual del item. Ten en cuenta que en caso de un error, este version aumentará y deberás usar siempre el último valor. Por ello es importante obtener la último version del API [Obtener Items pendientes](#obtener-items-pendientes)
+value | object | El value a enviar por cada tipo de Item. En las siguientes tablas podrás ver el detalle del value a enviar por cada tipo de item userInput
 
 ### Item de Términos y Condiciones
 
@@ -1287,45 +1346,7 @@ text | string | Valor del texto
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-linkId | string | linkId obtenido en el paso 1 de [Actualizar el valor de un item](#actualizar-el-valor-de-un-item)
-
-## Customizar opciones de un item por usuario
-
-Las opciones de los items que se encuentran establecidas en el template del contrato pueden ser customizadas para un usuario en especifico. Estas se indican para cada tipo de item que el usario tenga asignado en su proceso de firma. Las opciones deben ir dentro del atributo **items** de la **metadata** del usuario durante la creacion del contrato.
-
-Esta configuración de puede aplicar a los siguientes items:
-
-```json
-{
-	"name": "some:user-name",
-	"groups": ["signers"],
-	// Some user attributes...
-	"metadata": {
-		"items": {
-			"terms": {
-				"table": {
-					"title": "CONDICIONES DEL CRÉDITO",
-					"items": [
-						{
-							"title": "Monto del crédito",
-							"value": "S/ 6000.00"
-						},
-						{
-							"title": "Fecha del primer pago",
-							"value": "28/07/2021"
-						},
-						// Some items...
-					]
-				}
-			}
-		}
-	}
-}
-```
-
-### Terms:
-
-![terms-example](../images/terms-example.png)
+linkId | string | linkId obtenido en el paso 1 de [Enviar un archivo multimedia](#enviar-un-archivo-multimedia)
 
 # Configuración dinámica del template
 
