@@ -354,13 +354,21 @@
                     <a href="#errores-por-tipo-de-item" class="toc-h2 toc-link" data-title="Errores por tipo de Item">Errores por tipo de Item</a>
                   </li>
                   <li>
-                    <a href="#actualizar-el-valor-de-un-item" class="toc-h2 toc-link" data-title="Actualizar el valor de un item">Actualizar el valor de un item</a>
+                    <a href="#customizar-opciones-de-un-item-por-usuario" class="toc-h2 toc-link" data-title="Customizar opciones de un item por usuario">Customizar opciones de un item por usuario</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#proceso-de-firma-via-api" class="toc-h1 toc-link" data-title="Proceso de firma vía API">Proceso de firma vía API</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#obtener-items-pendientes" class="toc-h2 toc-link" data-title="Obtener Items pendientes">Obtener Items pendientes</a>
+                  </li>
+                  <li>
+                    <a href="#enviar-un-archivo-multimedia" class="toc-h2 toc-link" data-title="Enviar un archivo multimedia">Enviar un archivo multimedia</a>
                   </li>
                   <li>
                     <a href="#enviar-informacion-de-firma" class="toc-h2 toc-link" data-title="Enviar información de firma">Enviar información de firma</a>
-                  </li>
-                  <li>
-                    <a href="#customizar-opciones-de-un-item-por-usuario" class="toc-h2 toc-link" data-title="Customizar opciones de un item por usuario">Customizar opciones de un item por usuario</a>
                   </li>
               </ul>
           </li>
@@ -768,7 +776,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>token</td>
 <td>string</td>
-<td>El token del usuario que se utilizará para realizar la firma. Por ejemplo para <a href="#actualizar-el-valor-de-un-item">actualizar los valores de cada item</a></td>
+<td>El token del usuario que se utilizará para realizar la firma. Por ejemplo para <a href="#enviar-un-archivo-multimedia">enviar un archivo multimedia</a></td>
 </tr>
 <tr>
 <td>state</td>
@@ -1752,7 +1760,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 </tr>
 </tbody></table>
 <h2 id='tipos-de-item'>Tipos de Item</h2>
-<p>En la siguiente tabla podrás ver los Tipos de Items que existen en Keynua</p>
+<p>En la siguiente tabla podrás ver los Tipos de Items que existen en Keynua. Los Items <strong>&quot;User Input&quot;</strong> se refieren a los Items que deben ser enviados por los usuarios.</p>
 
 <table><thead>
 <tr>
@@ -2099,37 +2107,118 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>El item ha sido rechazado por el administrador del contrato.</td>
 </tr>
 </tbody></table>
-<h2 id='actualizar-el-valor-de-un-item'>Actualizar el valor de un item</h2>
-<aside class="notice">Este procedimiento sólo será realizado en caso quieran construir su propio proceso de firma. Keynua ofrece el proceso de firmar sin costo adicional bajo el propio dominio de Keynua o la posibilidad de incrustar el proceso de firma bajo tu dominio o App móvil mediante nuestro <code><a href="https://github.com/Keynua/public-docs/wiki/Widget">Keynua Widget</a></code></aside>
+<h2 id='customizar-opciones-de-un-item-por-usuario'>Customizar opciones de un item por usuario</h2>
+<p>Las opciones de los items que se encuentran establecidas en el template del contrato pueden ser customizadas para un usuario en especifico. Estas se indican para cada tipo de item que el usario tenga asignado en su proceso de firma. Las opciones deben ir dentro del atributo <strong>items</strong> de la <strong>metadata</strong> del usuario durante la creacion del contrato.</p>
 
-<p>Para poder actualizar el valor de cada item, se debe utilizar la información que se obtiene luego de crear un certificado o de obtener un certificado por id. Así, podemos saber los tipos (type) de cada item y seguir los siguientes pasos para realizar la actualización.</p>
+<p>Esta configuración de puede aplicar a los siguientes items:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some:user-name"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"signers"</span><span class="p">],</span><span class="w">
+    </span><span class="err">//</span><span class="w"> </span><span class="err">Some</span><span class="w"> </span><span class="err">user</span><span class="w"> </span><span class="err">attributes...</span><span class="w">
+    </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"terms"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"table"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CONDICIONES DEL CRÉDITO"</span><span class="p">,</span><span class="w">
+                    </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                            </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Monto del crédito"</span><span class="p">,</span><span class="w">
+                            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"S/ 6000.00"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="p">{</span><span class="w">
+                            </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fecha del primer pago"</span><span class="p">,</span><span class="w">
+                            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"28/07/2021"</span><span class="w">
+                        </span><span class="p">},</span><span class="w">
+                        </span><span class="err">//</span><span class="w"> </span><span class="err">Some</span><span class="w"> </span><span class="err">items...</span><span class="w">
+                    </span><span class="p">]</span><span class="w">
+                </span><span class="p">}</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='terms'>Terms:</h3>
+<p><img src="images/terms-example-f9388bd7.png" alt="terms-example" /></p>
+<h1 id='proceso-de-firma-via-api'>Proceso de firma vía API</h1>
+<p>Por defecto, Keynua ofrece al usuario completar el flujo de firma mediante la web de Keynua, sin necesidad de descargar un App o hacer algún registro previo. Esta web de Keynua puedes integrarla a tu propio dominio o a tu App móvil mediante un WebView, siguiendo las instrucciones que se detallan en esta <a href="https://github.com/Keynua/public-docs/wiki/Widget">documentación</a></p>
 
-<aside class="warning">Este procedimiento solo aplica para los items del tipo <code>image</code> y <code>video</code></aside>
-<h3 id='paso-1-solicitar-la-informacion-antes-de-subir-un-archivo'>Paso 1: solicitar la información antes de subir un archivo</h3>
-<blockquote>
-<p>Body payload</p>
-</blockquote>
+<p>Puedes usar las APIs de esta sección si lo que quieres es crear tu front personalizado para el flujo de firma. Luego de recibir los inputs del usuario, los procesaremos y validaremos según el flujo de firma que estés usando.</p>
+
+<p>Antes de comenzar, debes reconocer los Items que necesitas enviar de acuerdo a los <a href="#tipos-de-item">Tipos de Item</a> &quot;User Input&quot; que tiene el template que estás usando.</p>
+
+<p><strong>Flujo lógico</strong>
+<img src="images/flujofirma-6a7589d5.jpeg" alt="sign_process" /></p>
+
+<p><strong>Flujo lógico - Error</strong>
+<img src="images/flujofirma_error-e1e3fe63.jpeg" alt="sign_process_error" /></p>
+
+<aside class="warning">Cada template, puede tener distintos itemIds y tipos de Items. Por ello es importante validar esta información para cada uno de los templateIds que estés usando</aside>
+<h2 id='obtener-items-pendientes'>Obtener Items pendientes</h2>
+<p>Con este API podrás obtener un resumen de los Items que están pendientes a ser enviados. Es muy importante obtener el tipo de item que está pendiente a ser enviado, el itemId y el item version. <strong>El item version cambiará por cada intento de envío que hagas</strong>. Por ejemplo; si subes una foto de un documento que no es reconocido como el documento del país, devolveremos un error en el item de validación de formato del documento, pero el itemId y version que enviarás debe corresponder a la imagen del documento.</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some:user:token"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some_file.pdf"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"md5"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9a333cae630cf48165d18a9b1d33f5dd"</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4d50f870-xxxx-xxxx-xxxx-1b50872e31d5e1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"templateId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"keynua-peru-default"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"userName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Usuario Prueba"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"views"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"view_2_0"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"input"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"terms"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Aceptación de Términos"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"view_3_0"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"input"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"documents"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Revisión de Documentos"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dniView"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"input"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"text"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nº DNI"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"imageDniView"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"input"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Foto del DNI"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"videoView"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"input"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"input"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"video"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userId"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Videofirma"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div>
-<blockquote>
-<p>Si la solicitud fue satisfactoria, la respuesta tendrá la información para que puedas subir el contenido del archivo</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"linkId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some:id"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://some:url:for:upload"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PUT"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"headers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"Content-Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/jpeg"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"Content-MD5"</span><span class="p">:</span><span class="w"> </span><span class="s2">"solo si se envió md5"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"x-amz-tagging"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account-id={accountId}"</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
+
 </span></code></pre></div><h3 id='http-request-5'>HTTP Request</h3>
-<p><code>POST /contracts/v1/sign/upload</code></p>
+<p><code>POST /contracts/v1/sign</code></p>
 <h3 id='headers-2'>Headers</h3>
 <table><thead>
 <tr>
@@ -2153,145 +2242,109 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <tr>
 <td>token</td>
 <td>string</td>
-<td>El token del usuario del cual se actualizará el item</td>
-</tr>
-<tr>
-<td>name</td>
-<td>string</td>
-<td>El nombre del archivo que se va a subir. Debe incluir su extensión</td>
-</tr>
-<tr>
-<td>md5</td>
-<td>string</td>
-<td><code>opcional</code> El valor md5 del archivo</td>
+<td>El token del usuario del cual se obtendrá la información</td>
 </tr>
 </tbody></table>
-<h3 id='paso-2-subir-el-contenido-del-archivo'>Paso 2: subir el contenido del archivo</h3><div class="highlight"><pre class="highlight plaintext"><code>curl --request PUT \
-  --url 'https://some:url:for:upload' \
-  --header 'content-type: image/jpeg' \
-  --header 'Content-MD5: contentMD5' \
-  --header 'another-key: another-val' \
-  --data some_file.jpeg
-</code></pre></div>
-<blockquote>
-<p>Si no hubo errores al subir el archivo, se retornará el código de estado 200</p>
-</blockquote>
-
-<p>Con la información obtenida en el paso 1, se subirá el archivo. <strong>Ten en cuenta enviar los headers recibidos en el paso 1</strong></p>
-<h3 id='http-request-6'>HTTP Request</h3>
-<p><code>POST {URL-STEP-1}</code></p>
-<h3 id='headers-3'>Headers</h3>
+<h3 id='response-body'>Response body</h3>
 <table><thead>
 <tr>
-<th>Key</th>
-<th>Value</th>
+<th>Nombre</th>
+<th>Tipo</th>
+<th>Descripción</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>Content-Type</td>
-<td>{Content-Type-Step-1}</td>
+<td>id</td>
+<td>string</td>
+<td>Identificador único del contrato (contractId)</td>
 </tr>
 <tr>
-<td>Content-MD5</td>
-<td>contentMD5</td>
+<td>templateId</td>
+<td>string</td>
+<td>Identificador de la plantilla utilizada</td>
 </tr>
 <tr>
-<td>{another-key}</td>
-<td>{another-value} (Hace referencia a otro header que se puede haber enviado en el paso1)</td>
+<td>userName</td>
+<td>string</td>
+<td>Nombres del usuario que firma el contrato</td>
+</tr>
+<tr>
+<td>views</td>
+<td>array</td>
+<td>Lista de vistas del contrato</td>
+</tr>
+<tr>
+<td>views.id</td>
+<td>string</td>
+<td>Identificador único de la vista</td>
+</tr>
+<tr>
+<td>views.type</td>
+<td>string</td>
+<td>Tipo de vista, puede ser <code>info</code> o <code>input</code>. <strong>Los que nos interesan son sólo los de tipo <code>input</code></strong></td>
+</tr>
+<tr>
+<td>views.input</td>
+<td>object</td>
+<td>Si es un view de tipo <code>input</code>, obtendrás este objeto con más detalle</td>
+</tr>
+<tr>
+<td>views.input.type</td>
+<td>string</td>
+<td>Tipo de Item, puede ser cualquiera de estos <a href="#item-values">ItemValues</a></td>
+</tr>
+<tr>
+<td>views.input.id</td>
+<td>number</td>
+<td>Id del item, corresponde al valor de itemId</td>
+</tr>
+<tr>
+<td>views.input.version</td>
+<td>number</td>
+<td>Versión actual del item</td>
+</tr>
+<tr>
+<td>views.input.userId</td>
+<td>number</td>
+<td>Identificador del usuario</td>
+</tr>
+<tr>
+<td>views.input.title</td>
+<td>string</td>
+<td>Título del item</td>
 </tr>
 </tbody></table>
-<h3 id='body-4'>Body</h3>
-<p>El archivo en Base64</p>
-<h3 id='paso-3-actualizar-el-valor-del-item'>Paso 3: actualizar el valor del item</h3><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> PUT <span class="se">\</span>
-  <span class="nt">--url</span> https://api.stg.keynua.com/contracts/v1/sign <span class="se">\</span>
-  <span class="nt">--header</span> <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
-  <span class="nt">--data</span> <span class="s1">'{
-    "token": "USER-TOKEN-HERE",
-    "itemId": 2,
-    "version": 8,
-    "value": {
-        "linkId": "LINK-ID-HERE"
-    }
-}'</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">https</span><span class="dl">"</span><span class="p">);</span>
-
-<span class="kd">const</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
-  <span class="na">token</span><span class="p">:</span> <span class="dl">'</span><span class="s1">USER-TOKEN-HERE</span><span class="dl">'</span><span class="p">,</span>
-  <span class="na">itemId</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-  <span class="na">version</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
-  <span class="na">value</span><span class="p">:</span> <span class="p">{</span>
-    <span class="na">linkId</span><span class="p">:</span> <span class="dl">'</span><span class="s1">LINK-ID-HERE</span><span class="dl">'</span>
-  <span class="p">}</span>
-<span class="p">});</span>
-
-<span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
-  <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">PUT</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">hostname</span><span class="p">:</span> <span class="dl">"</span><span class="s2">api.stg.keynua.com</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">path</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/contracts/v1/sign</span><span class="dl">"</span><span class="p">,</span>
-  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
-    <span class="dl">"</span><span class="s2">content-type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">content-length</span><span class="dl">"</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span>
-  <span class="p">}</span>
-<span class="p">};</span>
-
-<span class="kd">const</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">const</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
-
-  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">);</span>
-  <span class="p">});</span>
-
-  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">end</span><span class="dl">"</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">body</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">);</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
-  <span class="p">});</span>
-<span class="p">});</span>
-
-<span class="nx">req</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">error</span><span class="dl">'</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span>
-<span class="p">});</span>
-
-<span class="nx">req</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
-<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
-
-<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.stg.keynua.com"</span><span class="p">)</span>
-
-<span class="n">payload</span> <span class="o">=</span> <span class="s">"{</span><span class="se">\n\t\"</span><span class="s">token</span><span class="se">\"</span><span class="s">: </span><span class="se">\"</span><span class="s">USER-TOKEN-HERE</span><span class="se">\"</span><span class="s">,</span><span class="se">\n\t\"</span><span class="s">itemId</span><span class="se">\"</span><span class="s">: 2,</span><span class="se">\n\t\"</span><span class="s">version</span><span class="se">\"</span><span class="s">: 8,</span><span class="se">\n\t\"</span><span class="s">value</span><span class="se">\"</span><span class="s">: {</span><span class="se">\n\t\t\"</span><span class="s">linkId</span><span class="se">\"</span><span class="s">: </span><span class="se">\"</span><span class="s">LINK-ID-HERE</span><span class="se">\"\n\t</span><span class="s">}</span><span class="se">\n</span><span class="s">}"</span>
-
-<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span> <span class="s">'content-type'</span><span class="p">:</span> <span class="s">"application/json"</span> <span class="p">}</span>
-
-<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"PUT"</span><span class="p">,</span> <span class="s">"/contracts/v1/sign"</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
-
-<span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
-
-<span class="k">print</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
-</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
-<span class="nb">require</span> <span class="s1">'net/http'</span>
-<span class="nb">require</span> <span class="s1">'openssl'</span>
-
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.stg.keynua.com/contracts/v1/sign"</span><span class="p">)</span>
-
-<span class="n">http</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
-<span class="n">http</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
-<span class="n">http</span><span class="p">.</span><span class="nf">verify_mode</span> <span class="o">=</span> <span class="no">OpenSSL</span><span class="o">::</span><span class="no">SSL</span><span class="o">::</span><span class="no">VERIFY_NONE</span>
-
-<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Put</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-<span class="n">request</span><span class="p">[</span><span class="s2">"content-type"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'application/json'</span>
-<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="s2">"{</span><span class="se">\n\t\"</span><span class="s2">token</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">USER-TOKEN-HERE</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n\t\"</span><span class="s2">itemId</span><span class="se">\"</span><span class="s2">: 2,</span><span class="se">\n\t\"</span><span class="s2">version</span><span class="se">\"</span><span class="s2">: 8,</span><span class="se">\n\t\"</span><span class="s2">value</span><span class="se">\"</span><span class="s2">: {</span><span class="se">\n\t\t\"</span><span class="s2">linkId</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">LINK-ID-HERE</span><span class="se">\"\n\t</span><span class="s2">}</span><span class="se">\n</span><span class="s2">}"</span>
-
-<span class="n">response</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
-<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
-</code></pre></div>
+<h2 id='enviar-un-archivo-multimedia'>Enviar un archivo multimedia</h2>
+<p>Para poder enviar un archivo multimedia, debes conocer previamente los archivos que necesitas subir. El procedimiento se debe repetir por cada archivo que subirás, solo aplica para los items de tipo <code>image</code> y <code>video</code>.</p>
+<h3 id='paso-1-solicitar-la-informacion-antes-de-subir-un-archivo'>Paso 1: solicitar la información antes de subir un archivo</h3>
 <blockquote>
-<p>Si la actualización fue exitosa, se devolverá el cuerpo del <a href="#items-del-contrato">item</a> actualizado</p>
+<p>Body payload</p>
 </blockquote>
-
-<p>En este paso se realizará la actualización de la imagen o el video del item. También puedes usar el API de <a href="#enviar-información-de-firma">Enviar información de firma</a> para enviar todos los Items en un sólo API.</p>
-<h3 id='http-request-7'>HTTP Request</h3>
-<p><code>PUT /contracts/v1/sign</code></p>
-<h3 id='headers-4'>Headers</h3>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some:user:token"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some_file.jpg"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Si la solicitud fue satisfactoria, la respuesta tendrá la información para que puedas subir el contenido del archivo</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"linkId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some:id"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://some:url:for:upload"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PUT"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"headers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"Content-Type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"image/jpeg"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"x-amz-tagging"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account-id={accountId}"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"{another-key}"</span><span class="p">:</span><span class="w"> </span><span class="s2">"{another-val}"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Ten en cuenta que {another-key} y {another-val} se refieren a posibles valores que podemos devolver y que deben ser enviados en el paso 2</p>
+</blockquote>
+<h3 id='http-request-6'>HTTP Request</h3>
+<p><code>POST /contracts/v1/sign/upload</code></p>
+<h3 id='headers-3'>Headers</h3>
 <table><thead>
 <tr>
 <th>Key</th>
@@ -2303,7 +2356,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>application/json</td>
 </tr>
 </tbody></table>
-<h3 id='body-5'>Body</h3>
+<h3 id='body-4'>Body</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -2317,30 +2370,72 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>El token del usuario del cual se actualizará el item</td>
 </tr>
 <tr>
-<td>itemId</td>
-<td>integer</td>
-<td>El identificador del item del que se actualizará el valor</td>
-</tr>
-<tr>
-<td>version</td>
-<td>integer</td>
-<td>La versión del item del que se actualizará el valor. Ten en cuenta que en caso de un error, este version aumentará y deberás usar siempre el último valor.</td>
-</tr>
-<tr>
-<td>value</td>
-<td>object</td>
-<td>Dentro del objeto value debes enviar el linkId obtenido en el paso 1 con el key <code>linkId</code></td>
-</tr>
-<tr>
-<td>otpToken</td>
+<td>name</td>
 <td>string</td>
-<td>El token de otp necesario <strong>solo</strong> para los contratos que utilizan otp.</td>
+<td>El nombre del archivo que se va a subir. Debe incluir su extensión</td>
+</tr>
+</tbody></table>
+<h3 id='paso-2-subir-el-contenido-del-archivo'>Paso 2: subir el contenido del archivo</h3><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> PUT <span class="se">\</span>
+  <span class="nt">--url</span> <span class="s1">'https://some:url:for:upload'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'content-type: image/jpeg'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="o">{</span>another-key<span class="o">}</span>: <span class="o">{</span>another-val<span class="o">}</span> <span class="se">\</span>
+  <span class="nt">--data-binary</span> <span class="s2">"@some_file.jpg"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">axios</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">axios</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">fs</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="c1">// Read image file</span>
+<span class="kd">const</span> <span class="nx">image</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="dl">"</span><span class="s2">some_file.jpg</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="c1">// Send PUT request</span>
+<span class="nx">axios</span>
+  <span class="p">.</span><span class="nx">put</span><span class="p">(</span>
+    <span class="dl">"</span><span class="s2">https://some:url:for:upload</span><span class="dl">"</span><span class="p">,</span>
+    <span class="nx">image</span><span class="p">,</span>
+    <span class="p">{</span>
+      <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">image/jpeg</span><span class="dl">"</span><span class="p">,</span>
+        <span class="p">{</span><span class="nx">another</span><span class="o">-</span><span class="nx">key</span><span class="p">}:</span> <span class="p">{</span><span class="nx">another</span><span class="o">-</span><span class="nx">val</span><span class="p">}</span>
+      <span class="p">},</span>
+    <span class="p">}</span>
+  <span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+  <span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>Ten en cuenta que {another-key} y {another-val} se refieren a posibles valores que se retornarán en el paso 1 y que deben ser enviados obligatoriamente en este paso. Si no hubo errores al subir el archivo, se retornará el código de estado 200</p>
+</blockquote>
+
+<p>Con la información obtenida en el paso 1, se subirá el archivo. <strong>IMPORTANTE: Ten en cuenta enviar los headers recibidos en el paso 1</strong></p>
+
+<aside class="warning">Los archivos no deben pesar más de 1MB y el video no debe tener una duración de más de 15 segundos</aside>
+<h3 id='http-request-7'>HTTP Request</h3>
+<p><code>PUT {URL-STEP-1}</code></p>
+<h3 id='headers-4'>Headers</h3>
+<table><thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Content-Type</td>
+<td>{Content-Type-Step-1}</td>
+</tr>
+<tr>
+<td>{another-key}</td>
+<td>{another-value} (Hace referencia a otro header que se puede haber enviado en el paso1)</td>
 </tr>
 </tbody></table>
 
-<aside class="notice">Los valores <code>itemId</code> y <code>version</code> del Item se obtienen de la respuesta de crear un Contrato o de obtener un Contrato por id</aside>
+<aside class="warning">Ten en cuenta que <code>{another-key}</code> y <code>{another-val}</code> se refieren a posibles valores que se retornarán en el paso 1 y que deben ser enviados obligatoriamente en este paso</aside>
+<h3 id='body-5'>Body</h3>
+<p>El archivo en binario de no más de 1MB y video de no más de 15 segundos de duración</p>
 <h2 id='enviar-informacion-de-firma'>Enviar información de firma</h2>
-<p>Este API se usa para poder enviar la información de varios Items, como por ejemplo la aceptación de Términos y Condiciones, la visualización de Documentos y los archivos multimedia como imagen y video.</p>
+<p>Luego de detectar los Items que debes enviar, puedes usar este API para finalmente enviar la información de firma por cada Item. Los Items que podrás enviar son los Items &quot;User Input&quot; como por ejemplo la aceptación de Términos y Condiciones, la visualización de Documentos, un texto y los archivos multimedia como imagen y video.</p>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> PUT <span class="se">\</span>
   <span class="nt">--url</span> https://api.stg.keynua.com/contracts/v2/sign/batch <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
@@ -2416,7 +2511,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>El token de otp necesario <strong>solo</strong> para los contratos que utilizan otp.</td>
 </tr>
 </tbody></table>
-<h3 id='response-body'>Response body</h3>
+<h3 id='response-body-2'>Response body</h3>
 <table><thead>
 <tr>
 <th>Nombre</th>
@@ -2441,17 +2536,17 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <tr>
 <td>itemId</td>
 <td>integer</td>
-<td>El identificador del item del que se actualizará el valor</td>
+<td>El identificador del item</td>
 </tr>
 <tr>
 <td>version</td>
 <td>integer</td>
-<td>La versión del item del que se actualizará el valor. Ten en cuenta que en caso de un error, este version aumentará y deberás usar siempre el último valor.</td>
+<td>La versión actual del item. Ten en cuenta que en caso de un error, esta versión aumentará y deberás usar siempre el último valor. Por ello es importante obtener la último versión mediante el API <a href="#obtener-items-pendientes">Obtener Items pendientes</a></td>
 </tr>
 <tr>
 <td>value</td>
 <td>object</td>
-<td>El value a enviar por cada tipo de Item será distinto.</td>
+<td>El value a enviar por cada tipo de Item. En las siguientes tablas podrás ver el detalle del value a enviar por cada tipo de item</td>
 </tr>
 </tbody></table>
 <h3 id='item-de-terminos-y-condiciones'>Item de Términos y Condiciones</h3>
@@ -2507,40 +2602,9 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <tr>
 <td>linkId</td>
 <td>string</td>
-<td>linkId obtenido en el paso 1 de <a href="#actualizar-el-valor-de-un-item">Actualizar el valor de un item</a></td>
+<td>linkId obtenido en el paso 1 de <a href="#enviar-un-archivo-multimedia">Enviar un archivo multimedia</a></td>
 </tr>
 </tbody></table>
-<h2 id='customizar-opciones-de-un-item-por-usuario'>Customizar opciones de un item por usuario</h2>
-<p>Las opciones de los items que se encuentran establecidas en el template del contrato pueden ser customizadas para un usuario en especifico. Estas se indican para cada tipo de item que el usario tenga asignado en su proceso de firma. Las opciones deben ir dentro del atributo <strong>items</strong> de la <strong>metadata</strong> del usuario durante la creacion del contrato.</p>
-
-<p>Esta configuración de puede aplicar a los siguientes items:</p>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some:user-name"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"signers"</span><span class="p">],</span><span class="w">
-    </span><span class="err">//</span><span class="w"> </span><span class="err">Some</span><span class="w"> </span><span class="err">user</span><span class="w"> </span><span class="err">attributes...</span><span class="w">
-    </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"terms"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nl">"table"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CONDICIONES DEL CRÉDITO"</span><span class="p">,</span><span class="w">
-                    </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-                        </span><span class="p">{</span><span class="w">
-                            </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Monto del crédito"</span><span class="p">,</span><span class="w">
-                            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"S/ 6000.00"</span><span class="w">
-                        </span><span class="p">},</span><span class="w">
-                        </span><span class="p">{</span><span class="w">
-                            </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fecha del primer pago"</span><span class="p">,</span><span class="w">
-                            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"28/07/2021"</span><span class="w">
-                        </span><span class="p">},</span><span class="w">
-                        </span><span class="err">//</span><span class="w"> </span><span class="err">Some</span><span class="w"> </span><span class="err">items...</span><span class="w">
-                    </span><span class="p">]</span><span class="w">
-                </span><span class="p">}</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='terms'>Terms:</h3>
-<p><img src="images/terms-example-f9388bd7.png" alt="terms-example" /></p>
 <h1 id='configuracion-dinamica-del-template'>Configuración dinámica del template</h1><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> PUT <span class="se">\</span>
   <span class="nt">--url</span> https://api.stg.keynua.com/contracts/v1 <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
@@ -4591,7 +4655,7 @@ Deceval para registrar la firma del participante.</li>
 </tbody></table>
 <h3 id='combinaciones-no-soportadas-por-defecto'>Combinaciones no soportadas por defecto</h3>
 <p>Por ahora los paises que soportamos para <code>selfie</code> y <code>video</code> son <code>sv-dui</code>, <code>mx-ife</code>, <code>cl-cedula</code>, <code>pe-dni</code>, <code>br-denatran</code> y <code>co-cedula</code>. En caso se cree una identificación con <code>selfie</code> o <code>video</code> con algún país que no esté en esta lista, automáticamente se considerará el documento como <code>global</code>. La lista completa sí está soportada con el type <code>liveness</code>.</p>
-<h3 id='response-body-2'>Response body</h3>
+<h3 id='response-body-3'>Response body</h3>
 <p><a href="#propiedades-de-una-verificacion-de-identidad">IdentityVerification</a></p>
 <h2 id='listar-verificaciones-de-identidad'>Listar verificaciones de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/identity-verification/v1/list'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
@@ -4736,7 +4800,7 @@ Deceval para registrar la firma del participante.</li>
 <td><code>true</code> si se quiere más detalle en cada item de la lista.</td>
 </tr>
 </tbody></table>
-<h3 id='response-body-3'>Response body</h3>
+<h3 id='response-body-4'>Response body</h3>
 <table><thead>
 <tr>
 <th>Nombre</th>
@@ -5008,7 +5072,7 @@ Deceval para registrar la firma del participante.</li>
 <td>your-api-token</td>
 </tr>
 </tbody></table>
-<h3 id='response-body-4'>Response body</h3>
+<h3 id='response-body-5'>Response body</h3>
 <p><a href="#propiedades-de-una-verificacion-de-identidad">IdentityVerification</a></p>
 <h1 id='plantillas-de-documento'>Plantillas de documento</h1>
 <p>Permite listar, obtener y rellenar plantillas de documentos PDF.</p>
@@ -5332,7 +5396,7 @@ Deceval para registrar la firma del participante.</li>
 <td><code>true</code> si se quiere las plantillas de documento de la organización</td>
 </tr>
 </tbody></table>
-<h3 id='response-body-5'>Response body</h3>
+<h3 id='response-body-6'>Response body</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
