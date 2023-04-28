@@ -1154,7 +1154,7 @@ Para poder enviar un archivo multimedia, debes conocer previamente los archivos 
 ```json
 {
   "token": "some:user:token",
-  "name": "some_file.pdf"
+  "name": "some_file.jpg"
 }
 ```
 
@@ -1232,6 +1232,8 @@ axios
 
 Con la información obtenida en el paso 1, se subirá el archivo. **IMPORTANTE: Ten en cuenta enviar los headers recibidos en el paso 1**
 
+<aside class="warning">Los archivos no deben pesar más de 1MB y el video no debe tener una duración de más de 15 segundos</aside>
+
 ### HTTP Request
 
 `PUT {URL-STEP-1}`
@@ -1247,7 +1249,7 @@ Content-Type | {Content-Type-Step-1}
 
 ### Body
 
-El archivo en binario, revisa el ejemplo para más detalle
+El archivo en binario de no más de 1MB y video de no más de 15 segundos de duración
 
 ## Enviar información de firma
 
