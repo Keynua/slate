@@ -1026,17 +1026,23 @@ Esta configuración de puede aplicar a los siguientes items:
 
 # Proceso de firma vía API
 
-Por defecto, Keynua ofrece al usuario completar el flujo de firma mediante la web de Keynua, sin necesidad de descargar un App o hacer algún registro previo. Esta web de Keynua puedes integrarla a tu propio dominio o tu App móvil mediante un WebView, siguiendo las instrucciones que se detallan en esta [documentación](https://github.com/Keynua/public-docs/wiki/Widget)
+Por defecto, Keynua ofrece al usuario completar el flujo de firma mediante la web de Keynua, sin necesidad de descargar un App o hacer algún registro previo. Esta web de Keynua puedes integrarla a tu propio dominio o a tu App móvil mediante un WebView, siguiendo las instrucciones que se detallan en esta [documentación](https://github.com/Keynua/public-docs/wiki/Widget)
 
 Puedes usar las APIs de esta sección si lo que quieres es crear tu front personalizado para el flujo de firma. Luego de recibir los inputs del usuario, los procesaremos y validaremos según el flujo de firma que estés usando.
 
-Antes de comenzar con este flujo, debes reconocer los Items que necesitas enviar de acuerdo a los [Tipos de Item](#tipos-de-item) userInputs que tiene el template que estás usando.
+Antes de comenzar, debes reconocer los Items que necesitas enviar de acuerdo a los [Tipos de Item](#tipos-de-item) "User Input" que tiene el template que estás usando.
+
+**Flujo lógico**
+![sign_process](../images/flujofirma.jpeg)
+
+**Flujo lógico - Error**
+![sign_process_error](../images/flujofirma_error.jpeg)
 
 <aside class="warning">Cada template, puede tener distintos itemIds y tipos de Items. Por ello es importante validar esta información para cada uno de los templateIds que estés usando</aside>
 
 ## Obtener Items pendientes
 
-Con este API podrás obtener un resumen de los Items que están pendientes a ser enviados, es muy importante obtener el tipo de item que está pendiente a ser enviado, el itemId y el itemVersion. El itemVersion cambiará por cada intento de envío que hagas. Por ejemplo, si subes una foto de un documento que no es reconocido como el documento del país, devolveremos un error en el item de validación de formato del documento, pero el itemId y version que debes enviar es el item que corresponde a la imagen del documento.
+Con este API podrás obtener un resumen de los Items que están pendientes a ser enviados. Es muy importante obtener el tipo de item que está pendiente a ser enviado, el itemId y el item version. **El item version cambiará por cada intento de envío que hagas**. Por ejemplo; si subes una foto de un documento que no es reconocido como el documento del país, devolveremos un error en el item de validación de formato del documento, pero el itemId y version que enviarás debe corresponder a la imagen del documento.
 
 ```json
 {
@@ -1129,9 +1135,9 @@ templateId | string | Identificador de la plantilla utilizada
 userName | string | Nombres del usuario que firma el contrato
 views | array | Lista de vistas del contrato
 views.id | string | Identificador único de la vista
-views.type | string | Tipo de vista, puede ser `info` o `input`. Los que nos interesan son sólo los de tipo `input`
+views.type | string | Tipo de vista, puede ser `info` o `input`. **Los que nos interesan son sólo los de tipo `input`**
 views.input | object | Si es un view de tipo `input`, obtendrás este objeto con más detalle
-views.input.type | string | Tipo de Item, estos tipos pueden ser los que aparecen en [ItemValues](#item-values)
+views.input.type | string | Tipo de Item, puede ser cualquiera de estos [ItemValues](#item-values)
 views.input.id | number | Id del item, corresponde al valor de itemId
 views.input.version | number | Versión actual del item
 views.input.userId | number | Identificador del usuario
@@ -1139,9 +1145,7 @@ views.input.title | string | Título del item
 
 ## Enviar un archivo multimedia
 
-Para poder enviar un archivo multimedia, se debe utilizar la información que se obtiene luego de crear un contrato. Así, podemos saber los [tipos de items](#tipos-de-item) que los usuarios deben enviar, y seguir los siguientes pasos para realizar el envío de información.
-
-<aside class="warning">Este procedimiento solo aplica para los items del tipo <code>image</code> y <code>video</code></aside>
+Para poder enviar un archivo multimedia, debes conocer previamente los archivos que necesitas subir. El procedimiento se debe repetir por cada archivo que subirás, solo aplica para los items de tipo `image` y `video`.
 
 ### Paso 1: solicitar la información antes de subir un archivo
 
@@ -1150,8 +1154,7 @@ Para poder enviar un archivo multimedia, se debe utilizar la información que se
 ```json
 {
   "token": "some:user:token",
-  "name": "some_file.pdf",
-  "md5": "9a333cae630cf48165d18a9b1d33f5dd"
+  "name": "some_file.pdf"
 }
 ```
 
@@ -1164,7 +1167,6 @@ Para poder enviar un archivo multimedia, se debe utilizar la información que se
   "method": "PUT",
   "headers": {
     "Content-Type": "image/jpeg",
-    "Content-MD5": "solo si se envió md5",
     "x-amz-tagging": "account-id={accountId}",
 	"{another-key}": "{another-val}"
   }
@@ -1188,7 +1190,6 @@ Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 token | string | El token del usuario del cual se actualizará el item
 name | string | El nombre del archivo que se va a subir. Debe incluir su extensión
-md5 | string | `opcional` El valor md5 del archivo
 
 ### Paso 2: subir el contenido del archivo
 
@@ -1233,7 +1234,7 @@ Con la información obtenida en el paso 1, se subirá el archivo. **IMPORTANTE: 
 
 ### HTTP Request
 
-`POST {URL-STEP-1}`
+`PUT {URL-STEP-1}`
 
 ### Headers
 
@@ -1250,7 +1251,7 @@ El archivo en binario, revisa el ejemplo para más detalle
 
 ## Enviar información de firma
 
-Luego de detectar los Items que debes enviar, puedes usar este API para finalmente enviar la información de firma por cada Item. Los Items que podrás enviar son los Items userInput como por ejemplo la aceptación de Términos y Condiciones, la visualización de Documentos, un texto y los archivos multimedia como imagen y video.
+Luego de detectar los Items que debes enviar, puedes usar este API para finalmente enviar la información de firma por cada Item. Los Items que podrás enviar son los Items "User Input" como por ejemplo la aceptación de Términos y Condiciones, la visualización de Documentos, un texto y los archivos multimedia como imagen y video.
 
 ```shell
 curl --request PUT \
@@ -1321,8 +1322,8 @@ ok | boolean | Si se ha recibido la información correctamente, obtendrás `true
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 itemId | integer | El identificador del item
-version | integer | La versión actual del item. Ten en cuenta que en caso de un error, este version aumentará y deberás usar siempre el último valor. Por ello es importante obtener la último version del API [Obtener Items pendientes](#obtener-items-pendientes)
-value | object | El value a enviar por cada tipo de Item. En las siguientes tablas podrás ver el detalle del value a enviar por cada tipo de item userInput
+version | integer | La versión actual del item. Ten en cuenta que en caso de un error, esta versión aumentará y deberás usar siempre el último valor. Por ello es importante obtener la último versión mediante el API [Obtener Items pendientes](#obtener-items-pendientes)
+value | object | El value a enviar por cada tipo de Item. En las siguientes tablas podrás ver el detalle del value a enviar por cada tipo de item
 
 ### Item de Términos y Condiciones
 
