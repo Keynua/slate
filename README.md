@@ -91,6 +91,6 @@ $ docker run --rm --name slate -p 4567:4567 -v <ruta_slate>/source:/srv/slate/so
 
 Para correr Slate localmente con docker compose es necesario hacer estos pasos. Estos pasos se han probado también en una Mac M1
 ```
-$ docker compose -f "docker-compose.build.yml" up -d --build 
-$ docker compose -f "docker-compose.serve.yml" up -d --build 
+$ docker compose -f "docker-compose.build.yml" up -d --build
+$ docker compose -f "docker-compose.serve.yml" up -d --build
 ```
