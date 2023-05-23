@@ -3014,6 +3014,11 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>Agrega <a href="#items-customizados">items customizados</a> al flujo</td>
 </tr>
 <tr>
+<td>placeholders</td>
+<td>objeto</td>
+<td>Sirve para persolizar textos en las vistas del flujo de firma. Por el momento el único atributo disponible es <code>documentName</code>. Este campo es opcional, si no se ingresa se usaran los valores por defecto según corresponda.</td>
+</tr>
+<tr>
 <td>maxNamesDifference</td>
 <td>float</td>
 <td>Porcentaje de similitud entre los nombres y apellidos que extrae del documento y reniec, la sensibilidad se encuentra en el intervalo de 0 a 1, mientras más se acerque a 0 la validación es más estricta. Por ejemplo: 0.5 indica una sensibilidad intermedia.</td>
@@ -3031,7 +3036,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <tr>
 <td>disableNotification</td>
 <td>boolean</td>
-<td>Indica si se quiere omitir el correo de inici</td>
+<td>Indica si se quiere omitir el correo de inicio</td>
 </tr>
 <tr>
 <td>disableReminder</td>
