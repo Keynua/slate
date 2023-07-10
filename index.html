@@ -2894,6 +2894,11 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td><code>optional</code> Indica la cantidad máxima de intentos de firma de un usuario</td>
 </tr>
 <tr>
+<td>autoRefresh</td>
+<td>integer</td>
+<td><code>optional</code> Indica el tiempo mínimo en segundos de espera en el que se actualiza el widget automáticamente al finalizar el envío de firma. Si está activado se muestra una nueva vista para indicar el progreso.</td>
+</tr>
+<tr>
 <td>contractApproval</td>
 <td>boolean</td>
 <td><code>optional</code> Activa la funcionalidad de aprobación de contratos, ver detalle del api para <a href="#aprobar-un-contrato">Aprobar un Contrato</a></td>
@@ -3012,6 +3017,16 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>dynamicFields</td>
 <td>array</td>
 <td>Agrega <a href="#items-customizados">items customizados</a> al flujo</td>
+</tr>
+<tr>
+<td>uploadSelfieButton</td>
+<td>boolean</td>
+<td>Sirve para mostrar el botón nativo para subir la foto de selfie en el flujo de firma.</td>
+</tr>
+<tr>
+<td>uploadVideoButton</td>
+<td>boolean</td>
+<td>Sirve para mostrar el botón nativo para subir el video en el flujo de firma.</td>
 </tr>
 <tr>
 <td>showReniecNames</td>
