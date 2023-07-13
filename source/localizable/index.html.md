@@ -712,6 +712,10 @@ contractId | El ID del Contrato a eliminar
 
 <aside class="warning">No se puede eliminar un contrato que su estado es <code>done</code>. Si eliminas un contrato que aún no ha sido iniciado por el firmante, la transacción utilizada será reintegrada a tu saldo. Si el contrato ya fue iniciado por el firmante, se tomará como una transacción utilizada.</aside>
 
+# Aprobación de un Contrato
+
+Este API Aprueba un Contrato, solo retornará un resultado exitoso si el contrato se encuentra en el estado: `contract_approval`. Este estado se asigna cuando el item de tipo `contractapproval` se pone en `working`. Para obtener el evento que asigna el estado puede integrar el webhook `ItemWorking` y validar que el atributo `type` sea igual al mencionado.
+
 ## Aprobar un Contrato
 
 ```ruby
@@ -823,8 +827,6 @@ req.end();
 }
 ```
 
-Este API Aprueba un Contrato, solo retornará un resultado exitoso si el contrato se encuentra en el estado: `contract_approval`. Este estado se asigna cuando el item de tipo `contractapproval` se pone en `working`. Para obtener el evento que asigna el estado puede integrar el webhook `ItemWorking` y validar que el atributo `type` sea igual al mencionado.
-
 ### HTTP Request
 
 `POST /contracts/v1/approve-contract`
@@ -835,6 +837,128 @@ Parámetro | Descripción
 --------- | -----------
 contractId | El ID del Contrato a eliminar
 message | Motivo de aprobación
+
+## Declinar un Contrato
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'openssl'
+
+url = URI("https://api.stg.keynua.com/contracts/v1/decline-contract")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Post.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+request["content-type"] = 'application/json'
+request.body = "{\n  \"contractId\": \"CONTRACT-ID\",\n  \"message\": \"Crédito declinado\"}\n"
+
+response = http.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
+
+payload = "{\n  \"contractId\": \"CONTRACT-ID\",\n  \"message\": \"Crédito declinado\"}\n"
+
+
+headers = {
+    'x-api-key': "YOUR-API-KEY-HERE",
+    'authorization': "YOUR-API-TOKEN-HERE"
+    'content-type': "application/json"
+    }
+
+conn.request("POST", "/contracts/v1/decline-contract", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --request DELETE \
+  --url https://api.stg.keynua.com/contracts/v1/decline-contract \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'content-type: application/json' \
+  --data '{
+  "contractId": "CONTRACT-ID",
+  "message": "Crédito declinado",
+}'
+```
+
+```javascript
+const https = require("https");
+
+const data = JSON.stringify({
+  contractId: 'CONTRACT-ID',
+  message: 'Crédito declinado',
+});
+
+const options = {
+  method: "POST",
+  hostname: "api.stg.keynua.com",
+  path: "/contracts/v1/decline-contract",
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE"
+    "content-type": "application/json",
+    "content-length": data.length
+  }
+};
+
+const req = https.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.on('error', (error) => {
+  console.error(error)
+});
+
+req.write(data);
+req.end();
+```
+
+> Si el contrato fue aprobado, el API retornará un JSON como el siguiente:
+
+```json
+{
+  "success": true,
+  "item": {
+	"itemId": 1,
+	"itemState": "e",
+	"itemVersion": 1
+  }
+}
+```
+
+### HTTP Request
+
+`POST /contracts/v1/decline-contract`
+
+### Body
+
+Parámetro | Descripción
+--------- | -----------
+contractId | El ID del Contrato a eliminar
+message | Motivo de declinación
 
 # Items del Contrato
 Para llevar a cabo el flujo de firma de un contrato, cada uno de los usuarios deberá ingresar la información necesaria para firmar. Por ejemplo: la foto de su DNI, el video diciendo el código corto o el número de su DNI. También hace referencia a los procesos internos llevados a cabo por Keynua, por ejemplo la generación del PDF final o validación biométrica. A cada uno de estos elementos los llamamos **Item**
@@ -1616,7 +1740,7 @@ Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 maximumSigningAttempts | integer | `optional` Indica la cantidad máxima de intentos de firma de un usuario
 autoRefresh | integer | `optional` Indica el tiempo mínimo en segundos de espera en el que se actualiza el widget automáticamente al finalizar el envío de firma. Si está activado se muestra una nueva vista para indicar el progreso.
-contractApproval | boolean | `optional` Activa la funcionalidad de aprobación de contratos, ver detalle del api para [Aprobar un Contrato](#aprobar-un-contrato)
+contractApproval | boolean | `optional` Activa la funcionalidad de aprobación de contratos, ver detalle del api para [Aprobar un Contrato](#aprobacion-de-un-contrato)
 
 ## Stages
 
