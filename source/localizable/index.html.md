@@ -84,6 +84,7 @@ El API de Contratos permite crear, ver y eliminar un contrato
 	"finishedAt":null,
 	"deletedAt":null,
 	"language":"es",
+	"timezone": "America/Panama",
 	"metadata":{
 		"something":"any-value"
 	},
@@ -110,6 +111,7 @@ description | string | Descripción del contrato
 finishedAt | string | Fecha de finalización del proceso de firma del contrato
 deletedAt | string | Fecha de eliminación del contrato
 language | string | Lenguaje del contrato
+timezone | string | Huso horario para formatear las fechas de firma del contrato
 metadata | object | Metadata del contrato
 reference | string | Referencia del contrato. Este campo es usado como clave de búsqueda en la plataforma web de Keynua.
 shortCode | string | Código corto del contrato para facilitar su identificación
