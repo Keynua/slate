@@ -992,7 +992,7 @@ reference | string | La referencia del item (está relacionado con la plantilla 
 title | string | Un título referente al item
 type | string | El ID del [tipo del Item](#tipos-de-item) al que pertenece
 stageIndex | integer | El índice del nivel al que pertenece el item
-value | object | El valor del item. La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key **url** el cual contiene la URL firmada para poder descargar el archivo. **Las URLs firmadas tienen una duración máxima de 12 horas**. Cuando el item tenga estado Error, se obtendrá el siguiente detalle de [error por tipo de Item](#errores-por-tipo-de-item)
+value | object | El [valor del item](#valores-por-tipo-de-item). La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key **url** el cual contiene la URL firmada para poder descargar el archivo. **Las URLs firmadas tienen una duración máxima de 12 horas**. Cuando el item tenga estado Error, se obtendrá el siguiente detalle de [error por tipo de Item](#errores-por-tipo-de-item)
 
 ## Tipos de Item
 En la siguiente tabla podrás ver los Tipos de Items que existen en Keynua. Los Items **"User Input"** se refieren a los Items que deben ser enviados por los usuarios.
@@ -1022,6 +1022,83 @@ Blockchain | blockchain | `no` | Proceso que indica si se registró correctament
 Normativa NOM151 - México | knom151 | `no` | Proceso que indica si se generó correctamente la constancia de conservación según la norma Méxicana NOM151
 Firma Múltiple | bulksignature | `no` | Indica si se solicitó firmar al usuario de firma múltiple o si firmó satsifactoriamente. El estado "error" no está implementado por el momento en este Item.
 Aprobación de contrato | contractapproval | `no` | Solicita aprobación por parte del administrador para finalizar el contrato.
+Formulario de plantilla de documento | documenttemplateform | `sí` | Solicita completar un formulario que contiene los campos agregados a la plantilla de documento.
+Validación de cuestionario | questionnairecheck | `sí` | Valida las respuestas ingresadas por el usuario en el cuestionario.
+
+## Valores por tipo de item
+
+En las siguientes tablas podrás ver los campos que se retornan en `value` de cada item.
+
+### Formulario de plantilla de documento
+
+```json
+{
+  "fields": [
+    {
+      "id": "number-y2ga911c4cdas",
+      "value": "123123123"
+    },
+    {
+      "id": "names-ubxx8pjp9a3m",
+      "value": "test"
+    }
+  ]
+}
+```
+
+Type: `documenttemplateform`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+fields | array | no | Arreglo de campos
+fields[].id | string | no | Id del campo
+fields[].value | string | no | Valor del campo
+
+### Cuestionario
+
+```json
+{
+  "questions": [
+    {
+      "options": [
+        "De 0 a 6 meses",
+        "De 6 meses a un año",
+        "De un año a 3 años",
+        "Más de 3 años"
+      ],
+      "id": "tiempo",
+      "question": "¿Cuánto tiempo vive usted en la vivienda declarada?",
+      "type": "radio",
+      "required": true,
+      "value": "De 0 a 6 meses"
+    },
+    {
+      "id": "referencias",
+      "question": "Referencias",
+      "type": "string",
+      "required": true,
+      "value": "testing"
+    }
+  ]
+}
+```
+
+Type: `questionnairecheck`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+questions | array | no | Arreglo de preguntas
+questions[].id | string | no | Id de la pregunta
+questions[].options | string[] | sí | Si `type` es `checkbox` o `radio`, opciones de respuesta
+questions[].question | string | no | Pregunta hecha al usuario
+questions[].type | `checkbox`, `radio`, `string`, `email`, `number`, `date` | no | Tipo de pregunta
+questions[].required | boolean | no | Si responder la pregunta es obligatorio
+questions[].placeholder | string | sí | Sugerencia de respuesta
+questions[].minLength | number | sí | Si `type` es `string`, mínima cantidad de caracteres aceptados
+questions[].maxLength | number | sí | Si `type` es `string`, máxima cantidad de caracteres aceptados
+questions[].max | number | sí | Si `type` es `number`, máximo valor aceptado
+questions[].min | number | sí | Si `type` es `number`, mínimo valor aceptado
+questions[].value | string | no | Valor de la respuesta
 
 ## Errores por tipo de Item
 
