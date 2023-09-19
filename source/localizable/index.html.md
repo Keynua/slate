@@ -1148,7 +1148,7 @@ userGroupDocs[].url | string | no | Url del documento firmado solo por los integ
 ```json
 {
   "original": {
-    "url": "https://cmfiles.dev.keynua.com/cont...
+    "url": "https://cmfiles.dev.keynua.com/cont..."
   }
 }
 ```
