@@ -1100,6 +1100,81 @@ questions[].max | number | sí | Si `type` es `number`, máximo valor aceptado
 questions[].min | number | sí | Si `type` es `number`, mínimo valor aceptado
 questions[].value | string | no | Valor de la respuesta
 
+### Documento PDF final
+
+```json
+{
+  "url": "https://cmfiles.dev.keynua.com/contracts/...",
+  "individualDocsUrls": [
+    "https://cmfiles.dev.keynua.com/contracts/...",
+    "https://cmfiles.dev.keynua.com/contracts/..."
+  ],
+  "individualDocs": [
+    {
+      "hash": "92cc7ac31e511ef740fd7804c58b2d5f8602b467779598793210e69fda5ffe07",
+      "userIds": [
+        0
+      ]
+    }
+  ],
+  "userGroupDocs": [
+    {
+      "hash": "92cc7ac31e511ef740fd7804c58b2d5f8602b467779598793210e69fda5ffe07",
+      "userIds": [
+        0
+      ],
+      "url": "https://cmfiles.dev.keynua.com/contracts/..."
+    }
+  ]
+}
+```
+
+Type: `pdf`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+url | string | no | Url del documento PDF firmado
+individualDocsUrls | string[] | sí | Urls por cada documento PDF agregado al contrato
+individualDocs[] | array | sí | Documentos por cada grupo de firmantes (si aplica) o por cada documento del contrato
+individualDocsUrls[].hash | string | no | SHA256 del documento firmado
+individualDocsUrls[].userIds | string[] | no | Ids de los firmantes del documento
+userGroupDocs[] | array | sí | Documentos por cada grupo de firmantes
+userGroupDocs[].hash | string | no | SHA256 del documento firmado
+userGroupDocs[].userIds | string[] | no | Ids de los firmantes del documento
+userGroupDocs[].url | string | no | Url del documento firmado solo por los integrantes del grupo
+
+### Imagen
+
+```json
+{
+  "original": {
+    "url": "https://cmfiles.dev.keynua.com/cont...
+  }
+}
+```
+
+Type: `image`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+original | string | no | Url de la imagen
+location | [GeolocationPosition](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition) | sí | Contiene información sobre la posición GPS de la imagen
+address | string | sí | Dirección calculada a partir de la posición
+
+### Conversión de video
+
+```json
+{
+  "success": true
+}
+```
+
+Type: `convertvideo`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+success | boolean | no | Si la conversión del video fue exitosa.
+
 ## Errores por tipo de Item
 
 Cuando ocurra un error en un Item, se obtendrán principalmente 2 atributos: `code` y `message`.
