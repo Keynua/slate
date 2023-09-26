@@ -992,7 +992,7 @@ reference | string | La referencia del item (está relacionado con la plantilla 
 title | string | Un título referente al item
 type | string | El ID del [tipo del Item](#tipos-de-item) al que pertenece
 stageIndex | integer | El índice del nivel al que pertenece el item
-value | object | El valor del item. La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key **url** el cual contiene la URL firmada para poder descargar el archivo. **Las URLs firmadas tienen una duración máxima de 12 horas**. Cuando el item tenga estado Error, se obtendrá el siguiente detalle de [error por tipo de Item](#errores-por-tipo-de-item)
+value | object | El [valor del item](#valores-por-tipo-de-item). La estructura varía de acuerdo al tipo del item. Cuando se trata de un Item que contiene un Archivo, habrá un key **url** el cual contiene la URL firmada para poder descargar el archivo. **Las URLs firmadas tienen una duración máxima de 12 horas**. Cuando el item tenga estado Error, se obtendrá el siguiente detalle de [error por tipo de Item](#errores-por-tipo-de-item)
 
 ## Tipos de Item
 En la siguiente tabla podrás ver los Tipos de Items que existen en Keynua. Los Items **"User Input"** se refieren a los Items que deben ser enviados por los usuarios.
@@ -1022,6 +1022,158 @@ Blockchain | blockchain | `no` | Proceso que indica si se registró correctament
 Normativa NOM151 - México | knom151 | `no` | Proceso que indica si se generó correctamente la constancia de conservación según la norma Méxicana NOM151
 Firma Múltiple | bulksignature | `no` | Indica si se solicitó firmar al usuario de firma múltiple o si firmó satsifactoriamente. El estado "error" no está implementado por el momento en este Item.
 Aprobación de contrato | contractapproval | `no` | Solicita aprobación por parte del administrador para finalizar el contrato.
+Formulario de plantilla de documento | documenttemplateform | `sí` | Solicita completar un formulario que contiene los campos agregados a la plantilla de documento.
+Validación de cuestionario | questionnairecheck | `sí` | Valida las respuestas ingresadas por el usuario en el cuestionario.
+
+## Valores por tipo de item
+
+En las siguientes tablas podrás ver los campos que se retornan en `value` de cada item.
+
+### Formulario de plantilla de documento
+
+```json
+{
+  "fields": [
+    {
+      "id": "number-y2ga911c4cdas",
+      "value": "123123123"
+    },
+    {
+      "id": "names-ubxx8pjp9a3m",
+      "value": "test"
+    }
+  ]
+}
+```
+
+Type: `documenttemplateform`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+fields | array | no | Arreglo de campos
+fields[].id | string | no | Id del campo
+fields[].value | string | no | Valor del campo
+
+### Cuestionario
+
+```json
+{
+  "questions": [
+    {
+      "options": [
+        "De 0 a 6 meses",
+        "De 6 meses a un año",
+        "De un año a 3 años",
+        "Más de 3 años"
+      ],
+      "id": "tiempo",
+      "question": "¿Cuánto tiempo vive usted en la vivienda declarada?",
+      "type": "radio",
+      "required": true,
+      "value": "De 0 a 6 meses"
+    },
+    {
+      "id": "referencias",
+      "question": "Referencias",
+      "type": "string",
+      "required": true,
+      "value": "testing"
+    }
+  ]
+}
+```
+
+Type: `questionnairecheck`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+questions | array | no | Arreglo de preguntas
+questions[].id | string | no | Id de la pregunta
+questions[].options | string[] | sí | Si `type` es `checkbox` o `radio`, opciones de respuesta
+questions[].question | string | no | Pregunta hecha al usuario
+questions[].type | `checkbox`, `radio`, `string`, `email`, `number`, `date` | no | Tipo de pregunta
+questions[].required | boolean | no | Si responder la pregunta es obligatorio
+questions[].placeholder | string | sí | Sugerencia de respuesta
+questions[].minLength | number | sí | Si `type` es `string`, mínima cantidad de caracteres aceptados
+questions[].maxLength | number | sí | Si `type` es `string`, máxima cantidad de caracteres aceptados
+questions[].max | number | sí | Si `type` es `number`, máximo valor aceptado
+questions[].min | number | sí | Si `type` es `number`, mínimo valor aceptado
+questions[].value | string | no | Valor de la respuesta
+
+### Documento PDF final
+
+```json
+{
+  "url": "https://cmfiles.dev.keynua.com/contracts/...",
+  "individualDocsUrls": [
+    "https://cmfiles.dev.keynua.com/contracts/...",
+    "https://cmfiles.dev.keynua.com/contracts/..."
+  ],
+  "individualDocs": [
+    {
+      "hash": "92cc7ac31e511ef740fd7804c58b2d5f8602b467779598793210e69fda5ffe07",
+      "userIds": [
+        0
+      ]
+    }
+  ],
+  "userGroupDocs": [
+    {
+      "hash": "92cc7ac31e511ef740fd7804c58b2d5f8602b467779598793210e69fda5ffe07",
+      "userIds": [
+        0
+      ],
+      "url": "https://cmfiles.dev.keynua.com/contracts/..."
+    }
+  ]
+}
+```
+
+Type: `pdf`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+url | string | no | Url del documento PDF firmado
+individualDocsUrls | string[] | sí | Urls por cada documento PDF agregado al contrato
+individualDocs[] | array | sí | Documentos por cada grupo de firmantes (si aplica) o por cada documento del contrato
+individualDocsUrls[].hash | string | no | SHA256 del documento firmado
+individualDocsUrls[].userIds | string[] | no | Ids de los firmantes del documento
+userGroupDocs[] | array | sí | Documentos por cada grupo de firmantes
+userGroupDocs[].hash | string | no | SHA256 del documento firmado
+userGroupDocs[].userIds | string[] | no | Ids de los firmantes del documento
+userGroupDocs[].url | string | no | Url del documento firmado solo por los integrantes del grupo
+
+### Imagen
+
+```json
+{
+  "original": {
+    "url": "https://cmfiles.dev.keynua.com/cont..."
+  }
+}
+```
+
+Type: `image`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+original | string | no | Url de la imagen
+location | [GeolocationPosition](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition) | sí | Contiene información sobre la posición GPS de la imagen
+address | string | sí | Dirección calculada a partir de la posición
+
+### Conversión de video
+
+```json
+{
+  "success": true
+}
+```
+
+Type: `convertvideo`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+success | boolean | no | Si la conversión del video fue exitosa.
 
 ## Errores por tipo de Item
 
