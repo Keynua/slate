@@ -1175,6 +1175,33 @@ Atributo | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
 success | boolean | no | Si la conversión del video fue exitosa.
 
+### OCR y Prueba de vida 3D
+
+```json
+{
+  "ocrData": {
+    "rut": "17840680",
+    "birthPlace": "SANTIAGO",
+    "familyNames": "JEREZ",
+    "names": "ALVARO",
+    "nationality": "CHL",
+    "sex": "M",
+    "digitChecker": "9",
+    "type": "cl-id",
+    "idNumber": "490862869",
+    "issueDate": "2021-11-16",
+    "birthDate": "1991-10-04",
+    "expirationDate": "2031-10-04"
+  }
+}
+```
+
+Type: `livenessinput`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+ocrData | Objeto | no | Información extraída del documento de identidad (opcional)
+
 ## Errores por tipo de Item
 
 Cuando ocurra un error en un Item, se obtendrán principalmente 2 atributos: `code` y `message`.
