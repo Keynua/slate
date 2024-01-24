@@ -1200,7 +1200,7 @@ Type: `livenessinput`
 
 Atributo | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
-ocrData | Objeto | no | Información extraída del documento de identidad (opcional)
+ocrData | Objeto | si | Información extraída del documento de identidad
 
 ## Errores por tipo de Item
 
