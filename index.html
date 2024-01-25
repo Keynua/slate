@@ -2369,19 +2369,284 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 </span></code></pre></div>
 <p>Type: <code>livenessinput</code></p>
 
+<p>DocumentType: <code>co-id</code></p>
+
 <table><thead>
 <tr>
 <th>Atributo</th>
 <th>Tipo</th>
-<th>Opcional</th>
 <th>Descripción</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ocrData</td>
-<td>Objeto</td>
-<td>si</td>
-<td>Información extraída del documento de identidad</td>
+<td>ocrData.type</td>
+<td>string</td>
+<td>Tipo de documento</td>
+</tr>
+<tr>
+<td>ocrData.idNumber</td>
+<td>string</td>
+<td>Número de documento</td>
+</tr>
+<tr>
+<td>ocrData.names</td>
+<td>string</td>
+<td>Nombre completo</td>
+</tr>
+<tr>
+<td>ocrData.familyNames</td>
+<td>string</td>
+<td>Apellidos</td>
+</tr>
+<tr>
+<td>ocrData.birthDate</td>
+<td>string</td>
+<td>Fecha de nacimiento, formato: MMMM-MM-DD</td>
+</tr>
+<tr>
+<td>ocrData.barcode</td>
+<td>string</td>
+<td>Información de el código de barras del documento</td>
+</tr>
+</tbody></table>
+
+<p>DocumentType: <code>cl-id</code></p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ocrData.type</td>
+<td>string</td>
+<td>Tipo de documento</td>
+</tr>
+<tr>
+<td>ocrData.idNumber</td>
+<td>string</td>
+<td>Número de documento</td>
+</tr>
+<tr>
+<td>ocrData.names</td>
+<td>string</td>
+<td>Nombre completo</td>
+</tr>
+<tr>
+<td>ocrData.familyNames</td>
+<td>string</td>
+<td>Apellidos</td>
+</tr>
+<tr>
+<td>ocrData.birthDate</td>
+<td>string</td>
+<td>Fecha de nacimiento, formato: MMMM-MM-DD</td>
+</tr>
+<tr>
+<td>ocrData.birthPlace</td>
+<td>string</td>
+<td>Lugar de nacimiento</td>
+</tr>
+<tr>
+<td>ocrData.expirationDate</td>
+<td>string</td>
+<td>Fecha de expiración, formato: MMMM-MM-DD</td>
+</tr>
+<tr>
+<td>ocrData.issueDate</td>
+<td>string</td>
+<td>Fecha de expiración, formato: MMMM-MM-DD</td>
+</tr>
+<tr>
+<td>ocrData.nationality</td>
+<td>string</td>
+<td>Nacionalidad</td>
+</tr>
+<tr>
+<td>ocrData.rut</td>
+<td>string</td>
+<td>Número rut</td>
+</tr>
+<tr>
+<td>ocrData.digitChecker</td>
+<td>string</td>
+<td>Dígito verificador</td>
+</tr>
+<tr>
+<td>ocrData.sex</td>
+<td>string</td>
+<td>Los valores posibles son: <code>F</code> y <code>M</code></td>
+</tr>
+</tbody></table>
+
+<p>DocumentType: <code>mx-id</code></p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ocrData.type</td>
+<td>string</td>
+<td>Tipo de documento</td>
+</tr>
+<tr>
+<td>ocrData.idNumber</td>
+<td>string</td>
+<td>Número de documento</td>
+</tr>
+<tr>
+<td>ocrData.names</td>
+<td>string</td>
+<td>Nombre completo</td>
+</tr>
+<tr>
+<td>ocrData.familyNames</td>
+<td>string</td>
+<td>Apellidos</td>
+</tr>
+<tr>
+<td>ocrData.birthDate</td>
+<td>string</td>
+<td>Fecha de nacimiento, formato: MMMM-MM-DD</td>
+</tr>
+<tr>
+<td>ocrData.expirationDate</td>
+<td>string</td>
+<td>Fecha de expiración, formato: MMMM-MM-DD</td>
+</tr>
+<tr>
+<td>ocrData.issueDate</td>
+<td>string</td>
+<td>Fecha de expiración, formato: MMMM-MM-DD</td>
+</tr>
+<tr>
+<td>ocrData.address</td>
+<td>string</td>
+<td>Dirección actual</td>
+</tr>
+<tr>
+<td>ocrData.sex</td>
+<td>string</td>
+<td>Los valores posibles son: <code>F</code> y <code>M</code></td>
+</tr>
+<tr>
+<td>ocrData.voterKey</td>
+<td>string</td>
+<td>Id del documento</td>
+</tr>
+</tbody></table>
+
+<p>DocumentType: <code>pe-id</code></p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ocrData.type</td>
+<td>string</td>
+<td>Tipo de documento</td>
+</tr>
+<tr>
+<td>ocrData.idNumber</td>
+<td>string</td>
+<td>Número de documento</td>
+</tr>
+<tr>
+<td>ocrData.names</td>
+<td>string</td>
+<td>Nombre completo</td>
+</tr>
+<tr>
+<td>ocrData.familyNames</td>
+<td>string</td>
+<td>Apellidos</td>
+</tr>
+<tr>
+<td>ocrData.birthDate</td>
+<td>string</td>
+<td>Fecha de nacimiento, formato: MMMM-MM-DD</td>
+</tr>
+<tr>
+<td>ocrData.expirationDate</td>
+<td>string</td>
+<td>Fecha de expiración, formato: MMMM-MM-DD</td>
+</tr>
+<tr>
+<td>ocrData.issueDate</td>
+<td>string</td>
+<td>Fecha de expiración, formato: MMMM-MM-DD</td>
+</tr>
+</tbody></table>
+
+<p>DocumentType: <code>pe-ce</code></p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ocrData.type</td>
+<td>string</td>
+<td>Tipo de documento</td>
+</tr>
+<tr>
+<td>ocrData.idNumber</td>
+<td>string</td>
+<td>Número de documento</td>
+</tr>
+<tr>
+<td>ocrData.names</td>
+<td>string</td>
+<td>Nombre completo</td>
+</tr>
+<tr>
+<td>ocrData.familyNames</td>
+<td>string</td>
+<td>Apellidos</td>
+</tr>
+<tr>
+<td>ocrData.birthDate</td>
+<td>string</td>
+<td>Fecha de nacimiento, formato: MMMM-MM-DD</td>
+</tr>
+</tbody></table>
+
+<p>DocumentType: <code>global</code></p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ocrData.type</td>
+<td>string</td>
+<td>Tipo de documento</td>
+</tr>
+<tr>
+<td>ocrData.idNumber</td>
+<td>string</td>
+<td>Número de documento</td>
+</tr>
+<tr>
+<td>ocrData.expirationDate</td>
+<td>string</td>
+<td>Fecha de expiración, formato: MMMM-MM-DD</td>
 </tr>
 </tbody></table>
 <h2 id='errores-por-tipo-de-item'>Errores por tipo de Item</h2>
