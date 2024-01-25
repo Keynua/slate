@@ -1200,77 +1200,76 @@ Type: `livenessinput`
 
 DocumentType: `co-id`
 
-Atributo | Tipo | Opcional | Descripción
---------- | ----------- | ----------- | -----------
-ocrData.type | string | no | Tipo de documento
-ocrData.idNumber | string | no | Número de documento
-ocrData.names | string | no | Nombre completo
-ocrData.familyNames | string | no | Apellidos
-ocrData.birthDate | string | no | Fecha de nacimiento, formato: MMMM-MM-DD
-ocrData.barcode | string | no | Información de el código de barras del documento 
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+ocrData.type | string | Tipo de documento
+ocrData.idNumber | string | Número de documento
+ocrData.names | string | Nombre completo
+ocrData.familyNames | string | Apellidos
+ocrData.birthDate | string | Fecha de nacimiento, formato: MMMM-MM-DD
+ocrData.barcode | string | Información de el código de barras del documento 
 
 DocumentType: `cl-id`
 
-Atributo | Tipo | Opcional | Descripción
---------- | ----------- | ----------- | -----------
-ocrData.type | string | no | Tipo de documento
-ocrData.idNumber | string | no | Número de documento
-ocrData.names | string | no | Nombre completo
-ocrData.familyNames | string | no | Apellidos
-ocrData.birthDate | string | no | Fecha de nacimiento, formato: MMMM-MM-DD
-ocrData.birthPlace | string | no | Lugar de nacimiento
-ocrData.expirationDate | string | no | Fecha de expiración, formato: MMMM-MM-DD
-ocrData.issueDate | string | no | Fecha de expiración, formato: MMMM-MM-DD
-ocrData.nationality | string | no | Nacionalidad 
-ocrData.rut | string | no | Número rut
-ocrData.digitChecker | string | no | Dígito verificador
-ocrData.sex | string | no | Los valores posibles son: `F` y `M`
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+ocrData.type | string | Tipo de documento
+ocrData.idNumber | string | Número de documento
+ocrData.names | string | Nombre completo
+ocrData.familyNames | string | Apellidos
+ocrData.birthDate | string | Fecha de nacimiento, formato: MMMM-MM-DD
+ocrData.birthPlace | string | Lugar de nacimiento
+ocrData.expirationDate | string | Fecha de expiración, formato: MMMM-MM-DD
+ocrData.issueDate | string | Fecha de expiración, formato: MMMM-MM-DD
+ocrData.nationality | string | Nacionalidad 
+ocrData.rut | string | Número rut
+ocrData.digitChecker | string | Dígito verificador
+ocrData.sex | string | Los valores posibles son: `F` y `M`
 
 DocumentType: `mx-id`
 
-Atributo | Tipo | Opcional | Descripción
---------- | ----------- | ----------- | -----------
-ocrData.type | string | no | Tipo de documento
-ocrData.idNumber | string | no | Número de documento
-ocrData.names | string | no | Nombre completo
-ocrData.familyNames | string | no | Apellidos
-ocrData.birthDate | string | no | Fecha de nacimiento, formato: MMMM-MM-DD
-ocrData.expirationDate | string | no | Fecha de expiración, formato: MMMM-MM-DD
-ocrData.issueDate | string | no | Fecha de expiración, formato: MMMM-MM-DD
-ocrData.address | string | no | Dirección actual
-ocrData.sex | string | no | Los valores posibles son: `F` y `M`
-ocrData.voterKey | string | no | Id del documento
-
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+ocrData.type | string | Tipo de documento
+ocrData.idNumber | string | Número de documento
+ocrData.names | string | Nombre completo
+ocrData.familyNames | string | Apellidos
+ocrData.birthDate | string | Fecha de nacimiento, formato: MMMM-MM-DD
+ocrData.expirationDate | string | Fecha de expiración, formato: MMMM-MM-DD
+ocrData.issueDate | string | Fecha de expiración, formato: MMMM-MM-DD
+ocrData.address | string | Dirección actual
+ocrData.sex | string | Los valores posibles son: `F` y `M`
+ocrData.voterKey | string | Id del documento
 
 DocumentType: `pe-id`
 
-Atributo | Tipo | Opcional | Descripción
---------- | ----------- | ----------- | -----------
-ocrData.type | string | no | Tipo de documento
-ocrData.idNumber | string | no | Número de documento
-ocrData.names | string | no | Nombre completo
-ocrData.familyNames | string | no | Apellidos
-ocrData.birthDate | string | no | Fecha de nacimiento, formato: MMMM-MM-DD
-ocrData.expirationDate | string | no | Fecha de expiración, formato: MMMM-MM-DD
-ocrData.issueDate | string | no | Fecha de expiración, formato: MMMM-MM-DD
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+ocrData.type | string | Tipo de documento
+ocrData.idNumber | string | Número de documento
+ocrData.names | string | Nombre completo
+ocrData.familyNames | string | Apellidos
+ocrData.birthDate | string | Fecha de nacimiento, formato: MMMM-MM-DD
+ocrData.expirationDate | string | Fecha de expiración, formato: MMMM-MM-DD
+ocrData.issueDate | string | Fecha de expiración, formato: MMMM-MM-DD
 
 DocumentType: `pe-ce`
 
-Atributo | Tipo | Opcional | Descripción
---------- | ----------- | ----------- | -----------
-ocrData.type | string | no | Tipo de documento
-ocrData.idNumber | string | no | Número de documento
-ocrData.names | string | no | Nombre completo
-ocrData.familyNames | string | no | Apellidos
-ocrData.birthDate | string | no | Fecha de nacimiento, formato: MMMM-MM-DD
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+ocrData.type | string | Tipo de documento
+ocrData.idNumber | string | Número de documento
+ocrData.names | string | Nombre completo
+ocrData.familyNames | string | Apellidos
+ocrData.birthDate | string | Fecha de nacimiento, formato: MMMM-MM-DD
 
 DocumentType: `global`
 
-Atributo | Tipo | Opcional | Descripción
---------- | ----------- | ----------- | -----------
-ocrData.type | string | no | Tipo de documento
-ocrData.idNumber | string | no | Número de documento
-ocrData.expirationDate | string | no | Fecha de expiración, formato: MMMM-MM-DD
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+ocrData.type | string | Tipo de documento
+ocrData.idNumber | string | Número de documento
+ocrData.expirationDate | string | Fecha de expiración, formato: MMMM-MM-DD
 
 ## Errores por tipo de Item
 
