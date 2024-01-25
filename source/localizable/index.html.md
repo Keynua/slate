@@ -1200,7 +1200,20 @@ Type: `livenessinput`
 
 Atributo | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
-ocrData | Objeto | si | Información extraída del documento de identidad
+ocrData.type | string | no | Los valores posibles son: `co-id`, `cl-id`, `mx-id`, `pe-id`, `pe-ce`, `global`
+ocrData.idNumber | string | si | Número de documento
+ocrData.names | string | si | Nombre completo
+ocrData.familyNames | string | si | Apellidos
+ocrData.birthDate | string | si | Fecha de nacimiento, formato: MMMM-MM-DD
+ocrData.birthPlace | string | si | Lugar de nacimiento
+ocrData.expirationDate | string | si | Fecha de expiración, formato: MMMM-MM-DD
+ocrData.issueDate | string | si | Fecha de expiración, formato: MMMM-MM-DD
+ocrData.nationality | string | si | Nacionalidad 
+ocrData.barcode | string | si | Información de el código de barras del documento 
+ocrData.address | string | si | Dirección actual
+ocrData.rut | string | si | Número rut, solo disponible para `cl-id`
+ocrData.digitChecker | string | si | Dígito verificador, solo disponible para `cl-id`
+ocrData.sex | string | si | Los valores posibles son: `F` y `M`
 
 ## Errores por tipo de Item
 
