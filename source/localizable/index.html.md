@@ -1198,9 +1198,22 @@ success | boolean | no | Si la conversión del video fue exitosa.
 
 Type: `livenessinput`
 
+DocumentType: `co-id`
+
 Atributo | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
-ocrData.type | string | no | Los valores posibles son: `co-id`, `cl-id`, `mx-id`, `pe-id`, `pe-ce`, `global`
+ocrData.type | string | no | Tipo de documento
+ocrData.idNumber | string | si | Número de documento
+ocrData.names | string | si | Nombre completo
+ocrData.familyNames | string | si | Apellidos
+ocrData.birthDate | string | si | Fecha de nacimiento, formato: MMMM-MM-DD
+ocrData.barcode | string | si | Información de el código de barras del documento 
+
+DocumentType: `cl-id`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+ocrData.type | string | no | Tipo de documento
 ocrData.idNumber | string | si | Número de documento
 ocrData.names | string | si | Nombre completo
 ocrData.familyNames | string | si | Apellidos
@@ -1209,11 +1222,55 @@ ocrData.birthPlace | string | si | Lugar de nacimiento
 ocrData.expirationDate | string | si | Fecha de expiración, formato: MMMM-MM-DD
 ocrData.issueDate | string | si | Fecha de expiración, formato: MMMM-MM-DD
 ocrData.nationality | string | si | Nacionalidad 
-ocrData.barcode | string | si | Información de el código de barras del documento 
-ocrData.address | string | si | Dirección actual
-ocrData.rut | string | si | Número rut, solo disponible para `cl-id`
-ocrData.digitChecker | string | si | Dígito verificador, solo disponible para `cl-id`
+ocrData.rut | string | si | Número rut
+ocrData.digitChecker | string | si | Dígito verificador
 ocrData.sex | string | si | Los valores posibles son: `F` y `M`
+
+DocumentType: `mx-id`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+ocrData.type | string | no | Tipo de documento
+ocrData.idNumber | string | si | Número de documento
+ocrData.names | string | si | Nombre completo
+ocrData.familyNames | string | si | Apellidos
+ocrData.birthDate | string | si | Fecha de nacimiento, formato: MMMM-MM-DD
+ocrData.expirationDate | string | si | Fecha de expiración, formato: MMMM-MM-DD
+ocrData.issueDate | string | si | Fecha de expiración, formato: MMMM-MM-DD
+ocrData.address | string | si | Dirección actual
+ocrData.sex | string | si | Los valores posibles son: `F` y `M`
+ocrData.voterKey | string | si | Id del documento
+
+
+DocumentType: `pe-id`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+ocrData.type | string | no | Tipo de documento
+ocrData.idNumber | string | si | Número de documento
+ocrData.names | string | si | Nombre completo
+ocrData.familyNames | string | si | Apellidos
+ocrData.birthDate | string | si | Fecha de nacimiento, formato: MMMM-MM-DD
+ocrData.expirationDate | string | si | Fecha de expiración, formato: MMMM-MM-DD
+ocrData.issueDate | string | si | Fecha de expiración, formato: MMMM-MM-DD
+
+DocumentType: `pe-ce`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+ocrData.type | string | no | Tipo de documento
+ocrData.idNumber | string | si | Número de documento
+ocrData.names | string | si | Nombre completo
+ocrData.familyNames | string | si | Apellidos
+ocrData.birthDate | string | si | Fecha de nacimiento, formato: MMMM-MM-DD
+
+DocumentType: `global`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+ocrData.type | string | no | Tipo de documento
+ocrData.idNumber | string | si | Número de documento
+ocrData.expirationDate | string | si | Fecha de expiración, formato: MMMM-MM-DD
 
 ## Errores por tipo de Item
 
