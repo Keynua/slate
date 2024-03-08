@@ -379,7 +379,12 @@ curl --request PUT \
       "email": "msilva@keynua.com",
 	  "groups": [ "signers" ]
     }
-  ]
+  ],
+  "flags": {
+    "chosenNotificationOptions": [
+      "email"
+    ]
+  }
 }'
 ```
 
@@ -399,7 +404,12 @@ const data = JSON.stringify({
   ],
   users: [
     {name: 'Manuel Silva', email: 'msilva@keynua.com', groups: ['signers']}
-  ]
+  ],
+  flags: {
+    chosenNotificationOptions: [
+      "email"
+    ]
+  }
 });
 
 const options = {
@@ -442,6 +452,10 @@ req.end();
 
 `PUT /contracts/v1`
 
+<aside class="success">
+Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_blank”>módulo de desarrollo</a> del portal Keynua puedes encontrar la sección <code>Crear contrato en modo desarrollo</code> e iniciar el modo para generar los <code>payloads</code> del api mediante la UI
+</aside>
+
 ### Headers
 
 Key | Value
@@ -468,10 +482,16 @@ onBehalfOf | string | AccountId de una cuenta hija. Este campo es usado para org
 documents | array | Arreglo de los documentos PDFs encodificados en base64 que van a ser firmados. Mínimo 1 y máximo 10. El peso máximo en total no debe ser mayor a 4.5 MB. En lugar de `base64` también se puede enviar `storageId`, como por ejemplo se obtiene de [este](#generar-documentos-rellenados) API.
 users | array | Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en **groups** depende del templateId a usar. Para el caso de `keynua-peru-default`, el valor en groups debe ser `signers`. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario
 metadata | object | `optional` Metadata del contrato. Puedes enviar información en este campo como key-value para poder identificar el contrato creado por Keynua con algún Identificador interno de tu sistema.
-flags | object | `optional` Se podrá enviar información adicional para crear un contrato. Por ejemplo la información de [Cavali](#cavali) para crear un contrato con Pagaré Electrónico se enviará con el key `cavaliData`
+flags | object | `optional` Se podrá enviar información adicional para crear un contrato. Por ejemplo para configurar un canal de comunicación o enviar la información de [Cavali](#cavali). Para crear un contrato con Pagaré Electrónico, se enviará el key `cavaliData`. Puedes ver el detalle de las configuraciones posibles en la sección [Flags del contrato](#flags-del-contrato)
 templateOptions | object | `optional` [Configuración dinámica del template](#configuracion-dinamica-del-template) del contrato, si mandas este campo se omite el templateId
 
-### Groups y Prefilled Items
+### Flags del contrato
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+chosenNotificationOptions | stringArray | Se deben enviar los tipos de notificación como string. Los valores pueden ser `sms`, `whatsapp` o `email`. **No se puede enviar sms y whatsapp al mismo tiempo**
+
+## Grupos e items precargados
 
 ```json
 {
@@ -1207,7 +1227,7 @@ ocrData.idNumber | string | Número de documento
 ocrData.names | string | Nombre completo
 ocrData.familyNames | string | Apellidos
 ocrData.birthDate | string | Fecha de nacimiento, formato: MMMM-MM-DD
-ocrData.barcode | string | Información de el código de barras del documento 
+ocrData.barcode | string | Información de el código de barras del documento
 
 DocumentType: `cl-id`
 
@@ -1221,7 +1241,7 @@ ocrData.birthDate | string | Fecha de nacimiento, formato: MMMM-MM-DD
 ocrData.birthPlace | string | Lugar de nacimiento
 ocrData.expirationDate | string | Fecha de expiración, formato: MMMM-MM-DD
 ocrData.issueDate | string | Fecha de expiración, formato: MMMM-MM-DD
-ocrData.nationality | string | Nacionalidad 
+ocrData.nationality | string | Nacionalidad
 ocrData.rut | string | Número rut
 ocrData.digitChecker | string | Dígito verificador
 ocrData.sex | string | Los valores posibles son: `F` y `M`
@@ -2672,6 +2692,23 @@ Permite crear, listar y obtener verificaciones de identidad.
 	"birthDate": "1992-11-20",
 	"expirationDate": "2026-03-17"
 	"address": "Some address",
+	"reniecInfo": {
+        "names": "Juan",
+        "lastName": "Garcia",
+        "mothersLastName": "Perez",
+        "marriedLastName": null,
+        "sex": "1", // 1: Masculino, 2: Femenino
+        "civilStatus": "1", // 1: Soltero, 2: Casado, 3: Viudo, 4: Divorciado
+        "birthplace": {
+          "code": "140133",
+          "department": "LIMA",
+          "province": "LIMA",
+          "district": "JESUS MARIA"
+        },
+        "department": "LIMA",
+        "province": "LIMA",
+        "district": "LIMA"
+      }
   },
   "items": ContractItem[]
 }
@@ -2702,7 +2739,7 @@ userFullName | string | Sí | Nombre completo de la persona
 accountName | string | No | Nombre de la cuenta que creó la verificación
 timezone | string | No | Huso horario  utilizado en notificaciones y mensajes
 title | string | No | Título de la verificación
-userIdInfo | string | Sí | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento solo aplica para las Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
+userIdInfo | string | Sí | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento **solo aplica para las Identificaciones Peruanas**. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI
 items | [ContractItem](#items-del-contrato)[] | No | Lista de pasos que sigue la verificación.
 
 ## Crear verificación de identidad
@@ -2720,7 +2757,6 @@ curl --location --request PUT 'https://api.keynua.com/identity-verification/v1' 
     "type": "video",
     "documentType": "pe-dni",
     "disableInitialNotification": false,
-    "validateDocument": true
   }'
 ```
 
