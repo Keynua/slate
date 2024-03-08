@@ -331,6 +331,9 @@
                     <a href="#crear-un-contrato" class="toc-h2 toc-link" data-title="Crear un Contrato">Crear un Contrato</a>
                   </li>
                   <li>
+                    <a href="#grupos-e-items-precargados" class="toc-h2 toc-link" data-title="Grupos e items precargados">Grupos e items precargados</a>
+                  </li>
+                  <li>
                     <a href="#obtener-un-contrato" class="toc-h2 toc-link" data-title="Obtener un Contrato">Obtener un Contrato</a>
                   </li>
                   <li>
@@ -1211,7 +1214,12 @@ Producción: https://api.keynua.com
       "email": "msilva@keynua.com",
       "groups": [ "signers" ]
     }
-  ]
+  ],
+  "flags": {
+    "chosenNotificationOptions": [
+      "email"
+    ]
+  }
 }'</span>
 </code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">https</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">https</span><span class="dl">"</span><span class="p">);</span>
 
@@ -1228,7 +1236,12 @@ Producción: https://api.keynua.com
   <span class="p">],</span>
   <span class="na">users</span><span class="p">:</span> <span class="p">[</span>
     <span class="p">{</span><span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Manuel Silva</span><span class="dl">'</span><span class="p">,</span> <span class="na">email</span><span class="p">:</span> <span class="dl">'</span><span class="s1">msilva@keynua.com</span><span class="dl">'</span><span class="p">,</span> <span class="na">groups</span><span class="p">:</span> <span class="p">[</span><span class="dl">'</span><span class="s1">signers</span><span class="dl">'</span><span class="p">]}</span>
-  <span class="p">]</span>
+  <span class="p">],</span>
+  <span class="na">flags</span><span class="p">:</span> <span class="p">{</span>
+    <span class="na">chosenNotificationOptions</span><span class="p">:</span> <span class="p">[</span>
+      <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
 <span class="p">});</span>
 
 <span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
@@ -1269,6 +1282,10 @@ Producción: https://api.keynua.com
 </blockquote>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>PUT /contracts/v1</code></p>
+
+<aside class="success">
+Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_blank”>módulo de desarrollo</a> del portal Keynua puedes encontrar la sección <code>Crear contrato en modo desarrollo</code> e iniciar el modo para generar los <code>payloads</code> del api mediante la UI
+</aside>
 <h3 id='headers'>Headers</h3>
 <table><thead>
 <tr>
@@ -1362,7 +1379,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>flags</td>
 <td>object</td>
-<td><code>optional</code> Se podrá enviar información adicional para crear un contrato. Por ejemplo la información de <a href="#cavali">Cavali</a> para crear un contrato con Pagaré Electrónico se enviará con el key <code>cavaliData</code></td>
+<td><code>optional</code> Se podrá enviar información adicional para crear un contrato. Por ejemplo para configurar un canal de comunicación o enviar la información de <a href="#cavali">Cavali</a>. Para crear un contrato con Pagaré Electrónico, se enviará el key <code>cavaliData</code>. Puedes ver el detalle de las configuraciones posibles en la sección <a href="#flags-del-contrato">Flags del contrato</a></td>
 </tr>
 <tr>
 <td>templateOptions</td>
@@ -1370,7 +1387,21 @@ Producción: https://api.keynua.com
 <td><code>optional</code> <a href="#configuracion-dinamica-del-template">Configuración dinámica del template</a> del contrato, si mandas este campo se omite el templateId</td>
 </tr>
 </tbody></table>
-<h3 id='groups-y-prefilled-items'>Groups y Prefilled Items</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+<h3 id='flags-del-contrato'>Flags del contrato</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>chosenNotificationOptions</td>
+<td>stringArray</td>
+<td>Se deben enviar los tipos de notificación como string. Los valores pueden ser <code>sms</code>, <code>whatsapp</code> o <code>email</code>. <strong>No se puede enviar sms y whatsapp al mismo tiempo</strong></td>
+</tr>
+</tbody></table>
+<h2 id='grupos-e-items-precargados'>Grupos e items precargados</h2><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"users"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
             </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"firmantes-precargados"</span><span class="p">],</span><span class="w">
@@ -4999,6 +5030,23 @@ Deceval para registrar la firma del participante.</li>
     </span><span class="nl">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1992-11-20"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"expirationDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-17"</span><span class="w">
     </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some address"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"reniecInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"names"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Juan"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Garcia"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"mothersLastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Perez"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marriedLastName"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"sex"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w"> </span><span class="err">//</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span><span class="w"> </span><span class="err">Masculino</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="err">:</span><span class="w"> </span><span class="err">Femenino</span><span class="w">
+        </span><span class="nl">"civilStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w"> </span><span class="err">//</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span><span class="w"> </span><span class="err">Soltero</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="err">:</span><span class="w"> </span><span class="err">Casado</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="err">:</span><span class="w"> </span><span class="err">Viudo</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="err">:</span><span class="w"> </span><span class="err">Divorciado</span><span class="w">
+        </span><span class="nl">"birthplace"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"140133"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LIMA"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"province"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LIMA"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"district"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JESUS MARIA"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LIMA"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"province"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LIMA"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"district"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LIMA"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="err">ContractItem</span><span class="p">[]</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -5153,7 +5201,7 @@ Deceval para registrar la firma del participante.</li>
 <td>userIdInfo</td>
 <td>string</td>
 <td>Sí</td>
-<td>Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento solo aplica para las Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI</td>
+<td>Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento <strong>solo aplica para las Identificaciones Peruanas</strong>. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI</td>
 </tr>
 <tr>
 <td>items</td>
@@ -5174,7 +5222,6 @@ Deceval para registrar la firma del participante.</li>
     "type": "video",
     "documentType": "pe-dni",
     "disableInitialNotification": false,
-    "validateDocument": true
   }'</span>
 </code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
