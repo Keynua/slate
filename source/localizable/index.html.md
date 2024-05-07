@@ -174,6 +174,7 @@ groups | array | Nombre de los grupos a los que pertenece el usuario, normalment
 token | string | El token del usuario que se utilizará para realizar la firma. Por ejemplo para [enviar un archivo multimedia](#enviar-un-archivo-multimedia)
 state | string | El [estado del usuario](#estados-del-usuario) dentro del contrato, basado en el estado de todos los items del usuario. Solo existe para contratos creados luego del 04/04/2022.
 idInfo | string | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
+validationsToSkip | array | La lista de validaciones que se deben omitir en el flujo de firma. Los valores permitidos en la lista son: `"expiration-date"` (Omitir validación de fecha de expiración), `"instructions-grade"` (Omitir validación de iletrados).
 
 ### Estados del Usuario
 
@@ -3773,6 +3774,7 @@ Created | Serás notificado cuando un contrato o verificación de identidad fue 
 Started | Serás notificado cuando un contrato o verificación de identidad fue creado satisfactoriamente y está listo para ser firmado o completado. **Recomendamos usar este evento en lugar del evento Created ya que este evento te notificará cuando el contrato está listo para comenzar el proceso de firma**
 Finished | Serás notificado cuando el contrato o verificación de identidad ha sido completado por todos y finalizó correctamente
 Deleted | Serás notificado cuando el contrato ha sido eliminado
+InputProvided | Serás notificado cuando se asigne el valor del atributo `inputProvidedAt` del contrato.
 ItemWorking | Serás notificado cada vez que se comienza a procesar un [Item](#propiedades-de-un-item)
 ItemSuccess | Serás notificado cada vez que un [Item](#propiedades-de-un-item) ha concluído satisactoriamente
 ItemError | Serás notificado cada vez que ocurre un error en un [Item](#propiedades-de-un-item)
@@ -3841,6 +3843,7 @@ Created | [ContractCreated](#propiedades-de-contractcreated) o [IdentityVerifica
 Started | [ContractStarted](#propiedades-de-contractstarted) o [IdentityVerificationStarted](#propiedades-de-identityverificationstarted)
 Finished | [ContractFinished](#propiedades-de-contractfinished) o [IdentityVerificationFinished](#propiedades-de-identityverificationfinished)
 Deleted | [ContractDeleted](#propiedades-de-contractdeleted)
+ContractInputProvided | [ContractInputProvided](#propiedades-de-contractinputprovided)
 ItemWorking | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `working`
 ItemSuccess | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `success`
 ItemError | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `error`
@@ -4194,6 +4197,52 @@ longCode | string | Código largo del contrato
 shortCode | string | Código corto del contrato para facilitar su identificación
 item | object | [Item](#propiedades-de-un-item) del contrato que ha cambiado de estado
 user | object | [Usuario](#propiedades-de-un-usuario-webhook) al que pertenece el elemento modificado. Si el valor es null el elemento le pertenece a todos los usuarios
+
+### Propiedades de ContractInputProvided
+
+> Ejemplo de Body
+
+```json
+{
+  "type": "ContractInputProvided",
+  "accountId": "00000000-0000-0000-0000-000000000001",
+  "payload":{
+    "contractId": "00000000-0000-0000-0000-000000000001",
+    "reference": null,
+    "title": "Contrato de trabajo",
+    "templateId": "draw-simple",
+    "language": "es",
+    "createdAt": "2024-05-06T17:53:58.549Z",
+    "startedAt": "2024-05-06T17:53:59.093Z",
+    "inputProvidedAt": "2024-05-06T17:55:36.246Z",
+    "docCount": 1,
+    "itemCount": 7,
+    "userCount": 1,
+    "longCode": "8dc1757e94522e4719a635b7a7532052b24431632a01622cf4ee5cb2552db28b",
+    "shortCode": "817579",
+  }
+}
+```
+
+Se emite cuando se asigna el valor del atributo `inputProvidedAt` del contrato.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+accountId | string | Identificador único de la cuenta con la que se creó el contrato
+contractId | string | Identificador único del contrato
+reference | string | Referencia del contrato
+title | string | Titulo del contrato
+templateId | string | Identificador del Template
+language | string | Idioma del contrato
+createdAt | string | Fecha de creación del contrato
+startedAt | string | Fecha de inicio del proceso de firma del contrato
+inputProvidedAt | string | Fecha de inicio del proceso de firma del contrato
+docCount | integer | Cantidad de documentos que tiene el contrato
+itemCount | integer | Cantidad de items que tiene el contrato
+userCount | integer | Cantidad de usuarios que tiene el contrato
+longCode | string | Código largo del contrato
+shortCode | string | Código corto del contrato para facilitar su identificación
+metadata | object | Metadata del contrato
 
 ### Propiedades de IdentityVerificationCreated
 
