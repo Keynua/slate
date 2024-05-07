@@ -1369,7 +1369,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <tr>
 <td>users</td>
 <td>array</td>
-<td>Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en <strong>groups</strong> depende del templateId a usar. Para el caso de <code>keynua-peru-default</code>, el valor en groups debe ser <code>signers</code>. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario</td>
+<td>Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en <strong>groups</strong> depende del templateId a usar. Para el caso de <code>keynua-peru-default</code>, el valor en groups debe ser <code>signers</code>. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario. Puedes ver el detalle de las configuraciones posibles en la sección <a href="#usuarios-del-contrato">Usuarios del contrato</a></td>
 </tr>
 <tr>
 <td>metadata</td>
@@ -1399,6 +1399,40 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>chosenNotificationOptions</td>
 <td>stringArray</td>
 <td>Se deben enviar los tipos de notificación como string. Los valores pueden ser <code>sms</code>, <code>whatsapp</code> o <code>email</code>. <strong>No se puede enviar sms y whatsapp al mismo tiempo</strong></td>
+</tr>
+</tbody></table>
+<h3 id='usuarios-del-contrato'>Usuarios del contrato</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>El nombre del usuario</td>
+</tr>
+<tr>
+<td>email</td>
+<td>string</td>
+<td>El correo electrónico del usuario</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>string</td>
+<td>El teléfono del usuario</td>
+</tr>
+<tr>
+<td>groups</td>
+<td>array</td>
+<td>Nombre de los grupos a los que pertenece el usuario, normalmente siempre pertenece a un sólo grupo. El identificador del grupo será asignado por el equipo de Keynua</td>
+</tr>
+<tr>
+<td>validationsToSkip</td>
+<td>array</td>
+<td>La lista de validaciones que se deben omitir en el flujo de firma. Los valores permitidos en la lista son: <code>&quot;expiration-date&quot;</code> (Omitir validación de fecha de expiración), <code>&quot;instructions-grade&quot;</code> (Omitir validación de iletrados).</td>
 </tr>
 </tbody></table>
 <h2 id='grupos-e-items-precargados'>Grupos e items precargados</h2><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
@@ -6624,6 +6658,10 @@ Deceval para registrar la firma del participante.</li>
 <td>Serás notificado cuando el contrato ha sido eliminado</td>
 </tr>
 <tr>
+<td>InputProvided</td>
+<td>Serás notificado cuando se asigne el valor del atributo <code>inputProvidedAt</code> del contrato.</td>
+</tr>
+<tr>
 <td>ItemWorking</td>
 <td>Serás notificado cada vez que se comienza a procesar un <a href="#propiedades-de-un-item">Item</a></td>
 </tr>
@@ -6749,6 +6787,10 @@ Deceval para registrar la firma del participante.</li>
 <tr>
 <td>Deleted</td>
 <td><a href="#propiedades-de-contractdeleted">ContractDeleted</a></td>
+</tr>
+<tr>
+<td>ContractInputProvided</td>
+<td><a href="#propiedades-de-contractinputprovided">ContractInputProvided</a></td>
 </tr>
 <tr>
 <td>ItemWorking</td>
@@ -7473,6 +7515,115 @@ Deceval para registrar la firma del participante.</li>
 <td>user</td>
 <td>object</td>
 <td><a href="#propiedades-de-un-usuario-webhook">Usuario</a> al que pertenece el elemento modificado. Si el valor es null el elemento le pertenece a todos los usuarios</td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-contractinputprovided'>Propiedades de ContractInputProvided</h3>
+<blockquote>
+<p>Ejemplo de Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ContractInputProvided"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000001"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"payload"</span><span class="p">:{</span><span class="w">
+    </span><span class="nl">"contractId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000001"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Contrato de trabajo"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"templateId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"draw-simple"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-05-06T17:53:58.549Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"startedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-05-06T17:53:59.093Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"inputProvidedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-05-06T17:55:36.246Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"docCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"itemCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"userCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"longCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"8dc1757e94522e4719a635b7a7532052b24431632a01622cf4ee5cb2552db28b"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"shortCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"817579"</span><span class="p">,</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Se emite cuando se asigna el valor del atributo <code>inputProvidedAt</code> del contrato.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>Identificador único de la cuenta con la que se creó el contrato</td>
+</tr>
+<tr>
+<td>contractId</td>
+<td>string</td>
+<td>Identificador único del contrato</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>Referencia del contrato</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Titulo del contrato</td>
+</tr>
+<tr>
+<td>templateId</td>
+<td>string</td>
+<td>Identificador del Template</td>
+</tr>
+<tr>
+<td>language</td>
+<td>string</td>
+<td>Idioma del contrato</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>string</td>
+<td>Fecha de creación del contrato</td>
+</tr>
+<tr>
+<td>startedAt</td>
+<td>string</td>
+<td>Fecha de inicio del proceso de firma del contrato</td>
+</tr>
+<tr>
+<td>inputProvidedAt</td>
+<td>string</td>
+<td>Fecha de inicio del proceso de firma del contrato</td>
+</tr>
+<tr>
+<td>docCount</td>
+<td>integer</td>
+<td>Cantidad de documentos que tiene el contrato</td>
+</tr>
+<tr>
+<td>itemCount</td>
+<td>integer</td>
+<td>Cantidad de items que tiene el contrato</td>
+</tr>
+<tr>
+<td>userCount</td>
+<td>integer</td>
+<td>Cantidad de usuarios que tiene el contrato</td>
+</tr>
+<tr>
+<td>longCode</td>
+<td>string</td>
+<td>Código largo del contrato</td>
+</tr>
+<tr>
+<td>shortCode</td>
+<td>string</td>
+<td>Código corto del contrato para facilitar su identificación</td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>object</td>
+<td>Metadata del contrato</td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-identityverificationcreated'>Propiedades de IdentityVerificationCreated</h3>
