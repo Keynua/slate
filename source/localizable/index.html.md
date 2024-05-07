@@ -174,7 +174,6 @@ groups | array | Nombre de los grupos a los que pertenece el usuario, normalment
 token | string | El token del usuario que se utilizará para realizar la firma. Por ejemplo para [enviar un archivo multimedia](#enviar-un-archivo-multimedia)
 state | string | El [estado del usuario](#estados-del-usuario) dentro del contrato, basado en el estado de todos los items del usuario. Solo existe para contratos creados luego del 04/04/2022.
 idInfo | string | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
-validationsToSkip | array | La lista de validaciones que se deben omitir en el flujo de firma. Los valores permitidos en la lista son: `"expiration-date"` (Omitir validación de fecha de expiración), `"instructions-grade"` (Omitir validación de iletrados).
 
 ### Estados del Usuario
 
@@ -481,7 +480,7 @@ expirationDatetime | string | `optional` Fecha y hora de expiración del contrat
 templateId | string | Id del template a usar. Puedes usar uno de los template públicos de Keynua como `keynua-peru-default`. Si es un proceso customizado, el equipo de Keynua te enviará este valor
 onBehalfOf | string | AccountId de una cuenta hija. Este campo es usado para organizaciones que necesitan crear contratos como si fueran sus cuentas hijas. Solo funciona si la cuenta hija pertenece a la misma organización de la cuenta padre y si cuenta con el permiso para crear contratos. Los accountId de las cuentas asociadas se pueden obtener [aquí](https://app.keynua.com/profile/organization/?tab=members), ya sea descargando todos los usuarios o copiando los Id que necesites.
 documents | array | Arreglo de los documentos PDFs encodificados en base64 que van a ser firmados. Mínimo 1 y máximo 10. El peso máximo en total no debe ser mayor a 4.5 MB. En lugar de `base64` también se puede enviar `storageId`, como por ejemplo se obtiene de [este](#generar-documentos-rellenados) API.
-users | array | Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en **groups** depende del templateId a usar. Para el caso de `keynua-peru-default`, el valor en groups debe ser `signers`. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario
+users | array | Arreglo de los usuarios que firmarán el contrato. El email es opcional y el valor a enviar en **groups** depende del templateId a usar. Para el caso de `keynua-peru-default`, el valor en groups debe ser `signers`. Si utilizan un template customizado en el que hay más de un grupo, por ejemplo firmas con DNI + Firma múltiple, el valor del grupo representará al grupo que pertenece dicho usuario. Puedes ver el detalle de las configuraciones posibles en la sección [Usuarios del contrato](#usuarios-del-contrato)
 metadata | object | `optional` Metadata del contrato. Puedes enviar información en este campo como key-value para poder identificar el contrato creado por Keynua con algún Identificador interno de tu sistema.
 flags | object | `optional` Se podrá enviar información adicional para crear un contrato. Por ejemplo para configurar un canal de comunicación o enviar la información de [Cavali](#cavali). Para crear un contrato con Pagaré Electrónico, se enviará el key `cavaliData`. Puedes ver el detalle de las configuraciones posibles en la sección [Flags del contrato](#flags-del-contrato)
 templateOptions | object | `optional` [Configuración dinámica del template](#configuracion-dinamica-del-template) del contrato, si mandas este campo se omite el templateId
@@ -491,6 +490,16 @@ templateOptions | object | `optional` [Configuración dinámica del template](#c
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 chosenNotificationOptions | stringArray | Se deben enviar los tipos de notificación como string. Los valores pueden ser `sms`, `whatsapp` o `email`. **No se puede enviar sms y whatsapp al mismo tiempo**
+
+### Usuarios del contrato
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+name | string | El nombre del usuario
+email | string | El correo electrónico del usuario
+phone | string | El teléfono del usuario
+groups | array | Nombre de los grupos a los que pertenece el usuario, normalmente siempre pertenece a un sólo grupo. El identificador del grupo será asignado por el equipo de Keynua
+validationsToSkip | array | La lista de validaciones que se deben omitir en el flujo de firma. Los valores permitidos en la lista son: `"expiration-date"` (Omitir validación de fecha de expiración), `"instructions-grade"` (Omitir validación de iletrados).
 
 ## Grupos e items precargados
 
