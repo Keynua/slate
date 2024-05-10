@@ -2041,7 +2041,7 @@ Atributo | Tipo | Descripción
 name | string | Nombre del grupo, este mismo nombre tendrías que agregarlo a cada usuario que quieras que pertenezca a este gurpo al [crear el contrato](#crear-un-contrato)
 type | enum | `viewers`
 dynamicFields | array | Agrega [items customizados](#items-customizados) al flujo.
-removeUserInput | boolean | Indica si el visor debe completar el input `text` ingresando su nombre o rol en el flujo
+removeUserInput | boolean |  Indica si el visor no debe completar el input `text` ingresando su nombre o rol en el flujo. Si se envía `true`, el usuario no tendrá que realizar ninguna acción y solo se le enviará una notificación avisándole que va en copia y otra notificación cuando finalice el contrato.
 rejectDocuments | boolean | Indica si el visor puede rechazar el documento
 
 **Signers**
