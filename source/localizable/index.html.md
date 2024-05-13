@@ -3783,7 +3783,7 @@ Created | Serás notificado cuando un contrato o verificación de identidad fue 
 Started | Serás notificado cuando un contrato o verificación de identidad fue creado satisfactoriamente y está listo para ser firmado o completado. **Recomendamos usar este evento en lugar del evento Created ya que este evento te notificará cuando el contrato está listo para comenzar el proceso de firma**
 Finished | Serás notificado cuando el contrato o verificación de identidad ha sido completado por todos y finalizó correctamente
 Deleted | Serás notificado cuando el contrato ha sido eliminado
-InputProvided | Serás notificado cuando se asigne el valor del atributo `inputProvidedAt` del contrato.
+InputProvided | Serás notificado cuando se asigne el valor del atributo `inputProvidedAt` del contrato. **Este evento solo se notifica la primera vez que el contrato se inicia**
 ItemWorking | Serás notificado cada vez que se comienza a procesar un [Item](#propiedades-de-un-item)
 ItemSuccess | Serás notificado cada vez que un [Item](#propiedades-de-un-item) ha concluído satisactoriamente
 ItemError | Serás notificado cada vez que ocurre un error en un [Item](#propiedades-de-un-item)
@@ -3852,7 +3852,7 @@ Created | [ContractCreated](#propiedades-de-contractcreated) o [IdentityVerifica
 Started | [ContractStarted](#propiedades-de-contractstarted) o [IdentityVerificationStarted](#propiedades-de-identityverificationstarted)
 Finished | [ContractFinished](#propiedades-de-contractfinished) o [IdentityVerificationFinished](#propiedades-de-identityverificationfinished)
 Deleted | [ContractDeleted](#propiedades-de-contractdeleted)
-ContractInputProvided | [ContractInputProvided](#propiedades-de-contractinputprovided)
+InputProvided | [ContractInputProvided](#propiedades-de-contractinputprovided)
 ItemWorking | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `working`
 ItemSuccess | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `success`
 ItemError | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `error`
