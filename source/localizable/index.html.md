@@ -1292,6 +1292,8 @@ ocrData.idNumber | string | Número de documento
 ocrData.names | string | Nombre completo
 ocrData.familyNames | string | Apellidos
 ocrData.birthDate | string | Fecha de nacimiento, formato: MMMM-MM-DD
+ocrData.nationality | string | Nacionalidad
+ocrData.sex | string | Los valores posibles son: `F` y `M`
 
 DocumentType: `global`
 
