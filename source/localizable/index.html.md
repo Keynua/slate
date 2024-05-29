@@ -1811,7 +1811,7 @@ curl --request PUT \
 					   "approvalMessageTitle": "Tu solicitud está en proceso. Por favor comunícate con nuestro Call Center."					},
 					"errorMessages": {
 					   "contentReniecUnmatchedTitle": "El número del DNI registrado: {documentNumber}, no coincide con el número del DNI de la foto",
-					   "contentReniecUnmatchedSubtitle": "Contáctanos para mayor información: respondepe@keynua.com"
+					   "contentReniecUnmatchedSubtitle": "Contáctanos para mayor información: respondepe@example.com"
 					},
 					"dynamicFields": [
 						{
@@ -1918,7 +1918,7 @@ const data = JSON.stringify({
 					   "approvalMessageTitle": "Tu solicitud está en proceso. Por favor comunícate con nuestro Call Center."					},
 					"errorMessages": {
 					   "contentReniecUnmatchedTitle": "El número del DNI registrado: {documentNumber}, no coincide con el número del DNI de la foto",
-					   "contentReniecUnmatchedSubtitle": "Contáctanos para mayor información: respondepe@keynua.com"
+					   "contentReniecUnmatchedSubtitle": "Contáctanos para mayor información: respondepe@example.com"
 					},
 					"dynamicFields": [
 						{
