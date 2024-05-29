@@ -1771,7 +1771,7 @@ curl --request PUT \
   "userEmailNotifications": true,
   "templateOptions": {
 		"mock": true,
-		"classesId": "belcorp-classes-v2",
+		"classesId": "custom-classes-v2",
 		"stages": [
 		   {
 			  "groups": [
@@ -1811,7 +1811,7 @@ curl --request PUT \
 					   "approvalMessageTitle": "Tu solicitud está en proceso. Por favor comunícate con nuestro Call Center."					},
 					"errorMessages": {
 					   "contentReniecUnmatchedTitle": "El número del DNI registrado: {documentNumber}, no coincide con el número del DNI de la foto",
-					   "contentReniecUnmatchedSubtitle": "Contáctanos para mayor información: belcorp_respondepe@belcorp.biz"
+					   "contentReniecUnmatchedSubtitle": "Contáctanos para mayor información: respondepe@keynua.com"
 					},
 					"dynamicFields": [
 						{
@@ -1878,7 +1878,7 @@ const data = JSON.stringify({
   userEmailNotifications: true,
   templateOptions: {
 		"mock": true,
-		"classesId": "belcorp-classes-v2",
+		"classesId": "custom-classes-v2",
 		"stages": [
 		   {
 			  "groups": [
@@ -1918,7 +1918,7 @@ const data = JSON.stringify({
 					   "approvalMessageTitle": "Tu solicitud está en proceso. Por favor comunícate con nuestro Call Center."					},
 					"errorMessages": {
 					   "contentReniecUnmatchedTitle": "El número del DNI registrado: {documentNumber}, no coincide con el número del DNI de la foto",
-					   "contentReniecUnmatchedSubtitle": "Contáctanos para mayor información: belcorp_respondepe@belcorp.biz"
+					   "contentReniecUnmatchedSubtitle": "Contáctanos para mayor información: respondepe@keynua.com"
 					},
 					"dynamicFields": [
 						{
