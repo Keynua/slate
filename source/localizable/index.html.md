@@ -2058,6 +2058,8 @@ signatureTypes | array | Indica los tipos de firma. Puede ser `selfie`, `video-s
 facematch | array | Indica los items a los cuales se le aplicará el reconocimiento facial. Puede ser `selfie`, `liveness`, `video-signature`, `reniec` y `document-frontal`
 liveness3D | boolean | Incluir validación 3D
 documentValidations | array | Indica las opciones de validación que puedes agregar a los documentos. Puede ser `verify-content-reniec`, para comparar que los datos de la foto del DNI coincidan con Reniec (Sólo Perú) o `expiration-date`, para comprobar que el documento de identidad no ha expirado aún o `verify-id-number`, para comprobar que el número de documento ingresado en el flujo de firma se encuentre en el documento.
+countries | array | Indica los países cuyos documentos de identidad son aceptados. Solo disponible para OCR 3D. Los valores permitidos deben cumplir con la convención **ISO 3166-1 alpha-3**.
+idTypes | array | Indica los tipos de documentos aceptados. Solo disponible para OCR 3D. Los valores permitidos son: `ID Card`, `Driver License`, `Passport`.
 views | object | [Vistas customizadas](#vistas-customizadas) del template
 dynamicFields | array | Agrega [items customizados](#items-customizados) al flujo
 uploadSelfieButton | boolean | Sirve para mostrar el botón nativo para subir la foto de selfie en el flujo de firma.
@@ -2950,6 +2952,8 @@ type | string | Sí | `selfie`, `video`, `smile` o `liveness`. `selfie` solo pid
 disableInitialNotification | boolean | Sí | Opción para desactivar la notificación inicial que se envía a la persona.
 documentSide | `front` o `both` | Sí | SOLO PARA DNI DE PERÚ. Opción para indicar qué lados del DNI validar. Si no es enviado no se hará ninguna validación.
 documentScanVersion | number | Sí | La versión de escaneo del documento puede ser `1` para escaneo simple o `2` para escaneo 3D.
+countries | array | Sí | Indica los países cuyos documentos de identidad son aceptados. Solo disponible para OCR 3D. Los valores permitidos deben cumplir con la convención **ISO 3166-1 alpha-3**.
+idTypes | array | Sí | Indica los tipos de documentos aceptados. Solo disponible para OCR 3D. Los valores permitidos son: `ID Card`, `Driver License`, `Passport`.
 language | string | Sí | Lenguaje con el cual se creará el proceso de identificación
 accountName | string | Sí | Nombre de cuenta que se usará al crear el proceso de identificación. De no ser enviado, se usará el nombre de la cuenta que está creando la identificación.
 
