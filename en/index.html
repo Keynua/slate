@@ -3824,6 +3824,16 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>Indica las opciones de validación que puedes agregar a los documentos. Puede ser <code>verify-content-reniec</code>, para comparar que los datos de la foto del DNI coincidan con Reniec (Sólo Perú) o <code>expiration-date</code>, para comprobar que el documento de identidad no ha expirado aún o <code>verify-id-number</code>, para comprobar que el número de documento ingresado en el flujo de firma se encuentre en el documento.</td>
 </tr>
 <tr>
+<td>countries</td>
+<td>array</td>
+<td>Indica los países cuyos documentos de identidad son aceptados. Solo disponible para OCR 3D. Los valores permitidos deben cumplir con la convención <strong>ISO 3166-1 alpha-3</strong>.</td>
+</tr>
+<tr>
+<td>idTypes</td>
+<td>array</td>
+<td>Indica los tipos de documentos aceptados. Solo disponible para OCR 3D. Los valores permitidos son: <code>ID Card</code>, <code>Driver License</code>, <code>Passport</code>.</td>
+</tr>
+<tr>
 <td>views</td>
 <td>object</td>
 <td><a href="#vistas-customizadas">Vistas customizadas</a> del template</td>
@@ -5501,6 +5511,18 @@ Deceval para registrar la firma del participante.</li>
 <td>number</td>
 <td>Sí</td>
 <td>La versión de escaneo del documento puede ser <code>1</code> para escaneo simple o <code>2</code> para escaneo 3D.</td>
+</tr>
+<tr>
+<td>countries</td>
+<td>array</td>
+<td>Sí</td>
+<td>Indica los países cuyos documentos de identidad son aceptados. Solo disponible para OCR 3D. Los valores permitidos deben cumplir con la convención <strong>ISO 3166-1 alpha-3</strong>.</td>
+</tr>
+<tr>
+<td>idTypes</td>
+<td>array</td>
+<td>Sí</td>
+<td>Indica los tipos de documentos aceptados. Solo disponible para OCR 3D. Los valores permitidos son: <code>ID Card</code>, <code>Driver License</code>, <code>Passport</code>.</td>
 </tr>
 <tr>
 <td>language</td>
