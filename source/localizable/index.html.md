@@ -51,6 +51,25 @@ Algunas características de nuestra API:
 * Está basada en REST: los payload para los `request` y `response` deben estar en formato `JSON`
 * Solo soporta `HTTPS`
 
+En el siguiente gráfico, podrás ver el flujo básico de integración. El proceso es el mismo tanto para los contratos como para la verificación de identidad; lo único que varía es la API que utilizarás y el payload que enviarás según la documentación.
+
+![Image](https://kpublic.s3.amazonaws.com/images/keynua/APIKeynuaDiagram2.jpg)
+
+**El flujo básico consta de:**
+
+1. Crear la transacción usando nuestra API de [Creación de Contrato](#crear-un-contrato) o [Creación de Verificación de Identidad](#crear-verificacion-de-identidad).
+2. El usuario recibirá una notificación con un enlace y podrá realizar el proceso de firma del contrato o de identificación desde su dispositivo.
+3. Si ocurre un error durante el proceso, el usuario recibirá una notificación para corregirlo.
+4. Si la validación es exitosa, se generará el certificado de firma, se finalizará el contrato y se enviará una notificación tanto a los firmantes como al creador del contrato.
+
+Si configuras tu [Webhook](#webhooks), notificaremos a tu API registrada según los [eventos](#tipos-de-eventos-webhook) a los que te hayas inscrito.
+
+Si vas a integrar Keynua en tu sitio web o aplicación móvil, puedes revisar la documentación y los ejemplos de integración:
+
+- [Web](https://github.com/Keynua/public-docs/wiki/Widget)
+- [Android](https://github.com/Keynua/android-integration-example)
+- [iOS](https://github.com/Keynua/ios-integration-example)
+
 # Autenticación
 
 ```shell
