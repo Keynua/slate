@@ -533,6 +533,29 @@ Producción: https://api.keynua.com
 <li>Está basada en REST: los payload para los <code>request</code> y <code>response</code> deben estar en formato <code>JSON</code></li>
 <li>Solo soporta <code>HTTPS</code></li>
 </ul>
+
+<p>En el siguiente gráfico, podrás ver el flujo básico de integración. El proceso es el mismo tanto para los contratos como para la verificación de identidad; lo único que varía es la API que utilizarás y el payload que enviarás según la documentación.</p>
+
+<p><img src="https://kpublic.s3.amazonaws.com/images/keynua/APIKeynuaDiagram2.jpg" alt="Image" /></p>
+
+<p><strong>El flujo básico consta de:</strong></p>
+
+<ol>
+<li>Crear la transacción usando nuestra API de <a href="#crear-un-contrato">Creación de Contrato</a> o <a href="#crear-verificacion-de-identidad">Creación de Verificación de Identidad</a>.</li>
+<li>El usuario recibirá una notificación con un enlace y podrá realizar el proceso de firma del contrato o de identificación desde su dispositivo.</li>
+<li>Si ocurre un error durante el proceso, el usuario recibirá una notificación para corregirlo.</li>
+<li>Si la validación es exitosa, se generará el certificado de firma, se finalizará el contrato y se enviará una notificación tanto a los firmantes como al creador del contrato.</li>
+</ol>
+
+<p>Si configuras tu <a href="#webhooks">Webhook</a>, notificaremos a tu API registrada según los <a href="#tipos-de-eventos-webhook">eventos</a> a los que te hayas inscrito.</p>
+
+<p>Si vas a integrar Keynua en tu sitio web o aplicación móvil, puedes revisar la documentación y los ejemplos de integración:</p>
+
+<ul>
+<li><a href="https://github.com/Keynua/public-docs/wiki/Widget">Web</a></li>
+<li><a href="https://github.com/Keynua/android-integration-example">Android</a></li>
+<li><a href="https://github.com/Keynua/ios-integration-example">iOS</a></li>
+</ul>
 <h1 id='autenticacion'>Autenticación</h1><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.stg.keynua.com'</span> <span class="se">\</span>
   <span class="nt">-H</span> <span class="s1">'x-api-key: YOUR-APIKEY-HERE'</span>
   <span class="nt">-H</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span> <span class="se">\</span>
