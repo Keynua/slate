@@ -2293,10 +2293,10 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 </tr>
 </tbody></table>
 <h3 id='documento-pdf-final'>Documento PDF final</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.dev.keynua.com/contracts/..."</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.keynua.com/contracts/..."</span><span class="p">,</span><span class="w">
   </span><span class="nl">"individualDocsUrls"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="s2">"https://cmfiles.dev.keynua.com/contracts/..."</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"https://cmfiles.dev.keynua.com/contracts/..."</span><span class="w">
+    </span><span class="s2">"https://cmfiles.keynua.com/contracts/..."</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"https://cmfiles.keynua.com/contracts/..."</span><span class="w">
   </span><span class="p">],</span><span class="w">
   </span><span class="nl">"individualDocs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
@@ -2312,7 +2312,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
       </span><span class="nl">"userIds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="mi">0</span><span class="w">
       </span><span class="p">],</span><span class="w">
-      </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.dev.keynua.com/contracts/..."</span><span class="w">
+      </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.keynua.com/contracts/..."</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -2331,7 +2331,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>url</td>
 <td>string</td>
 <td>no</td>
-<td>Url del documento PDF firmado</td>
+<td>Url del documento PDF firmado <strong>Expira en 12 horas</strong></td>
 </tr>
 <tr>
 <td>individualDocsUrls</td>
@@ -2379,12 +2379,12 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>userGroupDocs[].url</td>
 <td>string</td>
 <td>no</td>
-<td>Url del documento firmado solo por los integrantes del grupo</td>
+<td>Url del documento firmado solo por los integrantes del grupo <strong>Expira en 12 horas</strong></td>
 </tr>
 </tbody></table>
 <h3 id='imagen'>Imagen</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"original"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.dev.keynua.com/cont..."</span><span class="w">
+    </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.keynua.com/cont..."</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -2402,7 +2402,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>original</td>
 <td>string</td>
 <td>no</td>
-<td>Url de la imagen</td>
+<td>Url de la imagen <strong>Expira en 12 horas</strong></td>
 </tr>
 <tr>
 <td>location</td>
@@ -2439,6 +2439,10 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 </tr>
 </tbody></table>
 <h3 id='ocr-y-prueba-de-vida-3d'>OCR y Prueba de vida 3D</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"auditTrail"</span><span class="p">:</span><span class="s2">"https://cmfiles.keynua.com/..."</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"idScanFrontImage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.keynua.com/..."</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"idScanBackImage"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.keynua.com/..."</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"facematchScore"</span><span class="p">:</span><span class="w"> </span><span class="mf">99.91</span><span class="p">,</span><span class="w">
   </span><span class="nl">"ocrData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"rut"</span><span class="p">:</span><span class="w"> </span><span class="s2">"17840680"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"birthPlace"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SANTIAGO"</span><span class="p">,</span><span class="w">
@@ -2456,6 +2460,40 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Type: <code>livenessinput</code></p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>auditTrail</td>
+<td>string</td>
+<td>URL de la imagen del rostro del usuario obtenida en la prueba de vida 3D <strong>Expira en 12 horas</strong></td>
+</tr>
+<tr>
+<td>idScanFrontImage</td>
+<td>string</td>
+<td>URL de la foto de la parte frontal del documento obtenida en la validación del documento 3D <strong>Expira en 12 horas</strong></td>
+</tr>
+<tr>
+<td>idScanBackImage</td>
+<td>string</td>
+<td>URL de la foto de la parte trasera del documento obtenida en la validación del documento 3D. La parte trasera no se pide en algunos casos, como en el caso del DNI Peruano <strong>Expira en 12 horas</strong></td>
+</tr>
+<tr>
+<td>facematchScore</td>
+<td>number</td>
+<td>Porcentaje de validación biométrico entre la prueba de vida 3D y el documento escaneado. Solo tendrá valor si se realizar la prueba de vida 3D y la validación de documento 3D</td>
+</tr>
+<tr>
+<td>ocrData</td>
+<td>object</td>
+<td>Información OCR obtenida del documento. La información varía por país y se detalla en los recuadros de abajo</td>
+</tr>
+</tbody></table>
 
 <p>DocumentType: <code>co-id</code></p>
 
@@ -2740,6 +2778,16 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>ocrData.idNumber</td>
 <td>string</td>
 <td>Número de documento</td>
+</tr>
+<tr>
+<td>ocrData.names</td>
+<td>string</td>
+<td>Nombre completo</td>
+</tr>
+<tr>
+<td>ocrData.familyNames</td>
+<td>string</td>
+<td>Apellidos</td>
 </tr>
 <tr>
 <td>ocrData.expirationDate</td>
@@ -5303,7 +5351,7 @@ Deceval para registrar la firma del participante.</li>
 </code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v1"</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.keynua.com/identity-verification/v1"</span><span class="p">)</span>
 
 <span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
@@ -5431,8 +5479,8 @@ Deceval para registrar la firma del participante.</li>
       </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"terms"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"stageIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
       </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"termsAndConditionsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.dev.keynua.com/legal/terms-and-conditions/"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"privacypolicyUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.dev.keynua.com/legal/privacy-policy/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"termsAndConditionsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.keynua.com/legal/terms-and-conditions/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"privacypolicyUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.keynua.com/legal/privacy-policy/"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"viewedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:03:13.928Z"</span><span class="w">
       </span><span class="p">},</span><span class="w">
       </span><span class="nl">"allowsManualUpdate"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
@@ -5570,7 +5618,7 @@ Deceval para registrar la firma del participante.</li>
 </code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v1/list"</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.keynua.com/identity-verification/v1/list"</span><span class="p">)</span>
 
 <span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
@@ -5838,7 +5886,7 @@ Deceval para registrar la firma del participante.</li>
 </code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.dev.keynua.com/identity-verification/v1/{verification_id}"</span><span class="p">)</span>
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.keynua.com/identity-verification/v1/{verification_id}"</span><span class="p">)</span>
 
 <span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
 <span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
@@ -5948,8 +5996,8 @@ Deceval para registrar la firma del participante.</li>
       </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"terms"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"stageIndex"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
       </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"termsAndConditionsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.dev.keynua.com/legal/terms-and-conditions/"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"privacypolicyUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.dev.keynua.com/legal/privacy-policy/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"termsAndConditionsUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.keynua.com/legal/terms-and-conditions/"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"privacypolicyUrl"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.keynua.com/legal/privacy-policy/"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"viewedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-04-26T23:03:13.928Z"</span><span class="w">
       </span><span class="p">},</span><span class="w">
       </span><span class="nl">"allowsManualUpdate"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
@@ -6403,7 +6451,7 @@ Deceval para registrar la firma del participante.</li>
 
 <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
   <span class="dl">'</span><span class="s1">method</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">GET</span><span class="dl">'</span><span class="p">,</span>
-  <span class="dl">'</span><span class="s1">hostname</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">api.dev.keynua.com</span><span class="dl">'</span><span class="p">,</span>
+  <span class="dl">'</span><span class="s1">hostname</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">api.keynua.com</span><span class="dl">'</span><span class="p">,</span>
   <span class="dl">'</span><span class="s1">path</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">/contract-manager-document-templates/api/{templateId}</span><span class="dl">'</span><span class="p">,</span>
   <span class="dl">'</span><span class="s1">headers</span><span class="dl">'</span><span class="p">:</span> <span class="p">{</span>
     <span class="dl">'</span><span class="s1">x-api-key</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">YOUR-API-KEY-HERE</span><span class="dl">'</span><span class="p">,</span>
@@ -7137,16 +7185,16 @@ Deceval para registrar la firma del participante.</li>
     </span><span class="nl">"pdfItems"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
       </span><span class="p">{</span><span class="w">
         </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Certificado y documentos"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.dev.keynua.com/contracts/48ae1990..."</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.keynua.com/contracts/48ae1990..."</span><span class="p">,</span><span class="w">
         </span><span class="nl">"individuals"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="p">{</span><span class="w">
             </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pdf.24.1.test_contract_1.pdf"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.dev.keynua.com/contracts/48ae1990..."</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.keynua.com/contracts/48ae1990..."</span><span class="p">,</span><span class="w">
             </span><span class="nl">"userIds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w">
           </span><span class="p">},</span><span class="w">
           </span><span class="p">{</span><span class="w">
             </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pdf.24.1.test_contract_2.pdf"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.dev.keynua.com/contracts/48ae1990..."</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://cmfiles.keynua.com/contracts/48ae1990..."</span><span class="p">,</span><span class="w">
             </span><span class="nl">"userIds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w">
           </span><span class="p">}</span><span class="w">
         </span><span class="p">]</span><span class="w">
