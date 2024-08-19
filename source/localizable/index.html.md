@@ -1153,10 +1153,10 @@ questions[].value | string | no | Valor de la respuesta
 
 ```json
 {
-  "url": "https://cmfiles.dev.keynua.com/contracts/...",
+  "url": "https://cmfiles.keynua.com/contracts/...",
   "individualDocsUrls": [
-    "https://cmfiles.dev.keynua.com/contracts/...",
-    "https://cmfiles.dev.keynua.com/contracts/..."
+    "https://cmfiles.keynua.com/contracts/...",
+    "https://cmfiles.keynua.com/contracts/..."
   ],
   "individualDocs": [
     {
@@ -1172,7 +1172,7 @@ questions[].value | string | no | Valor de la respuesta
       "userIds": [
         0
       ],
-      "url": "https://cmfiles.dev.keynua.com/contracts/..."
+      "url": "https://cmfiles.keynua.com/contracts/..."
     }
   ]
 }
@@ -1182,7 +1182,7 @@ Type: `pdf`
 
 Atributo | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
-url | string | no | Url del documento PDF firmado
+url | string | no | Url del documento PDF firmado **Expira en 12 horas**
 individualDocsUrls | string[] | sí | Urls por cada documento PDF agregado al contrato
 individualDocs[] | array | sí | Documentos por cada grupo de firmantes (si aplica) o por cada documento del contrato
 individualDocsUrls[].hash | string | no | SHA256 del documento firmado
@@ -1190,14 +1190,14 @@ individualDocsUrls[].userIds | string[] | no | Ids de los firmantes del document
 userGroupDocs[] | array | sí | Documentos por cada grupo de firmantes
 userGroupDocs[].hash | string | no | SHA256 del documento firmado
 userGroupDocs[].userIds | string[] | no | Ids de los firmantes del documento
-userGroupDocs[].url | string | no | Url del documento firmado solo por los integrantes del grupo
+userGroupDocs[].url | string | no | Url del documento firmado solo por los integrantes del grupo **Expira en 12 horas**
 
 ### Imagen
 
 ```json
 {
   "original": {
-    "url": "https://cmfiles.dev.keynua.com/cont..."
+    "url": "https://cmfiles.keynua.com/cont..."
   }
 }
 ```
@@ -1206,7 +1206,7 @@ Type: `image`
 
 Atributo | Tipo | Opcional | Descripción
 --------- | ----------- | ----------- | -----------
-original | string | no | Url de la imagen
+original | string | no | Url de la imagen **Expira en 12 horas**
 location | [GeolocationPosition](https://developer.mozilla.org/en-US/docs/Web/API/GeolocationPosition) | sí | Contiene información sobre la posición GPS de la imagen
 address | string | sí | Dirección calculada a partir de la posición
 
@@ -1228,6 +1228,10 @@ success | boolean | no | Si la conversión del video fue exitosa.
 
 ```json
 {
+  "auditTrail":"https://cmfiles.keynua.com/...",
+  "idScanFrontImage": "https://cmfiles.keynua.com/...",
+  "idScanBackImage": "https://cmfiles.keynua.com/...",
+  "facematchScore": 99.91,
   "ocrData": {
     "rut": "17840680",
     "birthPlace": "SANTIAGO",
@@ -1246,6 +1250,14 @@ success | boolean | no | Si la conversión del video fue exitosa.
 ```
 
 Type: `livenessinput`
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+auditTrail | string | URL de la imagen del rostro del usuario obtenida en la prueba de vida 3D **Expira en 12 horas**
+idScanFrontImage | string | URL de la foto de la parte frontal del documento obtenida en la validación del documento 3D **Expira en 12 horas**
+idScanBackImage | string | URL de la foto de la parte trasera del documento obtenida en la validación del documento 3D. La parte trasera no se pide en algunos casos, como en el caso del DNI Peruano **Expira en 12 horas**
+facematchScore | number | Porcentaje de validación biométrico entre la prueba de vida 3D y el documento escaneado. Solo tendrá valor si se realizar la prueba de vida 3D y la validación de documento 3D
+ocrData | object | Información OCR obtenida del documento. La información varía por país y se detalla en los recuadros de abajo
 
 DocumentType: `co-id`
 
@@ -1320,6 +1332,8 @@ Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 ocrData.type | string | Tipo de documento
 ocrData.idNumber | string | Número de documento
+ocrData.names | string | Nombre completo
+ocrData.familyNames | string | Apellidos
 ocrData.expirationDate | string | Fecha de expiración, formato: MMMM-MM-DD
 
 ## Errores por tipo de Item
@@ -2797,7 +2811,7 @@ curl --location --request PUT 'https://api.keynua.com/identity-verification/v1' 
 require "uri"
 require "net/http"
 
-url = URI("https://api.dev.keynua.com/identity-verification/v1")
+url = URI("https://api.keynua.com/identity-verification/v1")
 
 https = Net::HTTP.new(url.host, url.port)
 https.use_ssl = true
@@ -2932,8 +2946,8 @@ req.end();
       "type": "terms",
       "stageIndex": 0,
       "value": {
-        "termsAndConditionsUrl": "https://www.dev.keynua.com/legal/terms-and-conditions/",
-        "privacypolicyUrl": "https://www.dev.keynua.com/legal/privacy-policy/",
+        "termsAndConditionsUrl": "https://www.keynua.com/legal/terms-and-conditions/",
+        "privacypolicyUrl": "https://www.keynua.com/legal/privacy-policy/",
         "viewedAt": "2021-04-26T23:03:13.928Z"
       },
       "allowsManualUpdate": false,
@@ -2996,7 +3010,7 @@ curl --location --request GET 'https://api.keynua.com/identity-verification/v1/l
 require "uri"
 require "net/http"
 
-url = URI("https://api.dev.keynua.com/identity-verification/v1/list")
+url = URI("https://api.keynua.com/identity-verification/v1/list")
 
 https = Net::HTTP.new(url.host, url.port)
 https.use_ssl = true
@@ -3145,7 +3159,7 @@ curl --location --request GET 'https://api.keynua.com/identity-verification/v1/{
 require "uri"
 require "net/http"
 
-url = URI("https://api.dev.keynua.com/identity-verification/v1/{verification_id}")
+url = URI("https://api.keynua.com/identity-verification/v1/{verification_id}")
 
 https = Net::HTTP.new(url.host, url.port)
 https.use_ssl = true
@@ -3262,8 +3276,8 @@ req.end();
       "type": "terms",
       "stageIndex": 0,
       "value": {
-        "termsAndConditionsUrl": "https://www.dev.keynua.com/legal/terms-and-conditions/",
-        "privacypolicyUrl": "https://www.dev.keynua.com/legal/privacy-policy/",
+        "termsAndConditionsUrl": "https://www.keynua.com/legal/terms-and-conditions/",
+        "privacypolicyUrl": "https://www.keynua.com/legal/privacy-policy/",
         "viewedAt": "2021-04-26T23:03:13.928Z"
       },
       "allowsManualUpdate": false,
@@ -3560,7 +3574,7 @@ const https = require("https");
 
 var options = {
   'method': 'GET',
-  'hostname': 'api.dev.keynua.com',
+  'hostname': 'api.keynua.com',
   'path': '/contract-manager-document-templates/api/{templateId}',
   'headers': {
     'x-api-key': 'YOUR-API-KEY-HERE',
@@ -4043,16 +4057,16 @@ documents | array | Arreglo de [Documentos](#propiedades-de-un-documento-webhook
     "pdfItems": [
       {
         "title": "Certificado y documentos",
-        "url": "https://cmfiles.dev.keynua.com/contracts/48ae1990...",
+        "url": "https://cmfiles.keynua.com/contracts/48ae1990...",
         "individuals": [
           {
             "title": "pdf.24.1.test_contract_1.pdf",
-            "url": "https://cmfiles.dev.keynua.com/contracts/48ae1990...",
+            "url": "https://cmfiles.keynua.com/contracts/48ae1990...",
             "userIds": [0]
           },
           {
             "title": "pdf.24.1.test_contract_2.pdf",
-            "url": "https://cmfiles.dev.keynua.com/contracts/48ae1990...",
+            "url": "https://cmfiles.keynua.com/contracts/48ae1990...",
             "userIds": [1]
           }
         ]
