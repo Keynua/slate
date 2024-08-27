@@ -665,6 +665,14 @@ Parámetro | Descripción
 --------- | -----------
 contractId | El ID del Contrato a obtener
 
+### Query Parameters
+
+Parámetro | Tipo | Descripción
+--------- | ----------- | -----------
+startAt | integer | Índice desde el cual se desea iniciar la paginación de los items. Este parámetro es opcional. El valor por defecto es `0`
+limit | integer | Cantidad máxima de elementos a devolver en la consulta. Este parámetro es opcional. El valor por defecto es `50`
+values | boolean | Indica si se quiere obtener los valores de los items. Este parámetro es opcional. El valor por defecto es `true`
+
 ## Eliminar un Contrato
 
 ```ruby
