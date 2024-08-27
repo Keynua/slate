@@ -1592,6 +1592,30 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>El ID del Contrato a obtener</td>
 </tr>
 </tbody></table>
+<h3 id='query-parameters'>Query Parameters</h3>
+<table><thead>
+<tr>
+<th>Parámetro</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>startAt</td>
+<td>integer</td>
+<td>Índice desde el cual se desea iniciar la paginación de los items. Este parámetro es opcional. El valor por defecto es <code>0</code></td>
+</tr>
+<tr>
+<td>limit</td>
+<td>integer</td>
+<td>Cantidad máxima de elementos a devolver en la consulta. Este parámetro es opcional. El valor por defecto es <code>50</code></td>
+</tr>
+<tr>
+<td>values</td>
+<td>boolean</td>
+<td>Indica si se quiere obtener los valores de los items. Este parámetro es opcional. El valor por defecto es <code>true</code></td>
+</tr>
+</tbody></table>
 <h2 id='eliminar-un-contrato'>Eliminar un Contrato</h2><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'uri'</span>
 <span class="nb">require</span> <span class="s1">'net/http'</span>
 <span class="nb">require</span> <span class="s1">'openssl'</span>
