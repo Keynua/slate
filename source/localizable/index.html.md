@@ -1433,6 +1433,27 @@ Code | Descripción
 --------- | -----------
 ManualApproveRejected | El item ha sido rechazado por el administrador del contrato.
 
+### livenessinput
+
+<aside class="notice">Estos errores, a diferencia del resto, de momento solo se devuelven en el navegador.</aside>
+
+Code | Descripción
+--------- | -----------
+Timeout | La sesión fue cancelada porque el usuario no pudo completar la verificación a tiempo.
+ContextSwitch | La sesión fue cancelada debido a que la aplicación fue terminada, puesta en suspensión, recibió una notificación del sistema operativo o se envió a segundo plano.
+OrientationChangeDuringSession | La sesión fue cancelada debido a un cambio de orientación del dispositivo durante la sesión.
+LandscapeModeNotAllowed | La sesión fue cancelada porque el dispositivo está en modo horizontal. La experiencia de usuario en esta orientación es deficiente, por lo que se requiere modo vertical.
+UserCancelled | El usuario presionó el botón de cancelar y no completó la sesión.
+UserCancelledFromRetryGuidance | El usuario presionó el botón de cancelar durante la guía de reintento.
+UserCancelledWhenAttemptingToGetCameraPermissions | El usuario canceló la experiencia en el navegador mientras intentaba otorgar permisos de cámara.
+LockedOut | La sesión fue cancelada porque el usuario estaba en un estado de bloqueo.
+CameraNotEnabled | La sesión fue cancelada porque la cámara no estaba habilitada.
+DocumentNotReady | La sesión fue cancelada porque el documento no estaba listo
+CameraNotRunning | La sesión fue cancelada porque la cámara seleccionada no está activa.
+StillLoadingResources | El SDK aún está cargando recursos
+ResourcesCouldNotBeLoadedOnLastInit | No se pudieron cargar los recursos
+UnknownInternalError | La sesión fue cancelada debido a un error desconocido e inesperado. El SDK en el navegador utiliza diversas APIs de plataforma, incluyendo cámara, almacenamiento, seguridad, redes, entre otras. Este valor es un "catch-all" para errores experimentados durante el uso normal de estas API.
+
 ## Customizar opciones de un item por usuario
 
 Las opciones de los items que se encuentran establecidas en el template del contrato pueden ser customizadas para un usuario en especifico. Estas se indican para cada tipo de item que el usario tenga asignado en su proceso de firma. Las opciones deben ir dentro del atributo **items** de la **metadata** del usuario durante la creacion del contrato.
