@@ -465,7 +465,7 @@ req.write(data);
 req.end();
 ```
 
-> Si el contrato fue creado satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
+> Si el contrato fue creado satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
 
 ### HTTP Request
 
@@ -2067,7 +2067,7 @@ req.write(data);
 req.end();
 ```
 
-> Si el contrato fue creado satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
+> Si el contrato fue creado satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
 
 Describe las opciones que podemos enviar en el atributo `templateOptions` al crear el contrato
 
@@ -3018,6 +3018,7 @@ countries | array | Sí | Indica los países cuyos documentos de identidad son a
 idTypes | array | Sí | Indica los tipos de documentos aceptados. Solo disponible para OCR 3D. Los valores permitidos son: `ID Card`, `Driver License`, `Passport`.
 language | string | Sí | Lenguaje con el cual se creará el proceso de identificación
 accountName | string | Sí | Nombre de cuenta que se usará al crear el proceso de identificación. De no ser enviado, se usará el nombre de la cuenta que está creando la identificación.
+addressMatchScore | number | Sí | Porcentaje de coincidencia (0-100) requerido entre la dirección extraída del documento escaneado y la obtenida de Reniec
 
 ### Combinaciones no soportadas por defecto
 
@@ -3631,7 +3632,7 @@ var req = https.request(options, function (res) {
 req.end();
 ```
 
-> Si la plantilla fue obtenida satisfactoramente, el API retorna un Json estructurado como aparece en la sección de [Plantilla de documento](#propiedades-de-una-plantilla-de-documento)
+> Si la plantilla fue obtenida satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de [Plantilla de documento](#propiedades-de-una-plantilla-de-documento)
 
 Permite obtener una plantilla de documento.
 
