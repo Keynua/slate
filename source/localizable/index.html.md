@@ -1437,22 +1437,58 @@ ManualApproveRejected | El item ha sido rechazado por el administrador del contr
 
 <aside class="notice">Estos errores, a diferencia del resto, de momento solo se devuelven en el navegador.</aside>
 
+Code | Title | Descripción
+--------- | ----------- | -----------
+InvalidDocument | Tipo de documento inválido | El formato del documento no esta permitido, vuelve a tomar una foto de tu documento.
+InvalidLoad | Problemas de conexión a Internet | Por favor, verifica que la conexión a internet de tu dispositivo sea adecuada. Si sigues teniendo el mismo problema, intenta conectarte a una red distinta o borrando el caché de tu navegador.
+InvalidCountry | El país no es válido | El documento escaneado no es de un país válido, asegúrate de que el documento sea de un país permitido.
+InvalidType | El tipo de documento no es válido | El documento escaneado no es un tipo de documento válido, asegúrate de que el documento sea un tipo permitido.
+IncludeDeniedCountry | País no permitido | El documento escaneado no es de un país permitido, asegúrate de que el documento sea de un país válido.
+IncludeDeniedType | Tipo de documento no permitido | El documento escaneado no es un tipo de documento permitido, asegúrate de que el documento sea un tipo válido.
+Timeout | Tiempo de espera agotado | La sesión fue cancelada porque el usuario no pudo completar la verificación a tiempo.
+ContextSwitch | Cambio de contexto | La sesión fue cancelada debido a que la aplicación fue terminada, puesta en suspensión, recibió una notificación del sistema operativo o se envió a segundo plano.
+OrientationChange | Cambio de orientación | La sesión fue cancelada debido a un cambio de orientación del dispositivo durante la sesión.
+LandscapeModeNotAllowed | Modo paisaje no permitido | La sesión fue cancelada porque el dispositivo está en modo horizontal. La experiencia de usuario en esta orientación es deficiente, por lo que se requiere modo vertical.
+UserCancelled | Verificación cancelada | El usuario presionó el botón de cancelar y no completó la sesión.
+UserCancelledRetryGuidance | El usuario canceló la orientación | El usuario presionó el botón de cancelar durante la guía de reintento.
+UserCancelledCameraPermissions | Permisos de cámara cancelados | El usuario canceló la experiencia en el navegador mientras intentaba otorgar permisos de cámara.
+LockedOut | Bloqueado | La sesión fue cancelada porque el usuario estaba en un estado de bloqueo.
+CameraNotEnabled | Cámara no habilitada | La sesión fue cancelada porque la cámara no estaba habilitada.
+DocumentNotReady | Documento no listo | La sesión fue cancelada porque el documento no estaba listo
+CameraNotRunning | Cámara no activa | La sesión fue cancelada porque la cámara seleccionada no está activa.
+StillLoadingResources | Cargando librerias | El SDK aún está cargando recursos
+ResourcesCouldNotBeLoadedOnLastInit | Ha ocurrido un error al intentar iniciar la prueba de vida | No se pudieron cargar los recursos
+DefaultError | Error en prueba de vida | La prueba de vida no es concluyente, vuelve a grabar un video donde se vea tu cara, y asegúrate de que salga nítida, sin sombras o brillos.
+DefaultIdScanError | Error al escanear el documento | El documento escaneado no es concluyente, asegúrate de que la foto salga nítida, sin sombras o brillos.
+UnknownInternalError | Error interno desconocido | La sesión fue cancelada debido a un error desconocido e inesperado. El SDK en el navegador utiliza diversas APIs de plataforma, incluyendo cámara, almacenamiento, seguridad, redes, entre otras. Este valor es un "catch-all" para errores experimentados durante el uso normal de estas API.
+
+### inevalidation
+
 Code | Descripción
 --------- | -----------
-Timeout | La sesión fue cancelada porque el usuario no pudo completar la verificación a tiempo.
-ContextSwitch | La sesión fue cancelada debido a que la aplicación fue terminada, puesta en suspensión, recibió una notificación del sistema operativo o se envió a segundo plano.
-OrientationChangeDuringSession | La sesión fue cancelada debido a un cambio de orientación del dispositivo durante la sesión.
-LandscapeModeNotAllowed | La sesión fue cancelada porque el dispositivo está en modo horizontal. La experiencia de usuario en esta orientación es deficiente, por lo que se requiere modo vertical.
-UserCancelled | El usuario presionó el botón de cancelar y no completó la sesión.
-UserCancelledFromRetryGuidance | El usuario presionó el botón de cancelar durante la guía de reintento.
-UserCancelledWhenAttemptingToGetCameraPermissions | El usuario canceló la experiencia en el navegador mientras intentaba otorgar permisos de cámara.
-LockedOut | La sesión fue cancelada porque el usuario estaba en un estado de bloqueo.
-CameraNotEnabled | La sesión fue cancelada porque la cámara no estaba habilitada.
-DocumentNotReady | La sesión fue cancelada porque el documento no estaba listo
-CameraNotRunning | La sesión fue cancelada porque la cámara seleccionada no está activa.
-StillLoadingResources | El SDK aún está cargando recursos
-ResourcesCouldNotBeLoadedOnLastInit | No se pudieron cargar los recursos
-UnknownInternalError | La sesión fue cancelada debido a un error desconocido e inesperado. El SDK en el navegador utiliza diversas APIs de plataforma, incluyendo cámara, almacenamiento, seguridad, redes, entre otras. Este valor es un "catch-all" para errores experimentados durante el uso normal de estas API.
+InvalidINE | El INE ingresado no es válido.
+RequiredUser | El usuario es requerido.
+MissingIdScan | No se ha obtenido la información del ID correctamente.
+InvalidIdScan | Hubo un error en la extracción de información del documento.
+INEVerificationError | Ocurrió un error verificando la INE.
+
+### ficoscore
+
+Code | Descripción
+--------- | -----------
+FicoScoreInvalid | El score obtenido es {{score}}. Se requiere como mínimo {{min-score}}.
+FicoScoreFailed | No fue posible obtener el Fico Score.
+
+### nationalidentities
+
+Code | Descripción
+--------- | -----------
+RestrictedDocument | El documento ingresado ha sido rechazado.
+DifferentSignerName | El nombre que figura en el documento no coincide con el destinatario de esta identificación.
+EmptyIdScan | No se detecto ningún texto en la imagen de documento.
+ExceededThreshold | Las información detectada en el documento no es correcta.
+UnsupportedDocumentType | El documento detectado no es aceptado por este proceso.
+ValidationError | La validación de identidad no fue exitosa.
 
 ## Customizar opciones de un item por usuario
 
