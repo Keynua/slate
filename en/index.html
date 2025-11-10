@@ -1301,7 +1301,7 @@ Producción: https://api.keynua.com
 <span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
 </code></pre></div>
 <blockquote>
-<p>Si el contrato fue creado satisfactoramente, el API retorna un Json estructurado como aparece en la sección de <a href="#contratos">Contratos</a></p>
+<p>Si el contrato fue creado satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de <a href="#contratos">Contratos</a></p>
 </blockquote>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>PUT /contracts/v1</code></p>
@@ -3023,64 +3023,195 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <table><thead>
 <tr>
 <th>Code</th>
+<th>Title</th>
 <th>Descripción</th>
 </tr>
 </thead><tbody>
 <tr>
+<td>InvalidDocument</td>
+<td>Tipo de documento inválido</td>
+<td>El formato del documento no esta permitido, vuelve a tomar una foto de tu documento.</td>
+</tr>
+<tr>
+<td>InvalidLoad</td>
+<td>Problemas de conexión a Internet</td>
+<td>Por favor, verifica que la conexión a internet de tu dispositivo sea adecuada. Si sigues teniendo el mismo problema, intenta conectarte a una red distinta o borrando el caché de tu navegador.</td>
+</tr>
+<tr>
+<td>InvalidCountry</td>
+<td>El país no es válido</td>
+<td>El documento escaneado no es de un país válido, asegúrate de que el documento sea de un país permitido.</td>
+</tr>
+<tr>
+<td>InvalidType</td>
+<td>El tipo de documento no es válido</td>
+<td>El documento escaneado no es un tipo de documento válido, asegúrate de que el documento sea un tipo permitido.</td>
+</tr>
+<tr>
+<td>IncludeDeniedCountry</td>
+<td>País no permitido</td>
+<td>El documento escaneado no es de un país permitido, asegúrate de que el documento sea de un país válido.</td>
+</tr>
+<tr>
+<td>IncludeDeniedType</td>
+<td>Tipo de documento no permitido</td>
+<td>El documento escaneado no es un tipo de documento permitido, asegúrate de que el documento sea un tipo válido.</td>
+</tr>
+<tr>
 <td>Timeout</td>
+<td>Tiempo de espera agotado</td>
 <td>La sesión fue cancelada porque el usuario no pudo completar la verificación a tiempo.</td>
 </tr>
 <tr>
 <td>ContextSwitch</td>
+<td>Cambio de contexto</td>
 <td>La sesión fue cancelada debido a que la aplicación fue terminada, puesta en suspensión, recibió una notificación del sistema operativo o se envió a segundo plano.</td>
 </tr>
 <tr>
-<td>OrientationChangeDuringSession</td>
+<td>OrientationChange</td>
+<td>Cambio de orientación</td>
 <td>La sesión fue cancelada debido a un cambio de orientación del dispositivo durante la sesión.</td>
 </tr>
 <tr>
 <td>LandscapeModeNotAllowed</td>
+<td>Modo paisaje no permitido</td>
 <td>La sesión fue cancelada porque el dispositivo está en modo horizontal. La experiencia de usuario en esta orientación es deficiente, por lo que se requiere modo vertical.</td>
 </tr>
 <tr>
 <td>UserCancelled</td>
+<td>Verificación cancelada</td>
 <td>El usuario presionó el botón de cancelar y no completó la sesión.</td>
 </tr>
 <tr>
-<td>UserCancelledFromRetryGuidance</td>
+<td>UserCancelledRetryGuidance</td>
+<td>El usuario canceló la orientación</td>
 <td>El usuario presionó el botón de cancelar durante la guía de reintento.</td>
 </tr>
 <tr>
-<td>UserCancelledWhenAttemptingToGetCameraPermissions</td>
+<td>UserCancelledCameraPermissions</td>
+<td>Permisos de cámara cancelados</td>
 <td>El usuario canceló la experiencia en el navegador mientras intentaba otorgar permisos de cámara.</td>
 </tr>
 <tr>
 <td>LockedOut</td>
+<td>Bloqueado</td>
 <td>La sesión fue cancelada porque el usuario estaba en un estado de bloqueo.</td>
 </tr>
 <tr>
 <td>CameraNotEnabled</td>
+<td>Cámara no habilitada</td>
 <td>La sesión fue cancelada porque la cámara no estaba habilitada.</td>
 </tr>
 <tr>
 <td>DocumentNotReady</td>
+<td>Documento no listo</td>
 <td>La sesión fue cancelada porque el documento no estaba listo</td>
 </tr>
 <tr>
 <td>CameraNotRunning</td>
+<td>Cámara no activa</td>
 <td>La sesión fue cancelada porque la cámara seleccionada no está activa.</td>
 </tr>
 <tr>
 <td>StillLoadingResources</td>
+<td>Cargando librerias</td>
 <td>El SDK aún está cargando recursos</td>
 </tr>
 <tr>
 <td>ResourcesCouldNotBeLoadedOnLastInit</td>
+<td>Ha ocurrido un error al intentar iniciar la prueba de vida</td>
 <td>No se pudieron cargar los recursos</td>
 </tr>
 <tr>
+<td>DefaultError</td>
+<td>Error en prueba de vida</td>
+<td>La prueba de vida no es concluyente, vuelve a grabar un video donde se vea tu cara, y asegúrate de que salga nítida, sin sombras o brillos.</td>
+</tr>
+<tr>
+<td>DefaultIdScanError</td>
+<td>Error al escanear el documento</td>
+<td>El documento escaneado no es concluyente, asegúrate de que la foto salga nítida, sin sombras o brillos.</td>
+</tr>
+<tr>
 <td>UnknownInternalError</td>
+<td>Error interno desconocido</td>
 <td>La sesión fue cancelada debido a un error desconocido e inesperado. El SDK en el navegador utiliza diversas APIs de plataforma, incluyendo cámara, almacenamiento, seguridad, redes, entre otras. Este valor es un &quot;catch-all&quot; para errores experimentados durante el uso normal de estas API.</td>
+</tr>
+</tbody></table>
+<h3 id='inevalidation'>inevalidation</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>InvalidINE</td>
+<td>El INE ingresado no es válido.</td>
+</tr>
+<tr>
+<td>RequiredUser</td>
+<td>El usuario es requerido.</td>
+</tr>
+<tr>
+<td>MissingIdScan</td>
+<td>No se ha obtenido la información del ID correctamente.</td>
+</tr>
+<tr>
+<td>InvalidIdScan</td>
+<td>Hubo un error en la extracción de información del documento.</td>
+</tr>
+<tr>
+<td>INEVerificationError</td>
+<td>Ocurrió un error verificando la INE.</td>
+</tr>
+</tbody></table>
+<h3 id='ficoscore'>ficoscore</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>FicoScoreInvalid</td>
+<td>El score obtenido es {{score}}. Se requiere como mínimo {{min-score}}.</td>
+</tr>
+<tr>
+<td>FicoScoreFailed</td>
+<td>No fue posible obtener el Fico Score.</td>
+</tr>
+</tbody></table>
+<h3 id='nationalidentities'>nationalidentities</h3>
+<table><thead>
+<tr>
+<th>Code</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>RestrictedDocument</td>
+<td>El documento ingresado ha sido rechazado.</td>
+</tr>
+<tr>
+<td>DifferentSignerName</td>
+<td>El nombre que figura en el documento no coincide con el destinatario de esta identificación.</td>
+</tr>
+<tr>
+<td>EmptyIdScan</td>
+<td>No se detecto ningún texto en la imagen de documento.</td>
+</tr>
+<tr>
+<td>ExceededThreshold</td>
+<td>Las información detectada en el documento no es correcta.</td>
+</tr>
+<tr>
+<td>UnsupportedDocumentType</td>
+<td>El documento detectado no es aceptado por este proceso.</td>
+</tr>
+<tr>
+<td>ValidationError</td>
+<td>La validación de identidad no fue exitosa.</td>
 </tr>
 </tbody></table>
 <h2 id='customizar-opciones-de-un-item-por-usuario'>Customizar opciones de un item por usuario</h2>
@@ -3823,7 +3954,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
 </code></pre></div>
 <blockquote>
-<p>Si el contrato fue creado satisfactoramente, el API retorna un Json estructurado como aparece en la sección de <a href="#contratos">Contratos</a></p>
+<p>Si el contrato fue creado satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de <a href="#contratos">Contratos</a></p>
 </blockquote>
 
 <p>Describe las opciones que podemos enviar en el atributo <code>templateOptions</code> al crear el contrato</p>
@@ -5697,6 +5828,12 @@ Deceval para registrar la firma del participante.</li>
 <td>Sí</td>
 <td>Nombre de cuenta que se usará al crear el proceso de identificación. De no ser enviado, se usará el nombre de la cuenta que está creando la identificación.</td>
 </tr>
+<tr>
+<td>addressMatchScore</td>
+<td>number</td>
+<td>Sí</td>
+<td>Porcentaje de coincidencia (0-100) requerido entre la dirección extraída del documento escaneado y la obtenida de Reniec</td>
+</tr>
 </tbody></table>
 <h3 id='combinaciones-no-soportadas-por-defecto'>Combinaciones no soportadas por defecto</h3>
 <p>Por ahora los paises que soportamos para <code>selfie</code> y <code>video</code> son <code>sv-dui</code>, <code>mx-ife</code>, <code>cl-cedula</code>, <code>pe-dni</code>, <code>br-denatran</code> y <code>co-cedula</code>. En caso se cree una identificación con <code>selfie</code> o <code>video</code> con algún país que no esté en esta lista, automáticamente se considerará el documento como <code>global</code>. La lista completa sí está soportada con el type <code>liveness</code>.</p>
@@ -6569,7 +6706,7 @@ Deceval para registrar la firma del participante.</li>
 <span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
 </code></pre></div>
 <blockquote>
-<p>Si la plantilla fue obtenida satisfactoramente, el API retorna un Json estructurado como aparece en la sección de <a href="#propiedades-de-una-plantilla-de-documento">Plantilla de documento</a></p>
+<p>Si la plantilla fue obtenida satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de <a href="#propiedades-de-una-plantilla-de-documento">Plantilla de documento</a></p>
 </blockquote>
 
 <p>Permite obtener una plantilla de documento.</p>
