@@ -7004,6 +7004,10 @@ Deceval para registrar la firma del participante.</li>
 <td>Serás notificado cada vez que ocurre un error en un <a href="#propiedades-de-un-item">Item</a></td>
 </tr>
 <tr>
+<td>UserFinished</td>
+<td>Serás notificado cuando un usuario específico haya completado todos sus elementos de firma en el contrato o verificación de identidad, sin esperar a que los demás usuarios también terminen</td>
+</tr>
+<tr>
 <td>OTPCreated</td>
 <td>Serás notificado cada vez que se envíe un <a href="#otp">OTP</a> de tipo <code>webhook</code> al usuario</td>
 </tr>
@@ -7080,7 +7084,7 @@ Deceval para registrar la firma del participante.</li>
 <tr>
 <td>type</td>
 <td>string</td>
-<td>Nombre del <a href="#tipos-de-eventos-webhook">tipo de evento</a> emitido. Puede ser <code>ContractCreated</code>, <code>ContractStarted</code>, <code>ContractItemUpdated</code>, <code>ContractFinished</code>, <code>ContractDeleted</code>, <code>IdentityVerificationCreated</code>, <code>IdentityVerificationStarted</code>, <code>IdentityVerificationFinished</code>, <code>IdentityVerificationItemUpdated</code>, o <code>OTPCreated</code></td>
+<td>Nombre del <a href="#tipos-de-eventos-webhook">tipo de evento</a> emitido. Puede ser <code>ContractCreated</code>, <code>ContractStarted</code>, <code>ContractItemUpdated</code>, <code>ContractUserUpdated</code>, <code>ContractFinished</code>, <code>ContractDeleted</code>, <code>IdentityVerificationCreated</code>, <code>IdentityVerificationStarted</code>, <code>IdentityVerificationUserUpdated</code>, <code>IdentityVerificationFinished</code>, <code>IdentityVerificationItemUpdated</code>, o <code>OTPCreated</code></td>
 </tr>
 <tr>
 <td>accountId</td>
@@ -7133,6 +7137,10 @@ Deceval para registrar la firma del participante.</li>
 <tr>
 <td>ItemError</td>
 <td><a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a> o <a href="#propiedades-de-identityverificationitemupdated">IdentityVerificationItemUpdated</a>. Item.state <code>error</code></td>
+</tr>
+<tr>
+<td>UserFinished</td>
+<td><a href="#propiedades-de-contractuserupdated">ContractUserUpdated</a> o <a href="#propiedades-de-identityverificationuserupdated">IdentityVerificationUserUpdated</a>. user.status <code>done</code></td>
 </tr>
 <tr>
 <td>OTPCreated</td>
@@ -7847,6 +7855,209 @@ Deceval para registrar la firma del participante.</li>
 <td><a href="#propiedades-de-un-usuario-webhook">Usuario</a> al que pertenece el elemento modificado. Si el valor es null el elemento le pertenece a todos los usuarios</td>
 </tr>
 </tbody></table>
+<h3 id='propiedades-de-contractuserupdated'>Propiedades de ContractUserUpdated</h3>
+<blockquote>
+<p>Ejemplo de Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ContractUserUpdated"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"contractId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000001"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mi contrato"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"templateId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"template-id"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01T00:00:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"startedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01T01:00:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"docCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"itemCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">14</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userCount"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"longCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"shortCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"123456"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+        </span><span class="nl">"user"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user-ref"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@keynua.com"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+51999888777"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                </span><span class="s2">"signers"</span><span class="w">
+            </span><span class="p">],</span><span class="w">
+            </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"otherUsers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Jane Doe"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"other-ref"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jane@keynua.com"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+51999888666"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+                    </span><span class="s2">"signers"</span><span class="w">
+                </span><span class="p">],</span><span class="w">
+                </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"working"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Se emite cuando un usuario específico ha completado todos sus elementos de firma en el contrato, sin esperar a que los demás usuarios también terminen.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>contractId</td>
+<td>string</td>
+<td>Código del contrato</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>Referencia del contrato</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Titulo del contrato</td>
+</tr>
+<tr>
+<td>templateId</td>
+<td>string</td>
+<td>Identificador del Template</td>
+</tr>
+<tr>
+<td>language</td>
+<td>string</td>
+<td>Idioma del contrato</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>string</td>
+<td>Fecha de creación del contrato</td>
+</tr>
+<tr>
+<td>startedAt</td>
+<td>string</td>
+<td>Fecha de inicio del proceso de firma del contrato</td>
+</tr>
+<tr>
+<td>docCount</td>
+<td>integer</td>
+<td>Cantidad de documentos que tiene el contrato</td>
+</tr>
+<tr>
+<td>itemCount</td>
+<td>integer</td>
+<td>Cantidad de items que tiene el contrato</td>
+</tr>
+<tr>
+<td>userCount</td>
+<td>integer</td>
+<td>Cantidad de usuarios que tiene el contrato</td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>object</td>
+<td>Metadata del contrato. Esta Metadata será la misma que se envió al <a href="#crear-un-contrato">crear un Contrato</a></td>
+</tr>
+<tr>
+<td>longCode</td>
+<td>string</td>
+<td>Código largo del contrato</td>
+</tr>
+<tr>
+<td>shortCode</td>
+<td>string</td>
+<td>Código corto del contrato para facilitar su identificación</td>
+</tr>
+<tr>
+<td>user</td>
+<td>object</td>
+<td><a href="#propiedades-de-un-usuario-userupdated">Usuario</a> que completó sus elementos de firma</td>
+</tr>
+<tr>
+<td>otherUsers</td>
+<td>array</td>
+<td>Arreglo de <a href="#propiedades-de-un-usuario-userupdated">Usuarios</a> restantes del contrato con su estado actual</td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-un-usuario-userupdated'>Propiedades de un Usuario UserUpdated</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user-ref"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@keynua.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+51999888777"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"signers"</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>Identificador único del usuario en el contrato</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>El nombre del usuario</td>
+</tr>
+<tr>
+<td>ref</td>
+<td>string</td>
+<td>Referencia del usuario</td>
+</tr>
+<tr>
+<td>email</td>
+<td>string</td>
+<td>El correo electrónico del usuario</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>string</td>
+<td>El teléfono del usuario</td>
+</tr>
+<tr>
+<td>groups</td>
+<td>array</td>
+<td>Nombre de los grupos a los que pertenece el usuario</td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>object</td>
+<td>Metadata del usuario</td>
+</tr>
+<tr>
+<td>documentNumber</td>
+<td>string</td>
+<td>Número de documento del usuario</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>Estado del usuario. Puede ser <code>pending</code>, <code>working</code>, <code>error</code> o <code>done</code></td>
+</tr>
+</tbody></table>
 <h3 id='propiedades-de-contractinputprovided'>Propiedades de ContractInputProvided</h3>
 <blockquote>
 <p>Ejemplo de Body</p>
@@ -8419,6 +8630,129 @@ Deceval para registrar la firma del participante.</li>
 <td>item</td>
 <td>object</td>
 <td><a href="#propiedades-de-un-item">Item</a> del contrato que ha cambiado de estado</td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-identityverificationuserupdated'>Propiedades de IdentityVerificationUserUpdated</h3>
+<blockquote>
+<p>Ejemplo de Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"IdentityVerificationUserUpdated"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payload"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"language"</span><span class="p">:</span><span class="w"> </span><span class="s2">"es"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"contractId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"transactionId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01T00:00:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"startedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01T00:00:00.000Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"account@mail.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"organizationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identificación de 12345678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userEmail"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@mail.com"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userPhone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"23456789"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"userStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Se emite cuando la persona de una verificación de identidad ha completado todos sus elementos, sin esperar a que el proceso finalice completamente.</p>
+
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>language</td>
+<td>string</td>
+<td>Lenguaje con el cual se completará el proceso de identificación</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>string</td>
+<td>Campo libre. Útil para realizar búsquedas.</td>
+</tr>
+<tr>
+<td>contractId</td>
+<td>string</td>
+<td>Id interno</td>
+</tr>
+<tr>
+<td>transactionId</td>
+<td>string</td>
+<td>Identificador de la transacción. Es el mismo valor que contractId</td>
+</tr>
+<tr>
+<td>documentNumber</td>
+<td>string</td>
+<td>Número de documento nacional de identificación</td>
+</tr>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>Identificador único de la verificación</td>
+</tr>
+<tr>
+<td>accountId</td>
+<td>string</td>
+<td>Id de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>string</td>
+<td>Fecha y hora de creación en formato ISO</td>
+</tr>
+<tr>
+<td>startedAt</td>
+<td>string</td>
+<td>Fecha y hora en formato ISO del momento en que la verificación está lista para ser completada.</td>
+</tr>
+<tr>
+<td>accountEmail</td>
+<td>string</td>
+<td>Email de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>organizationId</td>
+<td>string</td>
+<td>Id de la organización en la que se creó la verificación</td>
+</tr>
+<tr>
+<td>accountName</td>
+<td>string</td>
+<td>Nombre de la cuenta que creó la verificación</td>
+</tr>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Título de la verificación</td>
+</tr>
+<tr>
+<td>userEmail</td>
+<td>string</td>
+<td>Email del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>userPhone</td>
+<td>string</td>
+<td>Teléfono celular del verificante en el cual recibirá el link de inicio del proceso</td>
+</tr>
+<tr>
+<td>userToken</td>
+<td>string</td>
+<td>Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}</td>
+</tr>
+<tr>
+<td>userStatus</td>
+<td>string</td>
+<td>Estado del usuario en la verificación. Puede ser <code>pending</code>, <code>working</code>, <code>error</code> o <code>done</code></td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-otpcreated'>Propiedades de OTPCreated</h3>
