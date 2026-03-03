@@ -3892,6 +3892,7 @@ InputProvided | Serás notificado cuando se asigne el valor del atributo `inputP
 ItemWorking | Serás notificado cada vez que se comienza a procesar un [Item](#propiedades-de-un-item)
 ItemSuccess | Serás notificado cada vez que un [Item](#propiedades-de-un-item) ha concluído satisactoriamente
 ItemError | Serás notificado cada vez que ocurre un error en un [Item](#propiedades-de-un-item)
+UserFinished | Serás notificado cuando un usuario específico haya completado todos sus elementos de firma en el contrato o verificación de identidad, sin esperar a que los demás usuarios también terminen
 OTPCreated | Serás notificado cada vez que se envíe un [OTP](#otp) de tipo `webhook` al usuario
 
 Una vez configurado el Webhook, te llegará un email de confirmación al correo que ingresaste. Luego, debes seleccionar la opción **Habilitar** para poder activar el Webhook. Keynua enviará un HTTP POST al API configurado y será activado si cumple estos requisitos:
@@ -3944,7 +3945,7 @@ x-keynua-webhook-token | Token unico generado por request con una integridad de 
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-type | string | Nombre del [tipo de evento](#tipos-de-eventos-webhook) emitido. Puede ser `ContractCreated`, `ContractStarted`, `ContractItemUpdated`, `ContractFinished`, `ContractDeleted`, `IdentityVerificationCreated`, `IdentityVerificationStarted`, `IdentityVerificationFinished`, `IdentityVerificationItemUpdated`, o `OTPCreated`
+type | string | Nombre del [tipo de evento](#tipos-de-eventos-webhook) emitido. Puede ser `ContractCreated`, `ContractStarted`, `ContractItemUpdated`, `ContractUserUpdated`, `ContractFinished`, `ContractDeleted`, `IdentityVerificationCreated`, `IdentityVerificationStarted`, `IdentityVerificationUserUpdated`, `IdentityVerificationFinished`, `IdentityVerificationItemUpdated`, o `OTPCreated`
 accountId | string | Codigo de la cuenta propietaria del webhook
 payload | object | Datos del evento que varian segun el valor de [type](#tipos-de-eventos-webhook)
 
@@ -3961,6 +3962,7 @@ InputProvided | [ContractInputProvided](#propiedades-de-contractinputprovided)
 ItemWorking | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `working`
 ItemSuccess | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `success`
 ItemError | [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated). Item.state `error`
+UserFinished | [ContractUserUpdated](#propiedades-de-contractuserupdated) o [IdentityVerificationUserUpdated](#propiedades-de-identityverificationuserupdated). user.status `done`
 OTPCreated | [OTPCreated](#propiedades-de-otpcreated)
 
 ### Propiedades de ContractCreated
@@ -4312,6 +4314,109 @@ shortCode | string | Código corto del contrato para facilitar su identificació
 item | object | [Item](#propiedades-de-un-item) del contrato que ha cambiado de estado
 user | object | [Usuario](#propiedades-de-un-usuario-webhook) al que pertenece el elemento modificado. Si el valor es null el elemento le pertenece a todos los usuarios
 
+### Propiedades de ContractUserUpdated
+
+> Ejemplo de Body
+
+```json
+{
+	"type": "ContractUserUpdated",
+	"accountId": "00000000-0000-0000-0000-000000000000",
+	"payload": {
+		"contractId": "00000000-0000-0000-0000-000000000001",
+		"reference": null,
+		"title": "Mi contrato",
+		"templateId": "template-id",
+		"language": "es",
+		"createdAt": "2020-01-01T00:00:00.000Z",
+		"startedAt": "2020-01-01T01:00:00.000Z",
+		"docCount": 1,
+		"itemCount": 14,
+		"userCount": 2,
+		"longCode": "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
+		"shortCode": "123456",
+		"metadata": {},
+		"user": {
+			"id": 0,
+			"name": "John Doe",
+			"ref": "user-ref",
+			"email": "example@keynua.com",
+			"phone": "+51999888777",
+			"groups": [
+				"signers"
+			],
+			"metadata": null,
+			"documentNumber": "12345678",
+			"status": "done"
+		},
+		"otherUsers": [
+			{
+				"id": 1,
+				"name": "Jane Doe",
+				"ref": "other-ref",
+				"email": "jane@keynua.com",
+				"phone": "+51999888666",
+				"groups": [
+					"signers"
+				],
+				"metadata": null,
+				"status": "working"
+			}
+		]
+	}
+}
+```
+
+Se emite cuando un usuario específico ha completado todos sus elementos de firma en el contrato, sin esperar a que los demás usuarios también terminen.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+contractId | string | Código del contrato
+reference | string | Referencia del contrato
+title | string | Titulo del contrato
+templateId | string | Identificador del Template
+language | string | Idioma del contrato
+createdAt | string | Fecha de creación del contrato
+startedAt | string | Fecha de inicio del proceso de firma del contrato
+docCount | integer | Cantidad de documentos que tiene el contrato
+itemCount | integer | Cantidad de items que tiene el contrato
+userCount | integer | Cantidad de usuarios que tiene el contrato
+metadata | object | Metadata del contrato. Esta Metadata será la misma que se envió al [crear un Contrato](#crear-un-contrato)
+longCode | string | Código largo del contrato
+shortCode | string | Código corto del contrato para facilitar su identificación
+user | object | [Usuario](#propiedades-de-un-usuario-userupdated) que completó sus elementos de firma
+otherUsers | array | Arreglo de [Usuarios](#propiedades-de-un-usuario-userupdated) restantes del contrato con su estado actual
+
+### Propiedades de un Usuario UserUpdated
+
+```json
+{
+	"id": 0,
+	"name": "John Doe",
+	"ref": "user-ref",
+	"email": "example@keynua.com",
+	"phone": "+51999888777",
+	"groups": [
+		"signers"
+	],
+	"metadata": null,
+	"documentNumber": "12345678",
+	"status": "done"
+}
+```
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+id | integer | Identificador único del usuario en el contrato
+name | string | El nombre del usuario
+ref | string | Referencia del usuario
+email | string | El correo electrónico del usuario
+phone | string | El teléfono del usuario
+groups | array | Nombre de los grupos a los que pertenece el usuario
+metadata | object | Metadata del usuario
+documentNumber | string | Número de documento del usuario
+status | string | Estado del usuario. Puede ser `pending`, `working`, `error` o `done`
+
 ### Propiedades de ContractInputProvided
 
 > Ejemplo de Body
@@ -4574,6 +4679,58 @@ userEmail | string | Email del verificante en el cual recibirá el link de inici
 userPhone | string | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
 userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
 item | object | [Item](#propiedades-de-un-item) del contrato que ha cambiado de estado
+
+### Propiedades de IdentityVerificationUserUpdated
+
+> Ejemplo de Body
+
+```json
+{
+	"type": "IdentityVerificationUserUpdated",
+	"accountId": "00000000-0000-0000-0000-000000000000",
+	"payload": {
+		"language": "es",
+		"reference": "12345678",
+		"contractId": "00000000-0000-0000-0000-000000000000",
+		"transactionId": "00000000-0000-0000-0000-000000000000",
+		"documentNumber": "12345678",
+		"id": "00000000-0000-0000-0000-000000000000",
+		"accountId": "00000000-0000-0000-0000-000000000000",
+		"createdAt": "2020-01-01T00:00:00.000Z",
+		"startedAt": "2020-01-01T00:00:00.000Z",
+		"accountEmail": "account@mail.com",
+		"organizationId": "00000000-0000-0000-0000-000000000000",
+		"accountName": "Patrick Star",
+		"title": "Identificación de 12345678",
+		"userEmail": "user@mail.com",
+		"userPhone": "23456789",
+		"userToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...ZlOWJiMC1hNmUzLTExZWItOWEyYy0xMWZjMzM0ODY",
+		"userStatus": "done"
+	}
+}
+```
+
+Se emite cuando la persona de una verificación de identidad ha completado todos sus elementos, sin esperar a que el proceso finalice completamente.
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+language | string | Lenguaje con el cual se completará el proceso de identificación
+reference | string | Campo libre. Útil para realizar búsquedas.
+contractId | string | Id interno
+transactionId | string | Identificador de la transacción. Es el mismo valor que contractId
+documentNumber | string | Número de documento nacional de identificación
+id | string | Identificador único de la verificación
+accountId | string | Id de la cuenta que creó la verificación
+createdAt | string | Fecha y hora de creación en formato ISO
+startedAt | string | Fecha y hora en formato ISO del momento en que la verificación está lista para ser completada.
+accountEmail | string | Email de la cuenta que creó la verificación
+organizationId | string | Id de la organización en la que se creó la verificación
+accountName | string | Nombre de la cuenta que creó la verificación
+title | string | Título de la verificación
+userEmail | string | Email del verificante en el cual recibirá el link de inicio del proceso
+userPhone | string | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
+userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
+userStatus | string | Estado del usuario en la verificación. Puede ser `pending`, `working`, `error` o `done`
 
 ### Propiedades de OTPCreated
 
