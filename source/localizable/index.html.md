@@ -753,11 +753,30 @@ req.end();
 
 ```json
 {
-  "deletedAt": "2021-01-25T21:38:50.055Z"
+  "deletedAt": "2026-05-05T19:00:00.000Z"
 }
 ```
 
-Este API elimina un Contrato
+> Si además se borraron los documentos del contrato, el API retornará:
+
+```json
+{
+  "deletedAt": "2026-05-05T19:00:00.000Z",
+  "documentsDeletedAt": "2026-05-05T19:00:01.000Z",
+  "deletedKeysCount": 12
+}
+```
+
+> Si el contrato fue eliminado pero el borrado de documentos falló, el API retornará:
+
+```json
+{
+  "deletedAt": "2026-05-05T19:00:00.000Z",
+  "documentsDeletionError": "SomeErrorCode"
+}
+```
+
+Este API elimina un Contrato. La eliminación es lógica, es decir, el contrato queda marcado como eliminado. Opcionalmente, también puede borrar permanentemente los documentos asociados al contrato y sus archivos derivados en S3.
 
 ### HTTP Request
 
@@ -769,7 +788,125 @@ Parámetro | Descripción
 --------- | -----------
 contractId | El ID del Contrato a eliminar
 
+### Query Parameters
+
+Parámetro | Tipo | Descripción
+--------- | ----------- | -----------
+deleteDocuments | boolean | Opcional. Si es `true`, además de eliminar el contrato, el API intenta borrar los documentos y archivos derivados del contrato en S3. El valor por defecto es `false`.
+
 <aside class="warning">No se puede eliminar un contrato que su estado es <code>done</code>. Si eliminas un contrato que aún no ha sido iniciado por el firmante, la transacción utilizada será reintegrada a tu saldo. Si el contrato ya fue iniciado por el firmante, se tomará como una transacción utilizada.</aside>
+
+<aside class="notice">Cuando se usa <code>deleteDocuments=true</code>, si la eliminación lógica del contrato fue exitosa pero el borrado de documentos falló, la respuesta incluirá <code>documentsDeletionError</code>. En ese caso puedes reintentar el borrado con <a href="#eliminar-documentos-de-un-contrato">POST /contracts/v1/{contractId}/delete-documents</a>.</aside>
+
+## Eliminar documentos de un Contrato
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'openssl'
+
+url = URI("https://api.stg.keynua.com/contracts/v1/{contractId}/delete-documents")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Post.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+request["content-type"] = 'application/json'
+request.body = "{}"
+
+response = http.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
+
+payload = "{}"
+
+headers = {
+    'x-api-key': "YOUR-API-KEY-HERE",
+    'authorization': "YOUR-API-TOKEN-HERE",
+    'content-type': "application/json"
+    }
+
+conn.request("POST", "/contracts/v1/{contractId}/delete-documents", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --request POST \
+  --url https://api.stg.keynua.com/contracts/v1/{contractId}/delete-documents \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'content-type: application/json' \
+  --data '{}'
+```
+
+```javascript
+const https = require("https");
+
+const options = {
+  method: "POST",
+  hostname: "api.stg.keynua.com",
+  path: "/contracts/v1/{contractId}/delete-documents",
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE",
+    "content-type": "application/json"
+  }
+};
+
+const req = https.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.write("{}");
+req.end();
+```
+
+> Si los documentos del contrato fueron eliminados, el API retornará un JSON como el siguiente:
+
+```json
+{
+  "contractId": "contract-id",
+  "documentsDeletedAt": "2026-05-05T19:00:00.000Z",
+  "deletedKeysCount": 12
+}
+```
+
+Este API borra permanentemente los documentos de un Contrato y sus archivos derivados en S3. Antes del borrado, guarda una copia inmutable para auditoría y verificación.
+
+Es útil para borrar los documentos sin volver a eliminar el contrato, o para reintentar el borrado cuando falló al invocar [`DELETE /contracts/v1/{contractId}?deleteDocuments=true`](#eliminar-un-contrato).
+
+### HTTP Request
+
+`POST /contracts/v1/{contractId}/delete-documents`
+
+### URL Parameters
+
+Parámetro | Descripción
+--------- | -----------
+contractId | El ID del Contrato cuyos documentos se desean eliminar
+
+<aside class="warning">Este API solo puede usarse si el contrato está eliminado o finalizado. Además, esta operación es <strong>permanente</strong> sobre los archivos en S3 y no se puede deshacer. El token utilizado debe pertenecer al dueño del contrato o a la organización dueña del contrato.</aside>
 
 # Aprobación de un Contrato
 
