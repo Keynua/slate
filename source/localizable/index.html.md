@@ -509,6 +509,7 @@ templateOptions | object | `optional` [Configuración dinámica del template](#c
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 chosenNotificationOptions | stringArray | Se deben enviar los tipos de notificación como string. Los valores pueden ser `sms`, `whatsapp` o `email`. **No se puede enviar sms y whatsapp al mismo tiempo**
+livenessLightChallenge | boolean | `optional` Activa (`true`) o desactiva (`false`) el reto de luces en la prueba de vida 3D del contrato. El valor enviado tiene prioridad sobre la configuración de la organización; si no se envía, se usa la configuración de la organización. Solo tiene efecto en flujos que incluyen prueba de vida (liveness)
 
 ### Usuarios del contrato
 
@@ -3192,6 +3193,7 @@ idTypes | array | Sí | Indica los tipos de documentos aceptados. Solo disponibl
 language | string | Sí | Lenguaje con el cual se creará el proceso de identificación
 accountName | string | Sí | Nombre de cuenta que se usará al crear el proceso de identificación. De no ser enviado, se usará el nombre de la cuenta que está creando la identificación.
 addressMatchScore | number | Sí | Porcentaje de coincidencia (0-100) requerido entre la dirección extraída del documento escaneado y la obtenida de Reniec
+livenessLightChallenge | boolean | Sí | Activa (`true`) o desactiva (`false`) el reto de luces en la prueba de vida 3D. El valor enviado tiene prioridad sobre la configuración de la organización; si no se envía, se usa la configuración de la organización. Solo tiene efecto en verificaciones con prueba de vida 3D
 
 ### Combinaciones no soportadas por defecto
 
