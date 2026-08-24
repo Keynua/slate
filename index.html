@@ -1426,6 +1426,11 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>stringArray</td>
 <td>Se deben enviar los tipos de notificación como string. Los valores pueden ser <code>sms</code>, <code>whatsapp</code> o <code>email</code>. <strong>No se puede enviar sms y whatsapp al mismo tiempo</strong></td>
 </tr>
+<tr>
+<td>livenessLightChallenge</td>
+<td>boolean</td>
+<td><code>optional</code> Activa (<code>true</code>) o desactiva (<code>false</code>) el reto de luces en la prueba de vida 3D del contrato. El valor enviado tiene prioridad sobre la configuración de la organización; si no se envía, se usa la configuración de la organización. Solo tiene efecto en flujos que incluyen prueba de vida (liveness)</td>
+</tr>
 </tbody></table>
 <h3 id='usuarios-del-contrato'>Usuarios del contrato</h3>
 <table><thead>
@@ -5968,6 +5973,12 @@ Deceval para registrar la firma del participante.</li>
 <td>number</td>
 <td>Sí</td>
 <td>Porcentaje de coincidencia (0-100) requerido entre la dirección extraída del documento escaneado y la obtenida de Reniec</td>
+</tr>
+<tr>
+<td>livenessLightChallenge</td>
+<td>boolean</td>
+<td>Sí</td>
+<td>Activa (<code>true</code>) o desactiva (<code>false</code>) el reto de luces en la prueba de vida 3D. El valor enviado tiene prioridad sobre la configuración de la organización; si no se envía, se usa la configuración de la organización. Solo tiene efecto en verificaciones con prueba de vida 3D</td>
 </tr>
 </tbody></table>
 <h3 id='combinaciones-no-soportadas-por-defecto'>Combinaciones no soportadas por defecto</h3>
