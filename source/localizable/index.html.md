@@ -12,6 +12,7 @@ toc_footers:
   - <a href="https://github.com/tripit/slate">Documentation Powered by Slate</a>
 
 includes:
+  - custom_fields
   - otp
   - errors
 
@@ -175,8 +176,17 @@ done | Cuando el contrato ha sido firmado por todos y ha finalizado correctament
 		"names": "Juan",
 		"lastName": "Perez Alvarez",
 		"birthDate": "1992-11-20",
-		"expirationDate": "2026-03-17"
-		"address": "Some address",
+		"expirationDate": "2026-03-17",
+		"address": "Some address"
+	},
+	"customFieldsInfo": {
+		"id": "11111111-1111-1111-1111-111111111111",
+		"name": "Datos laborales",
+		"fields": {
+			"department": { "value": "Legal", "label": "Departamento" },
+			"level": { "value": 5, "label": "Nivel" },
+			"region": { "value": "north", "label": "Región" }
+		}
 	}
 }
 ```
@@ -193,6 +203,7 @@ groups | array | Nombre de los grupos a los que pertenece el usuario, normalment
 token | string | El token del usuario que se utilizará para realizar la firma. Por ejemplo para [enviar un archivo multimedia](#enviar-un-archivo-multimedia)
 state | string | El [estado del usuario](#estados-del-usuario) dentro del contrato, basado en el estado de todos los items del usuario. Solo existe para contratos creados luego del 04/04/2022.
 idInfo | string | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
+customFieldsInfo | object | `optional` [Campos personalizados](#campos-personalizados) enviados al crear el contrato. Es un snapshot (`id`, `name`, `fields`) del grupo asignado a este firmante.
 
 ### Estados del Usuario
 
@@ -475,6 +486,10 @@ req.end();
 Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_blank”>módulo de desarrollo</a> del portal Keynua puedes encontrar la sección <code>Crear contrato en modo desarrollo</code> e iniciar el modo para generar los <code>payloads</code> del api mediante la UI
 </aside>
 
+<aside class="notice">
+Para adjuntar <a href="#campos-personalizados">campos personalizados</a> a un firmante, copia el JSON desde <a href="https://app.stg.keynua.com/profile/organization/custom-fields" target="_blank">Organización → Campos personalizados</a> con <code>Copiar para API</code> y pégalo en <code>users[].customFieldsInfo</code>. <strong>Solo completa cada <code>value</code></strong>: el <code>id</code>, el <code>name</code>, las claves y cada <code>label</code> ya vienen listos.
+</aside>
+
 ### Headers
 
 Key | Value
@@ -520,6 +535,7 @@ email | string | El correo electrónico del usuario
 phone | string | El teléfono del usuario
 groups | array | Nombre de los grupos a los que pertenece el usuario, normalmente siempre pertenece a un sólo grupo. El identificador del grupo será asignado por el equipo de Keynua
 validationsToSkip | array | La lista de validaciones que se deben omitir en el flujo de firma. Los valores permitidos en la lista son: `"expiration-date"` (Omitir validación de fecha de expiración), `"instructions-grade"` (Omitir validación de iletrados).
+customFieldsInfo | object | `optional` [Campos personalizados](#campos-personalizados) del firmante. Copia el objeto desde el portal con `Copiar para API` y **completa solo cada `value`** (`id`, `name`, claves y `label` ya vienen listos).
 
 ## Grupos e items precargados
 
@@ -654,7 +670,7 @@ req.end();
 
 > Si el contrato fue obtenido satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
 
-Este API obtiene un contrato específico
+Este API obtiene un contrato específico. Si un firmante tenía [campos personalizados](#campos-personalizados) al crear el contrato, `users[].customFieldsInfo` trae el snapshot guardado (`id`, `name`, `fields`).
 
 ### HTTP Request
 
@@ -4540,7 +4556,16 @@ otherUsers | array | Arreglo de [Usuarios](#propiedades-de-un-usuario-userupdate
 	],
 	"metadata": null,
 	"documentNumber": "12345678",
-	"status": "done"
+	"status": "done",
+	"customFieldsInfo": {
+		"id": "11111111-1111-1111-1111-111111111111",
+		"name": "Datos laborales",
+		"fields": {
+			"department": { "value": "Legal", "label": "Departamento" },
+			"level": { "value": 5, "label": "Nivel" },
+			"region": { "value": "north", "label": "Región" }
+		}
+	}
 }
 ```
 
@@ -4555,6 +4580,7 @@ groups | array | Nombre de los grupos a los que pertenece el usuario
 metadata | object | Metadata del usuario
 documentNumber | string | Número de documento del usuario
 status | string | Estado del usuario. Puede ser `pending`, `working`, `error` o `done`
+customFieldsInfo | object | `optional` [Campos personalizados](#campos-personalizados) del firmante. Snapshot (`id`, `name`, `fields`) enviado al crear el contrato. Si el usuario no tenía campos, el atributo no se incluye.
 
 ### Propiedades de ContractInputProvided
 
@@ -4922,7 +4948,16 @@ metadata | object | Metadata del contrato
 	"ref": null,
 	"groups": [
 		"signers"
-	]
+	],
+	"customFieldsInfo": {
+		"id": "11111111-1111-1111-1111-111111111111",
+		"name": "Datos laborales",
+		"fields": {
+			"department": { "value": "Legal", "label": "Departamento" },
+			"level": { "value": 5, "label": "Nivel" },
+			"region": { "value": "north", "label": "Región" }
+		}
+	}
 }
 ```
 
@@ -4933,6 +4968,7 @@ name | string | El nombre del usuario
 email | string | El correo electrónico del usuario
 phone | string | El teléfono del usuario
 groups | array | Nombre de los grupos a los que pertenece el usuario
+customFieldsInfo | object | `optional` [Campos personalizados](#campos-personalizados) del firmante. Snapshot (`id`, `name`, `fields`) enviado al crear el contrato. Si el usuario no tenía campos, el atributo no se incluye.
 
 ### Propiedades de un Documento Webhook
 
