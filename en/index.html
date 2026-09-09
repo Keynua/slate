@@ -283,7 +283,7 @@
 }
 	</style>
 	<link href="../images/favicon-1a78870a.png" rel="icon" type="image/png" />
-    <link href="../stylesheets/screen-6460d436.css" rel="stylesheet" media="screen" />
+    <link href="../stylesheets/screen-02853c06.css" rel="stylesheet" media="screen" />
     <link href="../stylesheets/print-966d6edc.css" rel="stylesheet" media="print" />
       <script src="../javascripts/all-b12a2749.js"></script>
 
@@ -474,6 +474,29 @@
                   </li>
                   <li>
                     <a href="#verificar-keynua-signature-webhook-v2" class="toc-h2 toc-link" data-title="Verificar Keynua Signature Webhook V2">Verificar Keynua Signature Webhook V2</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#campos-personalizados" class="toc-h1 toc-link" data-title="Campos personalizados">Campos personalizados</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#como-obtener-el-payload-desde-el-portal" class="toc-h2 toc-link" data-title="Cómo obtener el payload desde el portal">Cómo obtener el payload desde el portal</a>
+                  </li>
+                  <li>
+                    <a href="#tipos-de-campo" class="toc-h2 toc-link" data-title="Tipos de campo">Tipos de campo</a>
+                  </li>
+                  <li>
+                    <a href="#usar-al-crear-un-contrato" class="toc-h2 toc-link" data-title="Usar al crear un contrato">Usar al crear un contrato</a>
+                  </li>
+                  <li>
+                    <a href="#errores" class="toc-h2 toc-link" data-title="Errores">Errores</a>
+                  </li>
+                  <li>
+                    <a href="#persistencia" class="toc-h2 toc-link" data-title="Persistencia">Persistencia</a>
+                  </li>
+                  <li>
+                    <a href="#lectura-en-get-y-webhooks" class="toc-h2 toc-link" data-title="Lectura en GET y Webhooks">Lectura en GET y Webhooks</a>
                   </li>
               </ul>
           </li>
@@ -780,8 +803,17 @@ Producción: https://api.keynua.com
         </span><span class="nl">"names"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Juan"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Perez Alvarez"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1992-11-20"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"expirationDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-17"</span><span class="w">
-        </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some address"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"expirationDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-17"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some address"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"customFieldsInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Datos laborales"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Legal"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Departamento"</span><span class="w"> </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"level"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nivel"</span><span class="w"> </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"north"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Región"</span><span class="w"> </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -833,6 +865,11 @@ Producción: https://api.keynua.com
 <td>idInfo</td>
 <td>string</td>
 <td>Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI</td>
+</tr>
+<tr>
+<td>customFieldsInfo</td>
+<td>object</td>
+<td><code>optional</code> <a href="#campos-personalizados">Campos personalizados</a> enviados al crear el contrato. Es un snapshot (<code>id</code>, <code>name</code>, <code>fields</code>) del grupo asignado a este firmante.</td>
 </tr>
 </tbody></table>
 <h3 id='estados-del-usuario'>Estados del Usuario</h3>
@@ -1312,6 +1349,10 @@ Producción: https://api.keynua.com
 <aside class="success">
 Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_blank”>módulo de desarrollo</a> del portal Keynua puedes encontrar la sección <code>Crear contrato en modo desarrollo</code> e iniciar el modo para generar los <code>payloads</code> del api mediante la UI
 </aside>
+
+<aside class="notice">
+Para adjuntar <a href="#campos-personalizados">campos personalizados</a> a un firmante, copia el JSON desde <a href="https://app.stg.keynua.com/profile/organization/custom-fields" target="_blank">Organización → Campos personalizados</a> con <code>Copiar para API</code> y pégalo en <code>users[].customFieldsInfo</code>. <strong>Solo completa cada <code>value</code></strong>: el <code>id</code>, el <code>name</code>, las claves y cada <code>label</code> ya vienen listos.
+</aside>
 <h3 id='headers'>Headers</h3>
 <table><thead>
 <tr>
@@ -1465,6 +1506,11 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>array</td>
 <td>La lista de validaciones que se deben omitir en el flujo de firma. Los valores permitidos en la lista son: <code>&quot;expiration-date&quot;</code> (Omitir validación de fecha de expiración), <code>&quot;instructions-grade&quot;</code> (Omitir validación de iletrados).</td>
 </tr>
+<tr>
+<td>customFieldsInfo</td>
+<td>object</td>
+<td><code>optional</code> <a href="#campos-personalizados">Campos personalizados</a> del firmante. Copia el objeto desde el portal con <code>Copiar para API</code> y <strong>completa solo cada <code>value</code></strong> (<code>id</code>, <code>name</code>, claves y <code>label</code> ya vienen listos).</td>
+</tr>
 </tbody></table>
 <h2 id='grupos-e-items-precargados'>Grupos e items precargados</h2><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"users"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -1585,7 +1631,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <p>Si el contrato fue obtenido satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de <a href="#contratos">Contratos</a></p>
 </blockquote>
 
-<p>Este API obtiene un contrato específico</p>
+<p>Este API obtiene un contrato específico. Si un firmante tenía <a href="#campos-personalizados">campos personalizados</a> al crear el contrato, <code>users[].customFieldsInfo</code> trae el snapshot guardado (<code>id</code>, <code>name</code>, <code>fields</code>).</p>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>GET /contracts/v1/{contractId}</code></p>
 <h3 id='url-parameters'>URL Parameters</h3>
@@ -8148,7 +8194,16 @@ Deceval para registrar la firma del participante.</li>
     </span><span class="p">],</span><span class="w">
     </span><span class="nl">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="nl">"documentNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"customFieldsInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Datos laborales"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Legal"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Departamento"</span><span class="w"> </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"level"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nivel"</span><span class="w"> </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"north"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Región"</span><span class="w"> </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <table><thead>
@@ -8202,6 +8257,11 @@ Deceval para registrar la firma del participante.</li>
 <td>status</td>
 <td>string</td>
 <td>Estado del usuario. Puede ser <code>pending</code>, <code>working</code>, <code>error</code> o <code>done</code></td>
+</tr>
+<tr>
+<td>customFieldsInfo</td>
+<td>object</td>
+<td><code>optional</code> <a href="#campos-personalizados">Campos personalizados</a> del firmante. Snapshot (<code>id</code>, <code>name</code>, <code>fields</code>) enviado al crear el contrato. Si el usuario no tenía campos, el atributo no se incluye.</td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-contractinputprovided'>Propiedades de ContractInputProvided</h3>
@@ -8996,7 +9056,16 @@ Deceval para registrar la firma del participante.</li>
     </span><span class="nl">"ref"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
     </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="s2">"signers"</span><span class="w">
-    </span><span class="p">]</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"customFieldsInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Datos laborales"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Legal"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Departamento"</span><span class="w"> </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"level"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nivel"</span><span class="w"> </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"north"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Región"</span><span class="w"> </span><span class="p">}</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <table><thead>
@@ -9030,6 +9099,11 @@ Deceval para registrar la firma del participante.</li>
 <td>groups</td>
 <td>array</td>
 <td>Nombre de los grupos a los que pertenece el usuario</td>
+</tr>
+<tr>
+<td>customFieldsInfo</td>
+<td>object</td>
+<td><code>optional</code> <a href="#campos-personalizados">Campos personalizados</a> del firmante. Snapshot (<code>id</code>, <code>name</code>, <code>fields</code>) enviado al crear el contrato. Si el usuario no tenía campos, el atributo no se incluye.</td>
 </tr>
 </tbody></table>
 <h3 id='propiedades-de-un-documento-webhook'>Propiedades de un Documento Webhook</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
@@ -9142,6 +9216,301 @@ Deceval para registrar la firma del participante.</li>
 <p>Luego de ello debes concatenar todos estos valores y aplicarle SHA256, el resultado debe ser el mismo que el valor del header <code>X-Keynua-Webhook-SigV2</code></p>
 
 <aside class="notice">Si el resultado de tu hash coincide con el que te enviamos, puedes tener la seguridad de que es Keynua quién envió la información a tu API.</aside>
+<h1 id='campos-personalizados'>Campos personalizados</h1>
+<p>Los campos personalizados permiten adjuntar datos extra a un firmante al <a href="#crear-un-contrato">crear un contrato</a>. El <strong>grupo</strong> (nombre, tipos y validación) se configura en el portal de Keynua. El API de contratos <strong>no crea ni lista grupos</strong>: solo envía, por usuario, un snapshot <code>customFieldsInfo</code> que referencia un grupo ya existente.</p>
+
+<p>Cada firmante puede usar un grupo distinto o ninguno. El <code>name</code> enviado debe coincidir <strong>exactamente</strong> con el del grupo. El <code>id</code> es el identificador del grupo (<code>customFieldsId</code>).</p>
+<h2 id='como-obtener-el-payload-desde-el-portal'>Cómo obtener el payload desde el portal</h2>
+<p>No existe un listado público de grupos con API Key. Copia el JSON desde la interfaz:</p>
+
+<ol>
+<li>Entra a <strong>Organización → Campos personalizados</strong>.</li>
+<li>En la fila del grupo, abre el menú de acciones y elige <strong>Copiar para API</strong>.</li>
+</ol>
+
+<p><img src="../images/custom-fields-json-2246b188.png" alt="custom-fields-json" /></p>
+
+<ol>
+<li>Pega el JSON copiado en <code>users[].customFieldsInfo</code> del <code>PUT /contracts/v1</code>.</li>
+</ol>
+
+<aside class="warning">
+<strong>Solo completa cada <code>value</code>.</strong> El JSON copiado ya trae listos el <code>id</code>, el <code>name</code>, las claves de <code>fields</code> y cada <code>label</code>. No los armes ni los cambies: si alteras <code>id</code> o <code>name</code> el API rechaza el contrato.
+</aside>
+
+<blockquote>
+<p>Así se ve el JSON copiado del portal. Cambia únicamente los <code>value</code>:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Datos laborales"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Departamento"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"level"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nivel"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"north"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Región"</span><span class="w"> </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Después de completar los <code>value</code> (esto es lo que envías):</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Datos laborales"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Legal"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Departamento"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"level"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nivel"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"lima"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Región"</span><span class="w"> </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<aside class="success">
+Recuerda — En <a href="https://app.stg.keynua.com/profile/organization/custom-fields" target="_blank">Organización → Campos personalizados</a> usa <code>Copiar para API</code> y luego rellena solo cada <code>value</code>.
+</aside>
+<h2 id='tipos-de-campo'>Tipos de campo</h2>
+<p>Cada grupo define uno o más campos. Al enviar valores debes respetar el tipo configurado.</p>
+
+<table><thead>
+<tr>
+<th>Tipo</th>
+<th>Valor en <code>fields</code></th>
+<th>Validación</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>string</code></td>
+<td>string</td>
+<td>Debe cumplir el <code>regex</code> configurado en el grupo</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>number</td>
+<td>Debe estar entre <code>minValue</code> y <code>maxValue</code> (inclusive)</td>
+</tr>
+<tr>
+<td><code>selection</code></td>
+<td>string</td>
+<td>Debe ser el <code>value</code> de una de las opciones del campo (no el texto visible)</td>
+</tr>
+<tr>
+<td><code>optional</code></td>
+<td>boolean</td>
+<td>Si no está o es <code>false</code>, el campo es obligatorio. Si el grupo solo tiene campos opcionales, puedes omitir <code>fields</code></td>
+</tr>
+</tbody></table>
+<h2 id='usar-al-crear-un-contrato'>Usar al crear un contrato</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> PUT <span class="se">\</span>
+  <span class="nt">--url</span> https://api.stg.keynua.com/contracts/v1 <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--data</span> <span class="s1">'{
+  "title": "Contract with custom fields",
+  "language": "es",
+  "templateId": "keynua-peru-default",
+  "documents": [
+    {
+      "name": "DocumentPdf.pdf",
+      "base64": "YOUR-BASE64-PDF-HERE"
+    }
+  ],
+  "users": [
+    {
+      "name": "Manuel Silva",
+      "email": "msilva@keynua.com",
+      "groups": ["signers"],
+      "customFieldsInfo": {
+        "id": "11111111-1111-1111-1111-111111111111",
+        "name": "Datos laborales",
+        "fields": {
+          "department": { "value": "Legal", "label": "Departamento" },
+          "level": { "value": 5, "label": "Nivel" },
+          "region": { "value": "north", "label": "Región" }
+        }
+      }
+    },
+    {
+      "name": "Jane Smith",
+      "email": "jane@example.com",
+      "groups": ["signers"]
+    }
+  ]
+}'</span>
+</code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Datos laborales"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Legal"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Departamento"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"level"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nivel"</span><span class="w"> </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"north"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Región"</span><span class="w"> </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Envía <code>customFieldsInfo</code> dentro de cada usuario de <a href="#crear-un-contrato">Crear un Contrato</a>. El segundo usuario del ejemplo no lleva campos: es válido.</p>
+
+<p>En el ejemplo de la derecha, <code>department</code>, <code>level</code> y <code>region</code> ya vienen del JSON copiado. Lo único que cambió respecto al portal son los <code>value</code>.</p>
+<h3 id='propiedades-de-customfieldsinfo'>Propiedades de customFieldsInfo</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>Identificador del grupo. Es el valor <code>customFieldsId</code> que copia <strong>Copiar para API</strong> en el portal.</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>Nombre del grupo. Debe coincidir exactamente con el configurado. Si no coincide, el API responde <code>CustomFieldsNameMismatch</code>.</td>
+</tr>
+<tr>
+<td>fields</td>
+<td>object</td>
+<td><code>optional</code> Mapa cuya clave es el <code>fieldName</code> del campo. Cada valor es un objeto <code>{ value, label? }</code>. Si el grupo tiene campos obligatorios y omites <code>fields</code>, el API responde <code>MissingRequiredFields</code>.</td>
+</tr>
+</tbody></table>
+<h3 id='propiedades-de-un-campo-en-fields'>Propiedades de un campo en fields</h3>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>value</td>
+<td>string o number</td>
+<td><strong>Esto es lo único que debes completar</strong> tras copiar el JSON. <code>string</code> y <code>selection</code> envían string; <code>number</code> envía number (no un string numérico).</td>
+</tr>
+<tr>
+<td>label</td>
+<td>string</td>
+<td><code>optional</code> Ya viene en el JSON copiado (<code>title</code> del campo). No hace falta editarlo. Si lo omites, el backend usa el <code>title</code> del campo.</td>
+</tr>
+</tbody></table>
+
+<p>Las claves de <code>fields</code> deben existir en el grupo. Una clave desconocida produce <code>UnknownCustomField</code>. Un campo obligatorio ausente produce <code>MissingCustomField</code>.</p>
+<h2 id='errores'>Errores</h2>
+<p>Si <code>customFieldsInfo</code> no es válido, <code>PUT /contracts/v1</code> responde <strong>400</strong> con uno de estos códigos:</p>
+
+<table><thead>
+<tr>
+<th>Código</th>
+<th>Significado</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>CustomFieldsNotFound</td>
+<td>El <code>id</code> no existe en la organización de la cuenta que crea el contrato</td>
+</tr>
+<tr>
+<td>CustomFieldsNameMismatch</td>
+<td>El <code>name</code> no coincide con el del grupo</td>
+</tr>
+<tr>
+<td>MissingCustomField</td>
+<td>Falta un campo obligatorio</td>
+</tr>
+<tr>
+<td>MissingRequiredFields</td>
+<td>El grupo tiene campos obligatorios y no se envió <code>fields</code></td>
+</tr>
+<tr>
+<td>UnknownCustomField</td>
+<td>Se envió un <code>fieldName</code> que no está en el grupo</td>
+</tr>
+<tr>
+<td>InvalidCustomFieldType</td>
+<td>El tipo de <code>value</code> no corresponde al del campo (<code>string</code>/<code>number</code>)</td>
+</tr>
+<tr>
+<td>InvalidCustomFieldFormat</td>
+<td>El string no cumple el <code>regex</code> del campo</td>
+</tr>
+<tr>
+<td>InvalidCustomFieldRange</td>
+<td>El number está fuera de <code>minValue</code> / <code>maxValue</code></td>
+</tr>
+<tr>
+<td>InvalidCustomFieldSelection</td>
+<td>El valor no es una opción válida del campo <code>selection</code></td>
+</tr>
+</tbody></table>
+<h2 id='persistencia'>Persistencia</h2>
+<p>El API guarda un <strong>snapshot</strong> en el usuario del contrato (<code>id</code>, <code>name</code> y <code>fields</code> con values/labels). No se vuelve a consultar el catálogo del portal al firmar: si más tarde editas el grupo, los contratos ya creados conservan lo enviado. Ese snapshot también puede aparecer en el PDF de constancia.</p>
+<h2 id='lectura-en-get-y-webhooks'>Lectura en GET y Webhooks</h2>
+<p>El snapshot viaja con cada firmante que lo recibió al crear el contrato. Si un usuario no tenía <code>customFieldsInfo</code>, el atributo <strong>no se incluye</strong> (no llega como <code>null</code>).</p>
+<h3 id='get-contracts-v1-contractid'>GET /contracts/v1/{contractId}</h3>
+<p>Al <a href="#obtener-un-contrato">obtener un contrato</a>, cada elemento de <code>users</code> puede incluir <code>customFieldsInfo</code> con la misma forma que enviaste:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Manuel Silva"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"msilva@keynua.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"signers"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"customFieldsInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Datos laborales"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Legal"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Departamento"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"level"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nivel"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"north"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Región"</span><span class="w"> </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='webhooks'>Webhooks</h3>
+<p>Los webhooks reenvían el mismo snapshot en el objeto de usuario. Aparece en:</p>
+
+<table><thead>
+<tr>
+<th>Evento</th>
+<th>Dónde</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><a href="#propiedades-de-contractstarted">ContractStarted</a></td>
+<td><code>payload.users[]</code></td>
+</tr>
+<tr>
+<td><a href="#propiedades-de-contractfinished">ContractFinished</a></td>
+<td><code>payload.users[]</code></td>
+</tr>
+<tr>
+<td><a href="#propiedades-de-un-usuario-userupdated">ContractUserUpdated</a></td>
+<td><code>payload.user</code> y <code>payload.otherUsers[]</code></td>
+</tr>
+<tr>
+<td><a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a></td>
+<td><code>payload.user</code> (si el item pertenece a un firmante)</td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>Ejemplo de usuario en <code>ContractStarted</code> / <code>ContractFinished</code>:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John Doe"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@keynua.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"phone"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"ref"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"signers"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"customFieldsInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Datos laborales"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Legal"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Departamento"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"level"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Nivel"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"region"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"north"</span><span class="p">,</span><span class="w"> </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Región"</span><span class="w"> </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<aside class="notice">
+La forma de <code>customFieldsInfo</code> es la misma en el GET y en los webhooks: es el snapshot guardado al crear el contrato, no el catálogo actual del portal.
+</aside>
 <h1 id='otp'>OTP</h1>
 <p>Conjunto de APIs que permiten enviar, verificar y revisar códigos de un solo
 uso para realizar la firma de documentos.</p>
