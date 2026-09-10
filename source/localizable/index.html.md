@@ -266,81 +266,192 @@ url | string | La URL para poder visualizar el documento
 
 ```json
 {
-	"banking": 6,
-	"product": 3,
-	"uniqueCode": 5478700,
-	"issuedDate": "2020-09-20",
-	"issuedPlace": "Lima",
-	"client": {
-	  "userId": 0,
-	  "civilStatus": 2,
-	  "domicile": "Lima"
-	},
-	"representatives": [
-	  {
-		"userId": 1
-	  }
-	]
+  "banking": 4,
+  "product": 41,
+  "uniqueCode": "000123",
+  "creditNumber": "CR-000123",
+  "issuedDate": "2026-09-09",
+  "expirationDate": "2027-09-09",
+  "currency": 1,
+  "amount": 15000,
+  "domicile": "Av. Ejemplo 123, Lima",
+  "client": {
+    "userId": 0,
+    "civilStatus": 1
+  },
+  "representatives": [],
+  "guarantees": []
 }
 ```
 
-Cavali permite crear un Pagaré y asociarlo a la firma de un contrato. Para crear un contrato, el proceso debe tener un Item Cavali y Item de tipo text con el id `documentNumber`
+Cavali permite registrar un Pagaré electrónico y asociarlo a la firma de un contrato. Para crear un contrato con Pagaré, el proceso debe tener un Item Cavali y un Item de tipo text con el id `documentNumber`. Los datos del Pagaré se envían en `flags.cavaliData` al [crear el contrato](#crear-un-contrato).
 
 <aside class="warning">Si quieres crear contratos con Pagarés electrónicos, debes contactar al equipo de soporte de Keynua</aside>
+
+`cavaliData` describe roles, no personas. Cada rol (cliente, cónyuge, representante legal, garante) apunta a un participante del contrato mediante `userId`, que es la posición (desde 0) de esa persona en el arreglo `users`. El nombre, correo y número de documento de ese participante se toman de `users` y de su verificación de identidad, no de `cavaliData`. El valor `-1` indica que el rol no firma (cliente empresa o garante empresa); en ese caso el nombre y el documento sí viajan en `cavaliData`.
 
 El Pagaré está compuesto por lo siguiente:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-banking | integer | Código de banca
-product | integer | Código de producto
-uniqueCode | integer | Código único del cliente
-creditNumber | integer | Número de crédito
-issuedDate | string | Fecha de emisión. Formato: YYYY-MM-dd
-conditionJustSign | integer | Condición del pagaré. Puede tener los siguientes valores: 1 (si) | 2 (no)
-special | integer | Indicador de pagaré especial. Puede tener los siguientes valores: 1 (si) | 2 (no)
-issuedPlace | string | Lugar de emisión
-expirationDate | string | Fecha de caducidad. Formato: YYYY-MM-dd
-amount | double | Monto del pagaré
+banking | integer | Código de banca asignado por CAVALI a su institución. `Requerido`
+product | integer | Código de producto. CAVALI valida que pertenezca a la banca. `Requerido`
+uniqueCode | string | Código único del Pagaré. Letras, números y guion, `Máximo 20 de longitud`. No puede repetirse dentro de su institución. `Requerido`
+creditNumber | string | Número de crédito. Letras, números y guion, `Máximo 20 de longitud`
+clientName | string | Nombre del cliente, `Máximo 100 de longitud`. Obligatorio cuando el cliente no firma (`client.userId: -1`); si firma, se toma del participante
+domicile | string | Domicilio del cliente, `Máximo 100 de longitud`. También puede enviarse en `client.domicile`
+issuedDate | string | Fecha de emisión. Formato: YYYY-MM-dd. Una fecha futura se ignora y CAVALI usa la fecha del registro
+expirationDate | string | Fecha de vencimiento. Formato: YYYY-MM-dd. CAVALI exige que sea posterior a `issuedDate`
+conditionJustSign | integer | Condición de solo firma. Puede tener los siguientes valores: 1 (si) | 2 (no)
+special | integer | Indicador de pagaré especial. Puede tener los siguientes valores: 1 (si) | 2 (no). Si no se envía, CAVALI asume 2
 currency | integer | Moneda del pagaré. Puede tener los siguientes valores: 1 (S/) | 2 (US$)
-compensatoryInterestAmount | double | El interés compensatorio sobre el monto
-periodOne | integer | El período de capitalización 1
-compensatoryInterestArrears | double | El interés compensatorio por el período de morosidad
-periodTwo | integer | El período de capitalización 2
-interestArrears | double | Interés moratorio del periodo
-periodTwo | integer | El período de capitalización 3
-specialClauses | string | Las Cláusulas especiales que pueda contener el Pagaré
-token | string | El token de validación de firmas para proveedores
-additionalField1 | string | Campo adicional 1
-additionalField2 | string | Campo adicional 2
-client | object | [Cliente](#cliente-cavali) del Pagaré
-representatives | array | Arreglo de [Representantes](#representantes-cavali) del cliente
-guarantees | array | Arreglo de [Garantías](#garantías-cavali) del cliente
+amount | double | Monto del pagaré. Mínimo 1
+compensatoryInterestAmount | double | El interés compensatorio sobre el monto. Mínimo 1
+periodOne | string | El período de capitalización 1, `Máximo 30 de longitud`
+compensatoryInterestArrears | double | El interés compensatorio por el período de morosidad. Mínimo 1
+periodTwo | string | El período de capitalización 2, `Máximo 30 de longitud`
+interestArrears | double | Interés moratorio del periodo. Mínimo 1
+periodThree | string | El período de capitalización 3, `Máximo 30 de longitud`
+issuedPlace | string | Lugar de emisión, `Máximo 50 de longitud`
+specialClauses | string | Las Cláusulas especiales que pueda contener el Pagaré, `Máximo 1000 de longitud`
+token | string | El token de validación de firmas para proveedores, `Máximo 20 de longitud`
+additionalField1 | string | Campo adicional 1, `Máximo 100 de longitud`
+additionalField2 | string | Campo adicional 2, `Máximo 100 de longitud`
+client | object | [Cliente](#cliente-cavali) del Pagaré. `Requerido`
+representatives | array | Arreglo de [Representantes](#representantes-cavali) legales del cliente. Máximo 3
+guarantees | array | Arreglo de [Garantías](#garantías-cavali) del cliente. Máximo 6
 
 ### Cliente Cavali
+
+```json
+{
+  "clientName": "EMPRESA S.A.C.",
+  "client": {
+    "userId": -1,
+    "typeDocument": 2,
+    "numberDocument": "20123456789"
+  },
+  "representatives": [
+    { "userId": 0 },
+    { "userId": 1 }
+  ]
+}
+```
+
 El cliente del pagaré. El elemento está compuesto por:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-userId | integer | Id del firmante. Es el índice del elemento al que hace referencia en el atributo `users` al [crear contrato](#crear-un-contrato)
-civilStatus | integer |  Estado civil del cliente. Puede tener los siguientes valores: `1 (SOLTERO)`, `2 (CASADO)`, `3 (DIVORCIADO)`, `4 (VIUDO)`
-domicile | string | Domicilio del cliente `Máximo 100 de longitud`
+userId | integer | Índice del participante en el atributo `users` al [crear contrato](#crear-un-contrato), o `-1` cuando el cliente no firma (empresa). `Requerido`
+typeDocument | integer | Tipo de documento del cliente. Puede tener los siguientes valores: `1 (DNI)`, `2 (RUC)`, `3 (CARNET DE EXTRANJERÍA)`, `4 (PASAPORTE)`. Por defecto `1`
+numberDocument | string | Número de documento. Obligatorio cuando `userId` es `-1`; si el cliente firma, se toma de su verificación de identidad. DNI: hasta 8 dígitos. RUC: exactamente 11 dígitos. CE o Pasaporte: 8 a 20 caracteres alfanuméricos
+civilStatus | integer | Estado civil del cliente persona natural. Puede tener los siguientes valores: `1 (SOLTERO)`, `2 (CASADO)`, `3 (DIVORCIADO)`, `4 (VIUDO)`. No aplica a empresas (RUC)
+clientName | string | Nombre o razón social, `Máximo 100 de longitud`. Obligatorio cuando `userId` es `-1`
+domicile | string | Domicilio del cliente, `Máximo 100 de longitud`
+spouse | object | Cónyuge del cliente: `{ "userId": n }`, donde `n` es el índice del cónyuge en `users`. Solo para persona natural con `civilStatus: 2`. Puede omitirse (separación de bienes)
 
 ### Representantes Cavali
-Representante del cliente. El elemento está compuesto por:
+
+Representante legal del cliente. Solo para cliente empresa (`typeDocument: 2`): mínimo 1, máximo 3. Un cliente persona natural no lleva representantes; si es casado, use `client.spouse`. El elemento está compuesto por:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-userId | integer | Id del firmante. Es el índice del elemento al que hace referencia en el atributo `users` al [crear contrato](#crear-un-contrato)
+userId | integer | Índice del participante en el atributo `users` al [crear contrato](#crear-un-contrato). El representante firma el pagaré en nombre de la empresa. `Requerido`
+
 ### Garantías Cavali
-Garantía del cliente. El elemento está compuesto por:
+
+```json
+{
+  "guarantees": [
+    {
+      "userId": 1,
+      "guaranteeType": 1,
+      "civilStatus": 2,
+      "spouse": { "userId": 2 },
+      "representatives": []
+    },
+    {
+      "userId": -1,
+      "guaranteeType": 2,
+      "businessName": "FIADOR S.A.",
+      "numberDocument": "20987654321",
+      "representatives": [ { "userId": 3 } ]
+    }
+  ]
+}
+```
+
+Garantía del cliente (aval o fiador). Máximo 6 y cada persona o empresa puede ser garante una sola vez. El elemento está compuesto por:
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-userId | integer | Id del firmante. Es el índice del elemento al que hace referencia en el atributo `users` al [crear contrato](#crear-un-contrato)
-civilStatus | integer | Estado civil. Puede tener los siguientes valores: `1 (SOLTERO)`, `2 (CASADO)`, `3 (DIVORCIADO)`, `4 (VIUDO)`
-domicile | string | Domicilio `Máximo 100 de longitud`
-representative | array | Arreglo de [Representantes](#representantes-cavali)
+userId | integer | Índice del participante en el atributo `users`, o `-1` cuando el garante no firma (empresa). `Requerido`
+guaranteeType | integer | Tipo de garante. Puede tener los siguientes valores: `1 (AVAL)`, `2 (FIADOR)`. Por defecto `1`
+civilStatus | integer | Estado civil. Puede tener los siguientes valores: `1 (SOLTERO)`, `2 (CASADO)`, `3 (DIVORCIADO)`, `4 (VIUDO)`. Obligatorio para garante persona natural que firma
+businessName | string | Razón social del garante empresa. Obligatorio cuando `userId` es `-1`
+numberDocument | string | Documento del garante empresa (un RUC son 11 dígitos). Obligatorio cuando `userId` es `-1`
+domicile | string | Domicilio, `Máximo 100 de longitud`
+spouse | object | Cónyuge del garante: `{ "userId": n }`. Solo persona natural con `civilStatus: 2`
+representatives | array | Arreglo de [Representantes](#representantes-cavali) del garante. Obligatorio (mínimo 1) para garante con RUC. Máximo 3
+
+### Combinaciones válidas
+
+Cliente | typeDocument | civilStatus | spouse | representatives
+--------- | ----------- | ----------- | ----------- | -----------
+Persona natural soltera, divorciada o viuda | 1, 3 o 4 | 1, 3 o 4 | No | No
+Persona natural casada | 1, 3 o 4 | 2 | Opcional | No
+Empresa | 2 | No enviar | No | 1 a 3
+
+Garante | Documento | civilStatus | spouse | representatives
+--------- | ----------- | ----------- | ----------- | -----------
+Persona natural soltera, divorciada o viuda | DNI, CE o Pasaporte | 1, 3 o 4 | No | No
+Persona natural casada | DNI, CE o Pasaporte | 2 | Opcional | No
+Empresa | RUC (11 dígitos) | No enviar | No | 1 a 3
+
+<aside class="notice">Por compatibilidad, un cliente persona natural casado que envía exactamente un elemento en <code>representatives</code> y no envía <code>spouse</code> se acepta y ese participante se registra en CAVALI como cónyuge. Para nuevas integraciones use <code>client.spouse</code>.</aside>
+
+### Validaciones de cavaliData
+
+```json
+{
+  "type": "AppError",
+  "code": "InvalidCavaliData",
+  "message": "A non-RUC client cannot have legal representatives",
+  "retryable": false
+}
+```
+
+Si `cavaliData` no cumple alguna regla, el API de [crear contrato](#crear-un-contrato) responde `400` y el contrato no se crea. Las reglas de negocio responden con `code: InvalidCavaliData` y uno de los siguientes mensajes:
+
+Mensaje | Cuándo ocurre | Cómo corregirlo
+--------- | ----------- | -----------
+The document number and the name of the client are required | `client.userId` es `-1` y falta `clientName` o `client.numberDocument` | Un cliente que no firma debe enviar nombre y documento
+A RUC client cannot have civilStatus 'Casado' | Cliente con `typeDocument: 2` y `civilStatus: 2` | Las empresas no tienen estado civil: no envíe `civilStatus`
+A RUC client cannot have spouse | Cliente con `typeDocument: 2` y `spouse` | Quite `spouse`
+Only married clients can have spouse | `spouse` con `civilStatus` distinto de `2` | Envíe `civilStatus: 2` o quite `spouse`
+A RUC client must have at least one legal representative | Cliente empresa sin `representatives` | Agregue al menos un representante legal
+A client cannot have more than three legal representatives | Más de 3 elementos en `representatives` | CAVALI admite hasta 3
+A non-RUC client cannot have legal representatives | Cliente persona natural con `representatives` | Solo las empresas tienen representantes. Si es casado, use `client.spouse`
+A RUC guarantee cannot have civilStatus 'Casado' | Garante con RUC y `civilStatus: 2` | Las empresas no tienen estado civil
+A RUC guarantee cannot have spouse | Garante con RUC y `spouse` | Quite `spouse`
+Only married guarantees can have spouse | Garante con `spouse` y `civilStatus` distinto de `2` | Envíe `civilStatus: 2` o quite `spouse`
+A guarantee cannot have more than three legal representatives | Más de 3 representantes en un garante | CAVALI admite hasta 3 por garante
+A RUC guarantee must have at least one legal representative | Garante con RUC (11 dígitos) sin representantes | Agregue al menos un representante del garante
+A promissory note cannot have more than six guarantees | Más de 6 elementos en `guarantees` | CAVALI admite hasta 6
+A person cannot be a guarantor and surety at the same time | El mismo participante (`userId`) o el mismo `numberDocument` aparece dos veces en `guarantees` | Cada persona o empresa puede ser garante una sola vez
+
+Los campos obligatorios, formatos y longitudes responden con estos códigos:
+
+Code | Mensaje | Cuándo ocurre
+--------- | ----------- | -----------
+RequiredValue | the client is required | Falta el objeto `client`
+RequiredAttribute | the &lt;campo&gt; attribute is required | Falta `banking`, `product`, `uniqueCode`, `client.userId`, el `userId` de un cónyuge o representante, el `civilStatus` de un garante que firma, o `businessName` / `numberDocument` de un garante que no firma
+InvalidNumber | the &lt;campo&gt; value must be an integer / greater or equal than N / less or equal than N | Valor fuera de rango: `conditionJustSign`, `special`, `currency` (1 o 2), `civilStatus` (1 a 4), `typeDocument` (1 a 4), `guaranteeType` (1 o 2), montos e intereses menores a 1, `userId` negativo (solo `client.userId` y `guarantees[].userId` admiten `-1`)
+InvalidString | the &lt;campo&gt; attribute must contain only letters, numbers or '-' | `uniqueCode`, `creditNumber` o `numberDocument` (CE, Pasaporte, garantes) con otros caracteres
+InvalidString | the &lt;campo&gt; attribute must contain only digits | `client.numberDocument` con caracteres no numéricos cuando el tipo es DNI o RUC
+InvalidDocumentNumber | the client.numberDocument for DNI must have at most 8 digits / for RUC must have exactly 11 digits / for CE or Passport must have between 8 and 20 characters | Longitud del documento del cliente fuera de lo permitido para su tipo
+InvalidLengthAttribute | the &lt;campo&gt; attribute must have a length less than or equal to N | Texto más largo que el máximo permitido
+InvalidDateFormat | the date format is invalid | `issuedDate` o `expirationDate` con formato no reconocido
 
 ## Crear un Contrato
 
@@ -1175,6 +1286,137 @@ message | Motivo de declinación
 
 # Items del Contrato
 Para llevar a cabo el flujo de firma de un contrato, cada uno de los usuarios deberá ingresar la información necesaria para firmar. Por ejemplo: la foto de su DNI, el video diciendo el código corto o el número de su DNI. También hace referencia a los procesos internos llevados a cabo por Keynua, por ejemplo la generación del PDF final o validación biométrica. A cada uno de estos elementos los llamamos **Item**
+## Actualizar datos Cavali de un Contrato
+
+```ruby
+require 'uri'
+require 'net/http'
+require 'openssl'
+
+url = URI("https://api.stg.keynua.com/contracts/v1/cavali-data")
+
+http = Net::HTTP.new(url.host, url.port)
+http.use_ssl = true
+http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+request = Net::HTTP::Put.new(url)
+request["x-api-key"] = 'YOUR-API-KEY-HERE'
+request["authorization"] = 'YOUR-API-TOKEN-HERE'
+request["content-type"] = 'application/json'
+request.body = "{\n  \"contractId\": \"CONTRACT-ID\",\n  \"cavali\": {\n    \"uniqueCode\": \"000127\",\n    \"creditNumber\": \"CR-000127\"\n  }\n}"
+
+response = http.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+
+conn = http.client.HTTPSConnection("api.stg.keynua.com")
+
+payload = "{\n  \"contractId\": \"CONTRACT-ID\",\n  \"cavali\": {\n    \"uniqueCode\": \"000127\",\n    \"creditNumber\": \"CR-000127\"\n  }\n}"
+
+headers = {
+    'x-api-key': "YOUR-API-KEY-HERE",
+    'authorization': "YOUR-API-TOKEN-HERE",
+    'content-type': "application/json"
+    }
+
+conn.request("PUT", "/contracts/v1/cavali-data", payload, headers)
+
+res = conn.getresponse()
+data = res.read()
+
+print(data.decode("utf-8"))
+```
+
+```shell
+curl --request PUT \
+  --url https://api.stg.keynua.com/contracts/v1/cavali-data \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'content-type: application/json' \
+  --data '{
+  "contractId": "CONTRACT-ID",
+  "cavali": {
+    "uniqueCode": "000127",
+    "creditNumber": "CR-000127"
+  }
+}'
+```
+
+```javascript
+const https = require("https");
+
+const data = JSON.stringify({
+  contractId: 'CONTRACT-ID',
+  cavali: {
+    uniqueCode: '000127',
+    creditNumber: 'CR-000127',
+  },
+});
+
+const options = {
+  method: "PUT",
+  hostname: "api.stg.keynua.com",
+  path: "/contracts/v1/cavali-data",
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE",
+    "content-type": "application/json",
+    "content-length": data.length
+  }
+};
+
+const req = https.request(options, function (res) {
+  const chunks = [];
+
+  res.on("data", function (chunk) {
+    chunks.push(chunk);
+  });
+
+  res.on("end", function () {
+    const body = Buffer.concat(chunks);
+    console.log(body.toString());
+  });
+});
+
+req.on('error', (error) => {
+  console.error(error)
+});
+
+req.write(data);
+req.end();
+```
+
+> Si los datos fueron actualizados, el API retornará `200` con un JSON vacío:
+
+```json
+{}
+```
+
+Permite cambiar el `uniqueCode` y el `creditNumber` del Pagaré de un contrato ya creado, sin recrearlo, mientras el contrato no haya finalizado (también después de que algún participante haya firmado). El resto de `cavaliData` no se puede modificar por este método.
+
+### HTTP Request
+
+`PUT /contracts/v1/cavali-data`
+
+### Body
+
+Parámetro | Descripción
+--------- | -----------
+contractId | El ID del Contrato
+cavali | Objeto con `uniqueCode` y/o `creditNumber` (mismas reglas que en [Cavali](#cavali))
+
+### Errores
+
+Code | HTTP | Descripción
+--------- | ----------- | -----------
+InvalidState | 400 | El contrato ya finalizó o fue eliminado
+InvalidContract | 400 | El contrato no tiene `cavaliData`
+Forbidden | 403 | El token no tiene permiso sobre ese contrato
+NotFound | 404 | El contrato no existe
+
 ## Propiedades de un Item
 
 ```json
@@ -1498,6 +1740,24 @@ ocrData.names | string | Nombre completo
 ocrData.familyNames | string | Apellidos
 ocrData.expirationDate | string | Fecha de expiración, formato: MMMM-MM-DD
 
+### Pagaré Cavali
+
+```json
+{
+  "success": true,
+  "processId": "472406",
+  "processMessage": "Proceso ejecutado exitosamente"
+}
+```
+
+Type: `cavali`
+
+Atributo | Tipo | Opcional | Descripción
+--------- | ----------- | ----------- | -----------
+success | boolean | no | `true` cuando el Pagaré quedó registrado en CAVALI
+processId | string | no | Número de proceso asignado por CAVALI al Pagaré
+processMessage | string | si | Mensaje de confirmación de CAVALI
+
 ## Errores por tipo de Item
 
 Cuando ocurra un error en un Item, se obtendrán principalmente 2 atributos: `code` y `message`.
@@ -1643,6 +1903,35 @@ EmptyIdScan | No se detecto ningún texto en la imagen de documento.
 ExceededThreshold | Las información detectada en el documento no es correcta.
 UnsupportedDocumentType | El documento detectado no es aceptado por este proceso.
 ValidationError | La validación de identidad no fue exitosa.
+
+### cavali
+
+<aside class="notice">Estos errores ocurren después de la firma, cuando Keynua envía el Pagaré a CAVALI. No son una respuesta HTTP: el item <code>cavali</code> pasa a <code>error</code> y se consulta con <a href="#obtener-un-contrato">obtener un contrato</a> o llega en el webhook <code>ContractItemUpdated.e</code>. Las reglas que se validan al crear el contrato están en <a href="#validaciones-de-cavalidata">Validaciones de cavaliData</a>.</aside>
+
+Code | Descripción
+--------- | -----------
+InvalidCavaliData | Los datos del Pagaré no cumplen una regla con la información capturada en la firma (por ejemplo, el documento de un participante). `message` indica la regla, con los mismos textos de [Validaciones de cavaliData](#validaciones-de-cavalidata) o: `The document number and the name of the client/spouse/representative/guarantee are required`, `The guarantee civilStatus is required`, `A client with RUC document must have at least one legal representative`, `A guarantee with RUC document must have at least one legal representative`.
+InvalidUser | Un `userId` de `cavaliData` no corresponde a ningún participante de `users`.
+InvalidParticipantCode | La cuenta no tiene código de participante de CAVALI configurado. Contacte a Keynua.
+CavaliAPIValidationError | CAVALI rechazó el Pagaré. `message` trae el texto de CAVALI con el prefijo `Cavali: ` (ver tabla siguiente). `Cavali: Invalid request body` indica que CAVALI rechazó el cuerpo, típicamente por un correo electrónico inválido de algún participante.
+CavaliAPIServerError | Error interno de CAVALI. Keynua reintenta automáticamente antes de marcar el error.
+CavaliAPIUnauthorized, CavaliAPIForbidden, CavaliAPIUnexpectedResponse | Problemas de acceso o respuesta inesperada del servicio de CAVALI. Contacte a Keynua.
+
+Mensajes de CAVALI (en `message`, sin el prefijo):
+
+Mensaje | Descripción
+--------- | -----------
+Error de duplicidad de Pagaré | Su institución ya registró un Pagaré con ese `uniqueCode`.
+PRODUCTO no disponible para la BANCA ingresada | `product` no pertenece a `banking`.
+BANCA no disponible para su usuario | `banking` no está habilitada para su institución en CAVALI.
+La fecha expirationDate debe ser mayor que la fecha issuedDate | Fechas invertidas.
+Uno de los campos enviados no es válido | Valor rechazado por CAVALI (por ejemplo, un garante repetido).
+La longitud de uno de los campos enviados no es válida | Texto más largo que el máximo de CAVALI.
+El formato de uno de los campos enviados no es válido | Formato inválido (fechas, correos).
+Los campos: … deben ser alfanuméricos / numéricos | `uniqueCode`, `creditNumber` o `numberDocument` con caracteres no permitidos para el tipo de documento.
+El titular no está asociado a la Cuenta | El cliente no está asociado a la cuenta de su institución en CAVALI.
+La firma enviada no es válida | El archivo de firma no es válido o es muy antiguo.
+EL SERVICIO NO SE ENCUENTRA DISPONIBLE | Error no controlado en CAVALI. Reintentar más tarde.
 
 ## Customizar opciones de un item por usuario
 
