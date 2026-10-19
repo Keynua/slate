@@ -525,6 +525,17 @@ Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 chosenNotificationOptions | stringArray | Se deben enviar los tipos de notificación como string. Los valores pueden ser `sms`, `whatsapp` o `email`. **No se puede enviar sms y whatsapp al mismo tiempo**
 livenessLightChallenge | boolean | `optional` Activa (`true`) o desactiva (`false`) el reto de luces en la prueba de vida 3D del contrato. El valor enviado tiene prioridad sobre la configuración de la organización; si no se envía, se usa la configuración de la organización. Solo tiene efecto en flujos que incluyen prueba de vida (liveness)
+idDocumentIntegrity | boolean | `optional` Activa (`true`) o desactiva (`false`) la [integridad del documento de identidad](#integridad-del-documento-de-identidad). El valor enviado prevalece sobre el flag del template; si ninguno está definido, se hereda la configuración de la organización. Una configuración específica del item o grupo tiene prioridad sobre este flag. No habilita la captura documental por sí solo.
+
+Ejemplo parcial del body de [creación de un contrato](#crear-un-contrato). Debe combinarse con los demás campos requeridos y un template que incluya captura documental compatible:
+
+```json
+{
+  "flags": {
+    "idDocumentIntegrity": true
+  }
+}
+```
 
 ### Usuarios del contrato
 
@@ -1421,6 +1432,10 @@ idScanBackImage | string | URL de la foto de la parte trasera del documento obte
 facematchScore | number | Porcentaje de validación biométrico entre la prueba de vida 3D y el documento escaneado. Solo tendrá valor si se realizar la prueba de vida 3D y la validación de documento 3D
 ocrData | object | Información OCR obtenida del documento. La información varía por país y se detalla en los recuadros de abajo
 
+Un item `livenessinput` puede reunir captura del rostro y del documento. El OCR extrae los datos del documento; el liveness evalúa la prueba de vida; y la [integridad documental](#integridad-del-documento-de-identidad), cuando está activada en un flujo compatible, evalúa posibles alteraciones o el uso de copias. Son validaciones diferentes: completar la captura del rostro no significa que el documento haya sido aprobado.
+
+La respuesta pública de este item no incluye el detalle `documentIntegrity`, sus scores ni `documentIntegrityError`. Para interpretar una validación no aprobada, consulta los [errores de livenessinput](#livenessinput). No confundas el porcentaje `facematchScore`, que corresponde a la comparación facial, con un score de integridad.
+
 DocumentType: `co-id`
 
 Atributo | Tipo | Descripción
@@ -1589,7 +1604,9 @@ ManualApproveRejected | El item ha sido rechazado por el administrador del contr
 
 ### livenessinput
 
-<aside class="notice">Estos errores, a diferencia del resto, de momento solo se devuelven en el navegador.</aside>
+#### Errores de captura en el navegador
+
+<aside class="notice">La siguiente tabla describe los errores de captura del SDK que se muestran en el navegador. No describe todos los errores de validación que puede devolver el servidor.</aside>
 
 Code | Title | Descripción
 --------- | ----------- | -----------
@@ -1615,6 +1632,38 @@ ResourcesCouldNotBeLoadedOnLastInit | Ha ocurrido un error al intentar iniciar l
 DefaultError | Error en prueba de vida | La prueba de vida no es concluyente, vuelve a grabar un video donde se vea tu cara, y asegúrate de que salga nítida, sin sombras o brillos.
 DefaultIdScanError | Error al escanear el documento | El documento escaneado no es concluyente, asegúrate de que la foto salga nítida, sin sombras o brillos.
 UnknownInternalError | Error interno desconocido | La sesión fue cancelada debido a un error desconocido e inesperado. El SDK en el navegador utiliza diversas APIs de plataforma, incluyendo cámara, almacenamiento, seguridad, redes, entre otras. Este valor es un "catch-all" para errores experimentados durante el uso normal de estas API.
+
+#### Resultado de validación del servidor
+
+Después de enviar las capturas, el servidor procesa las validaciones del flujo. Un rechazo de [integridad documental](#integridad-del-documento-de-identidad) se comunica en el `value` público del item con `code` igual a `NotPassed` y un mensaje apropiado para el usuario. Este código también se utiliza para otras validaciones no aprobadas: por sí solo no identifica la causa ni implica que haya fallado la prueba de vida.
+
+Ejemplo de `value` de un item en estado `error` cuyo siguiente intento requiere nuevas fotos del documento:
+
+```json
+{
+  "code": "NotPassed",
+  "message": "El documento no superó la validación de integridad. Vuelve a tomar las fotos del documento.",
+  "itemsThatNeedToChange": [10],
+  "retry": "document"
+}
+```
+
+Atributo | Tipo | Descripción
+--------- | ----------- | -----------
+code | string | Código público del error. Un rechazo de integridad se comunica como `NotPassed`; otros errores pueden utilizar sus propios códigos.
+message | string | Mensaje para mostrar al usuario. Puede indicar que el documento no superó la integridad, que el resultado no fue concluyente o que no fue posible completar la evaluación. El texto depende del idioma y puede cambiar; no lo compares literalmente para implementar reglas de negocio.
+itemsThatNeedToChange | array de enteros | `optional` Identificadores de los items que deben corregirse. Los valores del ejemplo son ilustrativos; utiliza los que devuelve el flujo.
+retry | string | `optional` Capturas requeridas para el siguiente intento: `document`, `liveness` o `both`. No es un código de causa del error y puede aparecer también en errores distintos de integridad.
+
+Valor de retry | Captura que se debe repetir
+--------- | -----------
+`document` | Las fotos del documento.
+`liveness` | La prueba de vida.
+`both` | La prueba de vida y las fotos del documento.
+
+Cuando solo falla la integridad y la prueba de vida puede reutilizarse, el flujo solicita nuevas fotos del documento. La reutilización depende de la vigencia de la sesión y de las validaciones del flujo; no se garantiza que siempre baste con repetir las fotos. Si `retry` no está presente, no asumas un reintento parcial: continúa con las instrucciones que entregue el flujo.
+
+Los códigos internos de evaluación y su evidencia técnica no forman parte de este contrato público. El estado del item y su `value` se pueden consultar mediante la API y los eventos existentes [ContractItemUpdated](#propiedades-de-contractitemupdated) o [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated).
 
 ### inevalidation
 
@@ -2309,6 +2358,7 @@ documentSides | string | Lados del documento de identidad. Puede ser `both`, `ba
 signatureTypes | array | Indica los tipos de firma. Puede ser `selfie`, `video-signature`, `draw` y `digital-signature`
 facematch | array | Indica los items a los cuales se le aplicará el reconocimiento facial. Puede ser `selfie`, `liveness`, `video-signature`, `reniec` y `document-frontal`
 liveness3D | boolean | Incluir validación 3D
+idDocumentIntegrity | boolean | `optional` Activa (`true`) o desactiva (`false`) la [integridad documental](#integridad-del-documento-de-identidad) para los items de captura documental compatibles de este grupo. Prevalece sobre el flag del contrato, incluso si se envía `false`. Si se omite, hereda el flag del contrato. No agrega captura documental ni liveness por sí solo.
 documentValidations | array | Indica las opciones de validación que puedes agregar a los documentos. Puede ser `verify-content-reniec`, para comparar que los datos de la foto del DNI coincidan con Reniec (Sólo Perú) o `expiration-date`, para comprobar que el documento de identidad no ha expirado aún o `verify-id-number`, para comprobar que el número de documento ingresado en el flujo de firma se encuentre en el documento.
 countries | array | Indica los países cuyos documentos de identidad son aceptados. Solo disponible para OCR 3D. Los valores permitidos deben cumplir con la convención **ISO 3166-1 alpha-3**.
 idTypes | array | Indica los tipos de documentos aceptados. Solo disponible para OCR 3D. Los valores permitidos son: `ID Card`, `Driver License`, `Passport`.
@@ -2923,6 +2973,68 @@ giradorNumId | string | Nùmero de documento del participante
 
 Permite crear, listar y obtener verificaciones de identidad.
 
+## Integridad del documento de identidad
+
+La integridad documental evalúa las imágenes capturadas del documento de identidad para detectar posibles alteraciones o el uso de copias impresas o mostradas en una pantalla. Complementa el OCR, la comparación facial y la prueba de vida; no los reemplaza ni constituye una garantía absoluta de autenticidad.
+
+### Activación y herencia
+
+El atributo `idDocumentIntegrity` es un booleano opcional:
+
+Valor | Comportamiento
+--------- | -----------
+`true` | Solicita la evaluación de integridad en una captura documental compatible.
+`false` | La desactiva explícitamente, aunque esté activada en la configuración heredada.
+Omitido | Hereda la configuración correspondiente. Si no existe ninguna configuración, queda desactivada.
+
+Envía booleanos JSON, no strings como `"true"` o `"false"`, números ni `null`.
+
+Desactivar la integridad no desactiva el OCR, el liveness ni las demás validaciones configuradas en el flujo.
+
+Contexto | Dónde configurarlo
+--------- | -----------
+[Crear una identificación](#crear-verificacion-de-identidad) | `idDocumentIntegrity` en el body de `PUT /identity-verification/v1`. Tiene prioridad sobre la configuración de la organización.
+[Crear un contrato](#flags-del-contrato) | `flags.idDocumentIntegrity` en el body de creación del contrato.
+[Template dinámico de contrato](#grupos) | `idDocumentIntegrity` dentro del grupo `signers`, en `templateOptions.stages[].groups[]`.
+
+Para contratos, la prioridad es: configuración específica del item o grupo, luego flag del contrato, luego configuración de la organización y finalmente `false`. El flag enviado al crear el contrato prevalece sobre el flag definido en el template. El valor heredado de la organización se fija al crear el contrato; cambiar después la organización no reconfigura los contratos existentes.
+
+Ejemplo parcial del body de creación de un contrato: la integridad está activada por defecto en el contrato, pero desactivada explícitamente para el grupo `signers`. Debe combinarse con los demás campos requeridos para crear el contrato.
+
+```json
+{
+  "flags": {
+    "idDocumentIntegrity": true
+  },
+  "templateOptions": {
+    "stages": [
+      {
+        "groups": [
+          {
+            "name": "signers",
+            "type": "signers",
+            "documentType": "pe-dni",
+            "documentSides": "both",
+            "liveness3D": true,
+            "idDocumentIntegrity": false
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Compatibilidad y resultado
+
+`idDocumentIntegrity` no habilita por sí solo la captura del documento ni la prueba de vida. El flujo debe incluir captura documental y utilizar procesamiento compatible con integridad. No debe asumirse que el atributo incorpora esta evaluación a cualquier flujo histórico o a una captura de fotos independiente. Confirma con Keynua la disponibilidad en el ambiente y template de tu integración.
+
+En identificaciones, `documentSide` utiliza `front` o `both` para la selección explícita de lados. En los grupos de contratos, el atributo se llama `documentSides` y el anverso se indica con `frontal`, no con `front`. Consulta el [ejemplo de identificación con integridad](#ejemplo-de-identificacion-con-integridad-documental).
+
+La creación de la transacción configura el flujo, pero no evalúa todavía las imágenes. La evaluación se procesa después de capturarlas y enviarlas. Consulta el estado y el valor público del item `livenessinput` mediante la API o los webhooks existentes; el estado `success` del item indica que sus validaciones finalizaron correctamente, no que se haya aprobado todo el contrato o identificación.
+
+Un liveness aprobado puede coexistir con un rechazo del documento. Los [errores de livenessinput](#livenessinput) describen el resultado público y las capturas que el flujo puede pedir nuevamente. El detalle de la evaluación, los scores de integridad y las respuestas del modelo no se incluyen en el valor público del item.
+
 ## Propiedades de una verificación de identidad
 
 ```json
@@ -3007,6 +3119,7 @@ timezone | string | No | Huso horario  utilizado en notificaciones y mensajes
 title | string | No | Título de la verificación
 userIdInfo | string | Sí | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento **solo aplica para las Identificaciones Peruanas**. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI
 items | [ContractItem](#items-del-contrato)[] | No | Lista de pasos que sigue la verificación.
+idDocumentIntegrity | boolean | Sí | Configuración explícita solicitada al crear la identificación, cuando se envió. No es un resultado de validación. Si se omitió, puede estar ausente aunque el flujo herede integridad de la organización; su ausencia no equivale a `false`.
 
 ## Crear verificación de identidad
 
@@ -3022,13 +3135,14 @@ curl --location --request PUT 'https://api.keynua.com/identity-verification/v1' 
     "title": "Identification 12345678",
     "type": "video",
     "documentType": "pe-dni",
-    "disableInitialNotification": false,
+    "disableInitialNotification": false
   }'
 ```
 
 ```ruby
 require "uri"
 require "net/http"
+require "json"
 
 url = URI("https://api.keynua.com/identity-verification/v1")
 
@@ -3039,7 +3153,15 @@ request = Net::HTTP::Put.new(url)
 request["x-api-key"] = 'YOUR-API-KEY-HERE'
 request["authorization"] = 'YOUR-API-TOKEN-HERE'
 request["Content-Type"] = "application/json"
-request.body = "{\n  \"documentNumber\": \"12345678\",\n  \"userPhone\": \"51123456789\",\n  \"userFullName\": \"Patrick Star\",\n  \"title\": \"Identification 12345678\",\n  \"type\": \"video\",\n \"documentType\": \"pe-dni\",\n \"disableInitialNotification\": \"false\",\n \"validateDocument\": \"true\"\n}"
+request.body = JSON.generate({
+  documentNumber: "12345678",
+  userPhone: "51123456789",
+  userFullName: "Patrick Star",
+  title: "Identification 12345678",
+  type: "video",
+  documentType: "pe-dni",
+  disableInitialNotification: false
+})
 
 response = https.request(request)
 puts response.read_body
@@ -3057,8 +3179,7 @@ payload = json.dumps({
     "title": "Identification 12345678",
     "type": "video",
     "documentType": "pe-dni",
-    "disableInitialNotification", "false",
-    "validateDocument": "true",
+    "disableInitialNotification": False,
 })
 headers = {
   'x-api-key': "YOUR-API-KEY-HERE",
@@ -3106,7 +3227,6 @@ var postData = JSON.stringify({
     "type": "video",
     "documentType": "pe-dni",
     "disableInitialNotification": false
-    "validateDocument": true
 });
 
 req.write(postData);
@@ -3210,10 +3330,115 @@ language | string | Sí | Lenguaje con el cual se creará el proceso de identifi
 accountName | string | Sí | Nombre de cuenta que se usará al crear el proceso de identificación. De no ser enviado, se usará el nombre de la cuenta que está creando la identificación.
 addressMatchScore | number | Sí | Porcentaje de coincidencia (0-100) requerido entre la dirección extraída del documento escaneado y la obtenida de Reniec
 livenessLightChallenge | boolean | Sí | Activa (`true`) o desactiva (`false`) el reto de luces en la prueba de vida 3D. El valor enviado tiene prioridad sobre la configuración de la organización; si no se envía, se usa la configuración de la organización. Solo tiene efecto en verificaciones con prueba de vida 3D
+idDocumentIntegrity | boolean | Sí | Activa (`true`) o desactiva (`false`) la [integridad del documento de identidad](#integridad-del-documento-de-identidad). El valor enviado tiene prioridad sobre la configuración de la organización; si se omite, la hereda y, si no existe configuración, queda desactivada. Requiere captura documental y procesamiento compatibles; no agrega captura ni liveness por sí solo. No acepta strings, números ni `null`.
 
 ### Combinaciones no soportadas por defecto
 
 Por ahora los paises que soportamos para `selfie` y `video` son `sv-dui`, `mx-ife`, `cl-cedula`, `pe-dni`, `br-denatran` y `co-cedula`. En caso se cree una identificación con `selfie` o `video` con algún país que no esté en esta lista, automáticamente se considerará el documento como `global`. La lista completa sí está soportada con el type `liveness`.
+
+### Ejemplo de identificación con integridad documental
+
+Este ejemplo crea una identificación con liveness, captura del anverso y reverso del DNI peruano, e integridad documental activada. Requiere que el ambiente tenga habilitado el procesamiento compatible descrito en [Integridad del documento de identidad](#integridad-del-documento-de-identidad). La respuesta de creación no es el resultado de la evaluación de las imágenes.
+
+```shell
+curl --location --request PUT 'https://api.keynua.com/identity-verification/v1' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "title": "Identification with document integrity",
+    "documentNumber": "12345678",
+    "documentType": "pe-dni",
+    "type": "liveness",
+    "documentScanVersion": 2,
+    "documentSide": "both",
+    "idDocumentIntegrity": true
+  }'
+```
+
+```ruby
+require "uri"
+require "net/http"
+require "json"
+
+url = URI("https://api.keynua.com/identity-verification/v1")
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Put.new(url)
+request["x-api-key"] = "YOUR-API-KEY-HERE"
+request["authorization"] = "YOUR-API-TOKEN-HERE"
+request["Content-Type"] = "application/json"
+request.body = JSON.generate({
+  title: "Identification with document integrity",
+  documentNumber: "12345678",
+  documentType: "pe-dni",
+  type: "liveness",
+  documentScanVersion: 2,
+  documentSide: "both",
+  idDocumentIntegrity: true
+})
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+import json
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+payload = json.dumps({
+    "title": "Identification with document integrity",
+    "documentNumber": "12345678",
+    "documentType": "pe-dni",
+    "type": "liveness",
+    "documentScanVersion": 2,
+    "documentSide": "both",
+    "idDocumentIntegrity": True,
+})
+headers = {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE",
+    "Content-Type": "application/json",
+}
+conn.request("PUT", "/identity-verification/v1", payload, headers)
+res = conn.getresponse()
+print(res.read().decode("utf-8"))
+```
+
+```javascript
+const https = require("https");
+
+const options = {
+  method: "PUT",
+  hostname: "api.keynua.com",
+  path: "/identity-verification/v1",
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    authorization: "YOUR-API-TOKEN-HERE",
+    "Content-Type": "application/json"
+  }
+};
+
+const payload = JSON.stringify({
+  title: "Identification with document integrity",
+  documentNumber: "12345678",
+  documentType: "pe-dni",
+  type: "liveness",
+  documentScanVersion: 2,
+  documentSide: "both",
+  idDocumentIntegrity: true
+});
+
+const req = https.request(options, function (res) {
+  const chunks = [];
+  res.on("data", (chunk) => chunks.push(chunk));
+  res.on("end", () => console.log(Buffer.concat(chunks).toString()));
+});
+req.on("error", (error) => console.error(error));
+req.end(payload);
+```
 
 ### Response body
 
@@ -4450,6 +4675,8 @@ deletedAt | string | Fecha de eliminación del contrato
 
 Se emite cuando un elemento del contrato ha cambiado de estado. Los estados pueden ser `working`, `success`, `error`
 
+La [integridad documental](#integridad-del-documento-de-identidad) utiliza este mismo evento para comunicar cambios del item `livenessinput`; no existe un evento exclusivo de integridad. Consulta el [seguimiento de validaciones documentales](#seguimiento-de-validaciones-documentales) para interpretar sus estados y errores.
+
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
 contractId | string | Código del contrato
@@ -4468,6 +4695,57 @@ longCode | string | Código largo del contrato
 shortCode | string | Código corto del contrato para facilitar su identificación
 item | object | [Item](#propiedades-de-un-item) del contrato que ha cambiado de estado
 user | object | [Usuario](#propiedades-de-un-usuario-webhook) al que pertenece el elemento modificado. Si el valor es null el elemento le pertenece a todos los usuarios
+
+#### Seguimiento de validaciones documentales
+
+Estas indicaciones aplican a los eventos [ContractItemUpdated](#propiedades-de-contractitemupdated) e [IdentityVerificationItemUpdated](#propiedades-de-identityverificationitemupdated) de un item `livenessinput`. Los siguientes ejemplos son fragmentos de `payload.item`, no cuerpos completos de webhook. Cada actualización se envía como un evento individual con la estructura documentada para su tipo.
+
+Estado del item | Interpretación
+--------- | -----------
+`working` | Las validaciones siguen procesándose. No es una aprobación ni un rechazo.
+`error` | El intento requiere una corrección. Consulta `value.code`, muestra `value.message` y sigue las instrucciones del flujo; `value.retry`, cuando está disponible, indica qué capturas repetir.
+`success` | Las validaciones configuradas en ese item finalizaron correctamente. No equivale a que toda la transacción haya finalizado y, si no se activó integridad en una captura compatible, tampoco prueba que se haya evaluado integridad.
+
+> Ejemplo parcial durante el procesamiento:
+
+```json
+{
+  "id": 10,
+  "type": "livenessinput",
+  "version": 1,
+  "state": "working"
+}
+```
+
+> Ejemplo parcial de un intento no aprobado por integridad:
+
+```json
+{
+  "id": 10,
+  "type": "livenessinput",
+  "version": 1,
+  "state": "error",
+  "value": {
+    "code": "NotPassed",
+    "message": "El documento no superó la validación de integridad. Vuelve a tomar las fotos del documento.",
+    "itemsThatNeedToChange": [10],
+    "retry": "document"
+  }
+}
+```
+
+> Ejemplo parcial de un intento posterior aprobado:
+
+```json
+{
+  "id": 10,
+  "type": "livenessinput",
+  "version": 2,
+  "state": "success"
+}
+```
+
+Los identificadores y versiones son ilustrativos. Relaciona las actualizaciones por la transacción, el item y su versión; no interpretes un resultado de un intento anterior como el resultado del nuevo. El `value` es el valor público del item, no el detalle interno de integridad. Consulta [errores de livenessinput](#livenessinput) para los límites del diagnóstico y los reintentos.
 
 ### Propiedades de ContractUserUpdated
 
@@ -4825,6 +5103,8 @@ alerts | array | Arreglo de [Alertas](#propiedades-de-una-alerta) de la identifi
 ```
 
 Se emite cuando un item de una verificación de identidad cambia de estado. Los estados pueden ser `working`, `success`, `error`.
+
+Para los items `livenessinput`, incluida la [integridad documental](#integridad-del-documento-de-identidad), se utiliza este mismo evento. Consulta el [seguimiento de validaciones documentales](#seguimiento-de-validaciones-documentales) para ejemplos de procesamiento, rechazo y aprobación. El error y las instrucciones de reintento se encuentran en `payload.item.value`; no se incluye la evidencia técnica interna de la evaluación.
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
