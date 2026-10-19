@@ -3320,7 +3320,7 @@ userFullName | string | Sí | Nombre completo de la persona
 userEmail | string | Sí | Email de la persona. Si se envía, no enviar el campo `userPhone` también.
 userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no enviar el campo `userEmail` también.
 reference | string | Sí | Campo útil para realizar búsquedas entre verificaciones creadas
-type | string | Sí | `selfie`, `video`, `smile` o `liveness`. `selfie` solo pide un selfie y valida esa imagen con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. `smile` solicita que se grabe un video sonriendo, y realiza una prueba de vida utilizando el video (BETA). `liveness` realiza una prueba de vida 3D.
+type | string | Sí | `selfie`, `video`, `smile`, `liveness` o `idperu`. `selfie` solo pide un selfie y valida esa imagen con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. `smile` solicita que se grabe un video sonriendo, y realiza una prueba de vida utilizando el video (BETA). `liveness` realiza una prueba de vida 3D. `idperu` solo verifica la identidad con ID Perú, la app de RENIEC: la persona valida su rostro en la app, sin foto del documento ni prueba de vida. Con `idperu`, `documentNumber` debe ser un DNI peruano de 8 dígitos y `documentType` se toma como `pe-dni`. Ver el [ejemplo](#ejemplo-de-identificacion-con-id-peru).
 disableInitialNotification | boolean | Sí | Opción para desactivar la notificación inicial que se envía a la persona.
 documentSide | `front` o `both` | Sí | SOLO PARA DNI DE PERÚ. Opción para indicar qué lados del DNI validar. Si no es enviado no se hará ninguna validación.
 documentScanVersion | number | Sí | La versión de escaneo del documento puede ser `1` para escaneo simple o `2` para escaneo 3D.
@@ -3331,10 +3331,105 @@ accountName | string | Sí | Nombre de cuenta que se usará al crear el proceso 
 addressMatchScore | number | Sí | Porcentaje de coincidencia (0-100) requerido entre la dirección extraída del documento escaneado y la obtenida de Reniec
 livenessLightChallenge | boolean | Sí | Activa (`true`) o desactiva (`false`) el reto de luces en la prueba de vida 3D. El valor enviado tiene prioridad sobre la configuración de la organización; si no se envía, se usa la configuración de la organización. Solo tiene efecto en verificaciones con prueba de vida 3D
 idDocumentIntegrity | boolean | Sí | Activa (`true`) o desactiva (`false`) la [integridad del documento de identidad](#integridad-del-documento-de-identidad). El valor enviado tiene prioridad sobre la configuración de la organización; si se omite, la hereda y, si no existe configuración, queda desactivada. Requiere captura documental y procesamiento compatibles; no agrega captura ni liveness por sí solo. No acepta strings, números ni `null`.
+reniecIdaas | boolean | Sí | SOLO PARA DNI DE PERÚ (`pe-dni`). Si es `true`, la identidad se verifica con ID Perú, la app de RENIEC, en lugar de la consulta a RENIEC. La persona necesita la app ID Perú en su celular. Se usa con `type` `selfie`, `video` o `liveness`; con `selfie` o `video` es obligatorio enviar `documentSide`. No se combina con `type: "idperu"`.
 
 ### Combinaciones no soportadas por defecto
 
 Por ahora los paises que soportamos para `selfie` y `video` son `sv-dui`, `mx-ife`, `cl-cedula`, `pe-dni`, `br-denatran` y `co-cedula`. En caso se cree una identificación con `selfie` o `video` con algún país que no esté en esta lista, automáticamente se considerará el documento como `global`. La lista completa sí está soportada con el type `liveness`.
+
+### Ejemplo de identificación con ID Perú
+
+Este ejemplo crea una identificación que solo verifica a la persona con ID Perú, la app de RENIEC. La persona ve su DNI ya cargado, abre ID Perú y valida su rostro en la app. No sube foto del documento ni hace prueba de vida.
+
+Al terminar, `userIdInfo` trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`. ID Perú no entrega apellidos, fecha de nacimiento ni dirección, así que esos campos vienen en `null`.
+
+```shell
+curl --location --request PUT 'https://api.keynua.com/identity-verification/v1' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "title": "Identification with ID Peru",
+    "documentNumber": "12345678",
+    "type": "idperu",
+    "userEmail": "user_email@gmail.com"
+  }'
+```
+
+```ruby
+require "uri"
+require "net/http"
+require "json"
+
+url = URI("https://api.keynua.com/identity-verification/v1")
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Put.new(url)
+request["x-api-key"] = "YOUR-API-KEY-HERE"
+request["authorization"] = "YOUR-API-TOKEN-HERE"
+request["Content-Type"] = "application/json"
+request.body = JSON.generate({
+  title: "Identification with ID Peru",
+  documentNumber: "12345678",
+  type: "idperu",
+  userEmail: "user_email@gmail.com"
+})
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+import json
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+payload = json.dumps({
+    "title": "Identification with ID Peru",
+    "documentNumber": "12345678",
+    "type": "idperu",
+    "userEmail": "user_email@gmail.com",
+})
+headers = {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE",
+    "Content-Type": "application/json",
+}
+conn.request("PUT", "/identity-verification/v1", payload, headers)
+res = conn.getresponse()
+print(res.read().decode("utf-8"))
+```
+
+```javascript
+const https = require("https");
+
+const options = {
+  method: "PUT",
+  hostname: "api.keynua.com",
+  path: "/identity-verification/v1",
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    authorization: "YOUR-API-TOKEN-HERE",
+    "Content-Type": "application/json"
+  }
+};
+
+const payload = JSON.stringify({
+  title: "Identification with ID Peru",
+  documentNumber: "12345678",
+  type: "idperu",
+  userEmail: "user_email@gmail.com"
+});
+
+const req = https.request(options, function (res) {
+  const chunks = [];
+  res.on("data", (chunk) => chunks.push(chunk));
+  res.on("end", () => console.log(Buffer.concat(chunks).toString()));
+});
+req.on("error", (error) => console.error(error));
+req.end(payload);
+```
 
 ### Ejemplo de identificación con integridad documental
 
