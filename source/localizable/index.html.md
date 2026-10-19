@@ -202,7 +202,7 @@ phone | string | El teléfono del usuario
 groups | array | Nombre de los grupos a los que pertenece el usuario, normalmente siempre pertenece a un sólo grupo. El identificador del grupo será asignado por el equipo de Keynua
 token | string | El token del usuario que se utilizará para realizar la firma. Por ejemplo para [enviar un archivo multimedia](#enviar-un-archivo-multimedia)
 state | string | El [estado del usuario](#estados-del-usuario) dentro del contrato, basado en el estado de todos los items del usuario. Solo existe para contratos creados luego del 04/04/2022.
-idInfo | string | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
+idInfo | string | Información de identidad del firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú (`reniec-idaas`), solo trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`; apellidos, fecha de nacimiento, vigencia y dirección vienen en `null`.
 customFieldsInfo | object | `optional` [Campos personalizados](#campos-personalizados) enviados al crear el contrato. Es un snapshot (`id`, `name`, `fields`) del grupo asignado a este firmante.
 
 ### Estados del Usuario
@@ -2355,7 +2355,7 @@ name | string | Nombre del grupo, este mismo nombre tendrías que agregarlo a ca
 type | enum | `signers`
 documentType | string | El tipo de documento que se quiere validar. Ver tabla de los [tipos de documentos](#documentos-de-identidad-soportados) soportados
 documentSides | string | Lados del documento de identidad. Puede ser `both`, `back` o `frontal`
-signatureTypes | array | Indica los tipos de firma. Puede ser `selfie`, `video-signature`, `draw` y `digital-signature`
+signatureTypes | array | Indica los tipos de firma. Puede ser `selfie`, `video-signature`, `draw`, `digital-signature` y `reniec-idaas`. `reniec-idaas` verifica al firmante con ID Perú, la app de RENIEC: el firmante escribe su DNI y valida su rostro en la app. Solo con `documentType` `pe-dni` o `pe-dni-ce`; si el firmante elige carné de extranjería, el paso se omite. No se combina con `reniec` en `facematch` ni con `verify-content-reniec` en `documentValidations`
 facematch | array | Indica los items a los cuales se le aplicará el reconocimiento facial. Puede ser `selfie`, `liveness`, `video-signature`, `reniec` y `document-frontal`
 liveness3D | boolean | Incluir validación 3D
 idDocumentIntegrity | boolean | `optional` Activa (`true`) o desactiva (`false`) la [integridad documental](#integridad-del-documento-de-identidad) para los items de captura documental compatibles de este grupo. Prevalece sobre el flag del contrato, incluso si se envía `false`. Si se omite, hereda el flag del contrato. No agrega captura documental ni liveness por sí solo.
@@ -3117,7 +3117,7 @@ userFullName | string | Sí | Nombre completo de la persona
 accountName | string | No | Nombre de la cuenta que creó la verificación
 timezone | string | No | Huso horario  utilizado en notificaciones y mensajes
 title | string | No | Título de la verificación
-userIdInfo | string | Sí | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento **solo aplica para las Identificaciones Peruanas**. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI
+userIdInfo | string | Sí | Información de identidad del firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento **solo aplica para las Identificaciones Peruanas**. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú (`reniec-idaas`), solo trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`; apellidos, fecha de nacimiento, vigencia y dirección vienen en `null`.
 items | [ContractItem](#items-del-contrato)[] | No | Lista de pasos que sigue la verificación.
 idDocumentIntegrity | boolean | Sí | Configuración explícita solicitada al crear la identificación, cuando se envió. No es un resultado de validación. Si se omitió, puede estar ausente aunque el flujo herede integridad de la organización; su ausencia no equivale a `false`.
 
@@ -5156,7 +5156,7 @@ title | string | Título de la verificación
 userEmail | string | Email del verificante en el cual recibirá el link de inicio del proceso
 userPhone | string | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
 userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
-userIdInfo | string | Información obtenida del OCR del documento enviado por el firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
+userIdInfo | string | Información de identidad del firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú (`reniec-idaas`), solo trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`; apellidos, fecha de nacimiento, vigencia y dirección vienen en `null`.
 alerts | array | Arreglo de [Alertas](#propiedades-de-una-alerta) de la identificación.
 
 ### Propiedades de IdentityVerificationItemUpdated
