@@ -427,6 +427,9 @@
             <a href="#verificacion-de-identidad" class="toc-h1 toc-link" data-title="Verificación de identidad">Verificación de identidad</a>
               <ul class="toc-list-h2">
                   <li>
+                    <a href="#integridad-del-documento-de-identidad" class="toc-h2 toc-link" data-title="Integridad del documento de identidad">Integridad del documento de identidad</a>
+                  </li>
+                  <li>
                     <a href="#propiedades-de-una-verificacion-de-identidad" class="toc-h2 toc-link" data-title="Propiedades de una verificación de identidad">Propiedades de una verificación de identidad</a>
                   </li>
                   <li>
@@ -1472,8 +1475,20 @@ Para adjuntar <a href="#campos-personalizados">campos personalizados</a> a un fi
 <td>boolean</td>
 <td><code>optional</code> Activa (<code>true</code>) o desactiva (<code>false</code>) el reto de luces en la prueba de vida 3D del contrato. El valor enviado tiene prioridad sobre la configuración de la organización; si no se envía, se usa la configuración de la organización. Solo tiene efecto en flujos que incluyen prueba de vida (liveness)</td>
 </tr>
+<tr>
+<td>idDocumentIntegrity</td>
+<td>boolean</td>
+<td><code>optional</code> Activa (<code>true</code>) o desactiva (<code>false</code>) la <a href="#integridad-del-documento-de-identidad">integridad del documento de identidad</a>. El valor enviado prevalece sobre el flag del template; si ninguno está definido, se hereda la configuración de la organización. Una configuración específica del item o grupo tiene prioridad sobre este flag. No habilita la captura documental por sí solo.</td>
+</tr>
 </tbody></table>
-<h3 id='usuarios-del-contrato'>Usuarios del contrato</h3>
+
+<p>Ejemplo parcial del body de <a href="#crear-un-contrato">creación de un contrato</a>. Debe combinarse con los demás campos requeridos y un template que incluya captura documental compatible:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"flags"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"idDocumentIntegrity"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='usuarios-del-contrato'>Usuarios del contrato</h3>
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -2705,6 +2720,10 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 </tr>
 </tbody></table>
 
+<p>Un item <code>livenessinput</code> puede reunir captura del rostro y del documento. El OCR extrae los datos del documento; el liveness evalúa la prueba de vida; y la <a href="#integridad-del-documento-de-identidad">integridad documental</a>, cuando está activada en un flujo compatible, evalúa posibles alteraciones o el uso de copias. Son validaciones diferentes: completar la captura del rostro no significa que el documento haya sido aprobado.</p>
+
+<p>La respuesta pública de este item no incluye el detalle <code>documentIntegrity</code>, sus scores ni <code>documentIntegrityError</code>. Para interpretar una validación no aprobada, consulta los <a href="#livenessinput">errores de livenessinput</a>. No confundas el porcentaje <code>facematchScore</code>, que corresponde a la comparación facial, con un score de integridad.</p>
+
 <p>DocumentType: <code>co-id</code></p>
 
 <table><thead>
@@ -3203,8 +3222,8 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>El item ha sido rechazado por el administrador del contrato.</td>
 </tr>
 </tbody></table>
-<h3 id='livenessinput'>livenessinput</h3>
-<aside class="notice">Estos errores, a diferencia del resto, de momento solo se devuelven en el navegador.</aside>
+<h3 id='livenessinput'>livenessinput</h3><h4 id='errores-de-captura-en-el-navegador'>Errores de captura en el navegador</h4>
+<aside class="notice">La siguiente tabla describe los errores de captura del SDK que se muestran en el navegador. No describe todos los errores de validación que puede devolver el servidor.</aside>
 
 <table><thead>
 <tr>
@@ -3324,6 +3343,69 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>La sesión fue cancelada debido a un error desconocido e inesperado. El SDK en el navegador utiliza diversas APIs de plataforma, incluyendo cámara, almacenamiento, seguridad, redes, entre otras. Este valor es un &quot;catch-all&quot; para errores experimentados durante el uso normal de estas API.</td>
 </tr>
 </tbody></table>
+<h4 id='resultado-de-validacion-del-servidor'>Resultado de validación del servidor</h4>
+<p>Después de enviar las capturas, el servidor procesa las validaciones del flujo. Un rechazo de <a href="#integridad-del-documento-de-identidad">integridad documental</a> se comunica en el <code>value</code> público del item con <code>code</code> igual a <code>NotPassed</code> y un mensaje apropiado para el usuario. Este código también se utiliza para otras validaciones no aprobadas: por sí solo no identifica la causa ni implica que haya fallado la prueba de vida.</p>
+
+<p>Ejemplo de <code>value</code> de un item en estado <code>error</code> cuyo siguiente intento requiere nuevas fotos del documento:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NotPassed"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"El documento no superó la validación de integridad. Vuelve a tomar las fotos del documento."</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"itemsThatNeedToChange"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"retry"</span><span class="p">:</span><span class="w"> </span><span class="s2">"document"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>Código público del error. Un rechazo de integridad se comunica como <code>NotPassed</code>; otros errores pueden utilizar sus propios códigos.</td>
+</tr>
+<tr>
+<td>message</td>
+<td>string</td>
+<td>Mensaje para mostrar al usuario. Puede indicar que el documento no superó la integridad, que el resultado no fue concluyente o que no fue posible completar la evaluación. El texto depende del idioma y puede cambiar; no lo compares literalmente para implementar reglas de negocio.</td>
+</tr>
+<tr>
+<td>itemsThatNeedToChange</td>
+<td>array de enteros</td>
+<td><code>optional</code> Identificadores de los items que deben corregirse. Los valores del ejemplo son ilustrativos; utiliza los que devuelve el flujo.</td>
+</tr>
+<tr>
+<td>retry</td>
+<td>string</td>
+<td><code>optional</code> Capturas requeridas para el siguiente intento: <code>document</code>, <code>liveness</code> o <code>both</code>. No es un código de causa del error y puede aparecer también en errores distintos de integridad.</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th>Valor de retry</th>
+<th>Captura que se debe repetir</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>document</code></td>
+<td>Las fotos del documento.</td>
+</tr>
+<tr>
+<td><code>liveness</code></td>
+<td>La prueba de vida.</td>
+</tr>
+<tr>
+<td><code>both</code></td>
+<td>La prueba de vida y las fotos del documento.</td>
+</tr>
+</tbody></table>
+
+<p>Cuando solo falla la integridad y la prueba de vida puede reutilizarse, el flujo solicita nuevas fotos del documento. La reutilización depende de la vigencia de la sesión y de las validaciones del flujo; no se garantiza que siempre baste con repetir las fotos. Si <code>retry</code> no está presente, no asumas un reintento parcial: continúa con las instrucciones que entregue el flujo.</p>
+
+<p>Los códigos internos de evaluación y su evidencia técnica no forman parte de este contrato público. El estado del item y su <code>value</code> se pueden consultar mediante la API y los eventos existentes <a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a> o <a href="#propiedades-de-identityverificationitemupdated">IdentityVerificationItemUpdated</a>.</p>
 <h3 id='inevalidation'>inevalidation</h3>
 <table><thead>
 <tr>
@@ -4295,6 +4377,11 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>liveness3D</td>
 <td>boolean</td>
 <td>Incluir validación 3D</td>
+</tr>
+<tr>
+<td>idDocumentIntegrity</td>
+<td>boolean</td>
+<td><code>optional</code> Activa (<code>true</code>) o desactiva (<code>false</code>) la <a href="#integridad-del-documento-de-identidad">integridad documental</a> para los items de captura documental compatibles de este grupo. Prevalece sobre el flag del contrato, incluso si se envía <code>false</code>. Si se omite, hereda el flag del contrato. No agrega captura documental ni liveness por sí solo.</td>
 </tr>
 <tr>
 <td>documentValidations</td>
@@ -5530,6 +5617,87 @@ Deceval para registrar la firma del participante.</li>
 </tbody></table>
 <h1 id='verificacion-de-identidad'>Verificación de identidad</h1>
 <p>Permite crear, listar y obtener verificaciones de identidad.</p>
+<h2 id='integridad-del-documento-de-identidad'>Integridad del documento de identidad</h2>
+<p>La integridad documental evalúa las imágenes capturadas del documento de identidad para detectar posibles alteraciones o el uso de copias impresas o mostradas en una pantalla. Complementa el OCR, la comparación facial y la prueba de vida; no los reemplaza ni constituye una garantía absoluta de autenticidad.</p>
+<h3 id='activacion-y-herencia'>Activación y herencia</h3>
+<p>El atributo <code>idDocumentIntegrity</code> es un booleano opcional:</p>
+
+<table><thead>
+<tr>
+<th>Valor</th>
+<th>Comportamiento</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>true</code></td>
+<td>Solicita la evaluación de integridad en una captura documental compatible.</td>
+</tr>
+<tr>
+<td><code>false</code></td>
+<td>La desactiva explícitamente, aunque esté activada en la configuración heredada.</td>
+</tr>
+<tr>
+<td>Omitido</td>
+<td>Hereda la configuración correspondiente. Si no existe ninguna configuración, queda desactivada.</td>
+</tr>
+</tbody></table>
+
+<p>Envía booleanos JSON, no strings como <code>&quot;true&quot;</code> o <code>&quot;false&quot;</code>, números ni <code>null</code>.</p>
+
+<p>Desactivar la integridad no desactiva el OCR, el liveness ni las demás validaciones configuradas en el flujo.</p>
+
+<table><thead>
+<tr>
+<th>Contexto</th>
+<th>Dónde configurarlo</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><a href="#crear-verificacion-de-identidad">Crear una identificación</a></td>
+<td><code>idDocumentIntegrity</code> en el body de <code>PUT /identity-verification/v1</code>. Tiene prioridad sobre la configuración de la organización.</td>
+</tr>
+<tr>
+<td><a href="#flags-del-contrato">Crear un contrato</a></td>
+<td><code>flags.idDocumentIntegrity</code> en el body de creación del contrato.</td>
+</tr>
+<tr>
+<td><a href="#grupos">Template dinámico de contrato</a></td>
+<td><code>idDocumentIntegrity</code> dentro del grupo <code>signers</code>, en <code>templateOptions.stages[].groups[]</code>.</td>
+</tr>
+</tbody></table>
+
+<p>Para contratos, la prioridad es: configuración específica del item o grupo, luego flag del contrato, luego configuración de la organización y finalmente <code>false</code>. El flag enviado al crear el contrato prevalece sobre el flag definido en el template. El valor heredado de la organización se fija al crear el contrato; cambiar después la organización no reconfigura los contratos existentes.</p>
+
+<p>Ejemplo parcial del body de creación de un contrato: la integridad está activada por defecto en el contrato, pero desactivada explícitamente para el grupo <code>signers</code>. Debe combinarse con los demás campos requeridos para crear el contrato.</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"flags"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"idDocumentIntegrity"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"templateOptions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"stages"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"signers"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"signers"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"documentType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pe-dni"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"documentSides"</span><span class="p">:</span><span class="w"> </span><span class="s2">"both"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"liveness3D"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"idDocumentIntegrity"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='compatibilidad-y-resultado'>Compatibilidad y resultado</h3>
+<p><code>idDocumentIntegrity</code> no habilita por sí solo la captura del documento ni la prueba de vida. El flujo debe incluir captura documental y utilizar procesamiento compatible con integridad. No debe asumirse que el atributo incorpora esta evaluación a cualquier flujo histórico o a una captura de fotos independiente. Confirma con Keynua la disponibilidad en el ambiente y template de tu integración.</p>
+
+<p>En identificaciones, <code>documentSide</code> utiliza <code>front</code> o <code>both</code> para la selección explícita de lados. En los grupos de contratos, el atributo se llama <code>documentSides</code> y el anverso se indica con <code>frontal</code>, no con <code>front</code>. Consulta el <a href="#ejemplo-de-identificacion-con-integridad-documental">ejemplo de identificación con integridad</a>.</p>
+
+<p>La creación de la transacción configura el flujo, pero no evalúa todavía las imágenes. La evaluación se procesa después de capturarlas y enviarlas. Consulta el estado y el valor público del item <code>livenessinput</code> mediante la API o los webhooks existentes; el estado <code>success</code> del item indica que sus validaciones finalizaron correctamente, no que se haya aprobado todo el contrato o identificación.</p>
+
+<p>Un liveness aprobado puede coexistir con un rechazo del documento. Los <a href="#livenessinput">errores de livenessinput</a> describen el resultado público y las capturas que el flujo puede pedir nuevamente. El detalle de la evaluación, los scores de integridad y las respuestas del modelo no se incluyen en el valor público del item.</p>
 <h2 id='propiedades-de-una-verificacion-de-identidad'>Propiedades de una verificación de identidad</h2><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"userRealName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JOHN, DOE"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"done"</span><span class="p">,</span><span class="w">
@@ -5741,6 +5909,12 @@ Deceval para registrar la firma del participante.</li>
 <td>No</td>
 <td>Lista de pasos que sigue la verificación.</td>
 </tr>
+<tr>
+<td>idDocumentIntegrity</td>
+<td>boolean</td>
+<td>Sí</td>
+<td>Configuración explícita solicitada al crear la identificación, cuando se envió. No es un resultado de validación. Si se omitió, puede estar ausente aunque el flujo herede integridad de la organización; su ausencia no equivale a <code>false</code>.</td>
+</tr>
 </tbody></table>
 <h2 id='crear-verificacion-de-identidad'>Crear verificación de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> PUT <span class="s1">'https://api.keynua.com/identity-verification/v1'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
@@ -5753,10 +5927,11 @@ Deceval para registrar la firma del participante.</li>
     "title": "Identification 12345678",
     "type": "video",
     "documentType": "pe-dni",
-    "disableInitialNotification": false,
+    "disableInitialNotification": false
   }'</span>
 </code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
 <span class="nb">require</span> <span class="s2">"net/http"</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
 
 <span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.keynua.com/identity-verification/v1"</span><span class="p">)</span>
 
@@ -5767,7 +5942,15 @@ Deceval para registrar la firma del participante.</li>
 <span class="n">request</span><span class="p">[</span><span class="s2">"x-api-key"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-KEY-HERE'</span>
 <span class="n">request</span><span class="p">[</span><span class="s2">"authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'YOUR-API-TOKEN-HERE'</span>
 <span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"application/json"</span>
-<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="s2">"{</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">documentNumber</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">12345678</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">userPhone</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">51123456789</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">userFullName</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">Patrick Star</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">title</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">Identification 12345678</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2">  </span><span class="se">\"</span><span class="s2">type</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">video</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2"> </span><span class="se">\"</span><span class="s2">documentType</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">pe-dni</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2"> </span><span class="se">\"</span><span class="s2">disableInitialNotification</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">false</span><span class="se">\"</span><span class="s2">,</span><span class="se">\n</span><span class="s2"> </span><span class="se">\"</span><span class="s2">validateDocument</span><span class="se">\"</span><span class="s2">: </span><span class="se">\"</span><span class="s2">true</span><span class="se">\"\n</span><span class="s2">}"</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">generate</span><span class="p">({</span>
+  <span class="ss">documentNumber: </span><span class="s2">"12345678"</span><span class="p">,</span>
+  <span class="ss">userPhone: </span><span class="s2">"51123456789"</span><span class="p">,</span>
+  <span class="ss">userFullName: </span><span class="s2">"Patrick Star"</span><span class="p">,</span>
+  <span class="ss">title: </span><span class="s2">"Identification 12345678"</span><span class="p">,</span>
+  <span class="ss">type: </span><span class="s2">"video"</span><span class="p">,</span>
+  <span class="ss">documentType: </span><span class="s2">"pe-dni"</span><span class="p">,</span>
+  <span class="ss">disableInitialNotification: </span><span class="kp">false</span>
+<span class="p">})</span>
 
 <span class="n">response</span> <span class="o">=</span> <span class="n">https</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
 <span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
@@ -5782,8 +5965,7 @@ Deceval para registrar la firma del participante.</li>
     <span class="s">"title"</span><span class="p">:</span> <span class="s">"Identification 12345678"</span><span class="p">,</span>
     <span class="s">"type"</span><span class="p">:</span> <span class="s">"video"</span><span class="p">,</span>
     <span class="s">"documentType"</span><span class="p">:</span> <span class="s">"pe-dni"</span><span class="p">,</span>
-    <span class="s">"disableInitialNotification"</span><span class="p">,</span> <span class="s">"false"</span><span class="p">,</span>
-    <span class="s">"validateDocument"</span><span class="p">:</span> <span class="s">"true"</span><span class="p">,</span>
+    <span class="s">"disableInitialNotification"</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
 <span class="p">})</span>
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
   <span class="s">'x-api-key'</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
@@ -5828,7 +6010,6 @@ Deceval para registrar la firma del participante.</li>
     <span class="dl">"</span><span class="s2">type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">video</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">documentType</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">pe-dni</span><span class="dl">"</span><span class="p">,</span>
     <span class="dl">"</span><span class="s2">disableInitialNotification</span><span class="dl">"</span><span class="p">:</span> <span class="kc">false</span>
-    <span class="dl">"</span><span class="s2">validateDocument</span><span class="dl">"</span><span class="p">:</span> <span class="kc">true</span>
 <span class="p">});</span>
 
 <span class="nx">req</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">postData</span><span class="p">);</span>
@@ -6026,10 +6207,106 @@ Deceval para registrar la firma del participante.</li>
 <td>Sí</td>
 <td>Activa (<code>true</code>) o desactiva (<code>false</code>) el reto de luces en la prueba de vida 3D. El valor enviado tiene prioridad sobre la configuración de la organización; si no se envía, se usa la configuración de la organización. Solo tiene efecto en verificaciones con prueba de vida 3D</td>
 </tr>
+<tr>
+<td>idDocumentIntegrity</td>
+<td>boolean</td>
+<td>Sí</td>
+<td>Activa (<code>true</code>) o desactiva (<code>false</code>) la <a href="#integridad-del-documento-de-identidad">integridad del documento de identidad</a>. El valor enviado tiene prioridad sobre la configuración de la organización; si se omite, la hereda y, si no existe configuración, queda desactivada. Requiere captura documental y procesamiento compatibles; no agrega captura ni liveness por sí solo. No acepta strings, números ni <code>null</code>.</td>
+</tr>
 </tbody></table>
 <h3 id='combinaciones-no-soportadas-por-defecto'>Combinaciones no soportadas por defecto</h3>
 <p>Por ahora los paises que soportamos para <code>selfie</code> y <code>video</code> son <code>sv-dui</code>, <code>mx-ife</code>, <code>cl-cedula</code>, <code>pe-dni</code>, <code>br-denatran</code> y <code>co-cedula</code>. En caso se cree una identificación con <code>selfie</code> o <code>video</code> con algún país que no esté en esta lista, automáticamente se considerará el documento como <code>global</code>. La lista completa sí está soportada con el type <code>liveness</code>.</p>
-<h3 id='response-body-3'>Response body</h3>
+<h3 id='ejemplo-de-identificacion-con-integridad-documental'>Ejemplo de identificación con integridad documental</h3>
+<p>Este ejemplo crea una identificación con liveness, captura del anverso y reverso del DNI peruano, e integridad documental activada. Requiere que el ambiente tenga habilitado el procesamiento compatible descrito en <a href="#integridad-del-documento-de-identidad">Integridad del documento de identidad</a>. La respuesta de creación no es el resultado de la evaluación de las imágenes.</p>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> PUT <span class="s1">'https://api.keynua.com/identity-verification/v1'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--data-raw</span> <span class="s1">'{
+    "title": "Identification with document integrity",
+    "documentNumber": "12345678",
+    "documentType": "pe-dni",
+    "type": "liveness",
+    "documentScanVersion": 2,
+    "documentSide": "both",
+    "idDocumentIntegrity": true
+  }'</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
+<span class="nb">require</span> <span class="s2">"net/http"</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.keynua.com/identity-verification/v1"</span><span class="p">)</span>
+<span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Put</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"x-api-key"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"YOUR-API-KEY-HERE"</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"YOUR-API-TOKEN-HERE"</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"application/json"</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">generate</span><span class="p">({</span>
+  <span class="ss">title: </span><span class="s2">"Identification with document integrity"</span><span class="p">,</span>
+  <span class="ss">documentNumber: </span><span class="s2">"12345678"</span><span class="p">,</span>
+  <span class="ss">documentType: </span><span class="s2">"pe-dni"</span><span class="p">,</span>
+  <span class="ss">type: </span><span class="s2">"liveness"</span><span class="p">,</span>
+  <span class="ss">documentScanVersion: </span><span class="mi">2</span><span class="p">,</span>
+  <span class="ss">documentSide: </span><span class="s2">"both"</span><span class="p">,</span>
+  <span class="ss">idDocumentIntegrity: </span><span class="kp">true</span>
+<span class="p">})</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">https</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.keynua.com"</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">({</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"Identification with document integrity"</span><span class="p">,</span>
+    <span class="s">"documentNumber"</span><span class="p">:</span> <span class="s">"12345678"</span><span class="p">,</span>
+    <span class="s">"documentType"</span><span class="p">:</span> <span class="s">"pe-dni"</span><span class="p">,</span>
+    <span class="s">"type"</span><span class="p">:</span> <span class="s">"liveness"</span><span class="p">,</span>
+    <span class="s">"documentScanVersion"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s">"documentSide"</span><span class="p">:</span> <span class="s">"both"</span><span class="p">,</span>
+    <span class="s">"idDocumentIntegrity"</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">"x-api-key"</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
+    <span class="s">"authorization"</span><span class="p">:</span> <span class="s">"YOUR-API-TOKEN-HERE"</span><span class="p">,</span>
+    <span class="s">"Content-Type"</span><span class="p">:</span> <span class="s">"application/json"</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"PUT"</span><span class="p">,</span> <span class="s">"/identity-verification/v1"</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">https</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">https</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">PUT</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">hostname</span><span class="p">:</span> <span class="dl">"</span><span class="s2">api.keynua.com</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">path</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/identity-verification/v1</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-KEY-HERE</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">authorization</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-TOKEN-HERE</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+  <span class="na">title</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Identification with document integrity</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">documentNumber</span><span class="p">:</span> <span class="dl">"</span><span class="s2">12345678</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">documentType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">pe-dni</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">liveness</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">documentScanVersion</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="na">documentSide</span><span class="p">:</span> <span class="dl">"</span><span class="s2">both</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">idDocumentIntegrity</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">});</span>
+
+<span class="kd">const</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">https</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">));</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">end</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">).</span><span class="nx">toString</span><span class="p">()));</span>
+<span class="p">});</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">payload</span><span class="p">);</span>
+</code></pre></div><h3 id='response-body-3'>Response body</h3>
 <p><a href="#propiedades-de-una-verificacion-de-identidad">IdentityVerification</a></p>
 <h2 id='listar-verificaciones-de-identidad'>Listar verificaciones de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.keynua.com/identity-verification/v1/list'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
@@ -7959,6 +8236,8 @@ Deceval para registrar la firma del participante.</li>
 </span></code></pre></div>
 <p>Se emite cuando un elemento del contrato ha cambiado de estado. Los estados pueden ser <code>working</code>, <code>success</code>, <code>error</code></p>
 
+<p>La <a href="#integridad-del-documento-de-identidad">integridad documental</a> utiliza este mismo evento para comunicar cambios del item <code>livenessinput</code>; no existe un evento exclusivo de integridad. Consulta el <a href="#seguimiento-de-validaciones-documentales">seguimiento de validaciones documentales</a> para interpretar sus estados y errores.</p>
+
 <table><thead>
 <tr>
 <th>Atributo</th>
@@ -8047,6 +8326,66 @@ Deceval para registrar la firma del participante.</li>
 <td><a href="#propiedades-de-un-usuario-webhook">Usuario</a> al que pertenece el elemento modificado. Si el valor es null el elemento le pertenece a todos los usuarios</td>
 </tr>
 </tbody></table>
+<h4 id='seguimiento-de-validaciones-documentales'>Seguimiento de validaciones documentales</h4>
+<p>Estas indicaciones aplican a los eventos <a href="#propiedades-de-contractitemupdated">ContractItemUpdated</a> e <a href="#propiedades-de-identityverificationitemupdated">IdentityVerificationItemUpdated</a> de un item <code>livenessinput</code>. Los siguientes ejemplos son fragmentos de <code>payload.item</code>, no cuerpos completos de webhook. Cada actualización se envía como un evento individual con la estructura documentada para su tipo.</p>
+
+<table><thead>
+<tr>
+<th>Estado del item</th>
+<th>Interpretación</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>working</code></td>
+<td>Las validaciones siguen procesándose. No es una aprobación ni un rechazo.</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td>El intento requiere una corrección. Consulta <code>value.code</code>, muestra <code>value.message</code> y sigue las instrucciones del flujo; <code>value.retry</code>, cuando está disponible, indica qué capturas repetir.</td>
+</tr>
+<tr>
+<td><code>success</code></td>
+<td>Las validaciones configuradas en ese item finalizaron correctamente. No equivale a que toda la transacción haya finalizado y, si no se activó integridad en una captura compatible, tampoco prueba que se haya evaluado integridad.</td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>Ejemplo parcial durante el procesamiento:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"livenessinput"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"working"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Ejemplo parcial de un intento no aprobado por integridad:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"livenessinput"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"error"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NotPassed"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"El documento no superó la validación de integridad. Vuelve a tomar las fotos del documento."</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"itemsThatNeedToChange"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">10</span><span class="p">],</span><span class="w">
+    </span><span class="nl">"retry"</span><span class="p">:</span><span class="w"> </span><span class="s2">"document"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Ejemplo parcial de un intento posterior aprobado:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"livenessinput"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Los identificadores y versiones son ilustrativos. Relaciona las actualizaciones por la transacción, el item y su versión; no interpretes un resultado de un intento anterior como el resultado del nuevo. El <code>value</code> es el valor público del item, no el detalle interno de integridad. Consulta <a href="#livenessinput">errores de livenessinput</a> para los límites del diagnóstico y los reintentos.</p>
 <h3 id='propiedades-de-contractuserupdated'>Propiedades de ContractUserUpdated</h3>
 <blockquote>
 <p>Ejemplo de Body</p>
@@ -8749,6 +9088,8 @@ Deceval para registrar la firma del participante.</li>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Se emite cuando un item de una verificación de identidad cambia de estado. Los estados pueden ser <code>working</code>, <code>success</code>, <code>error</code>.</p>
+
+<p>Para los items <code>livenessinput</code>, incluida la <a href="#integridad-del-documento-de-identidad">integridad documental</a>, se utiliza este mismo evento. Consulta el <a href="#seguimiento-de-validaciones-documentales">seguimiento de validaciones documentales</a> para ejemplos de procesamiento, rechazo y aprobación. El error y las instrucciones de reintento se encuentran en <code>payload.item.value</code>; no se incluye la evidencia técnica interna de la evaluación.</p>
 
 <table><thead>
 <tr>
