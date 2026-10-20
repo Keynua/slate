@@ -202,7 +202,7 @@ phone | string | El teléfono del usuario
 groups | array | Nombre de los grupos a los que pertenece el usuario, normalmente siempre pertenece a un sólo grupo. El identificador del grupo será asignado por el equipo de Keynua
 token | string | El token del usuario que se utilizará para realizar la firma. Por ejemplo para [enviar un archivo multimedia](#enviar-un-archivo-multimedia)
 state | string | El [estado del usuario](#estados-del-usuario) dentro del contrato, basado en el estado de todos los items del usuario. Solo existe para contratos creados luego del 04/04/2022.
-idInfo | string | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
+idInfo | string | Información de identidad del firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú, solo trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`. Apellidos, fecha de nacimiento, vigencia y dirección vienen en `null`.
 customFieldsInfo | object | `optional` [Campos personalizados](#campos-personalizados) enviados al crear el contrato. Es un snapshot (`id`, `name`, `fields`) del grupo asignado a este firmante.
 
 ### Estados del Usuario
@@ -2355,7 +2355,7 @@ name | string | Nombre del grupo, este mismo nombre tendrías que agregarlo a ca
 type | enum | `signers`
 documentType | string | El tipo de documento que se quiere validar. Ver tabla de los [tipos de documentos](#documentos-de-identidad-soportados) soportados
 documentSides | string | Lados del documento de identidad. Puede ser `both`, `back` o `frontal`
-signatureTypes | array | Indica los tipos de firma. Puede ser `selfie`, `video-signature`, `draw` y `digital-signature`
+signatureTypes | array | Indica los tipos de firma. Puede ser `selfie`, `video-signature`, `draw`, `digital-signature` y `reniec-idaas`. `reniec-idaas` verifica al firmante con ID Perú, la app de RENIEC: el firmante escribe su DNI y valida su rostro en la app. Solo con `documentType` `pe-dni` o `pe-dni-ce`. Si el firmante elige carné de extranjería, el paso se omite. No se combina con `reniec` en `facematch` ni con `verify-content-reniec` en `documentValidations`
 facematch | array | Indica los items a los cuales se le aplicará el reconocimiento facial. Puede ser `selfie`, `liveness`, `video-signature`, `reniec` y `document-frontal`
 liveness3D | boolean | Incluir validación 3D
 idDocumentIntegrity | boolean | `optional` Activa (`true`) o desactiva (`false`) la [integridad documental](#integridad-del-documento-de-identidad) para los items de captura documental compatibles de este grupo. Prevalece sobre el flag del contrato, incluso si se envía `false`. Si se omite, hereda el flag del contrato. No agrega captura documental ni liveness por sí solo.
@@ -3117,7 +3117,7 @@ userFullName | string | Sí | Nombre completo de la persona
 accountName | string | No | Nombre de la cuenta que creó la verificación
 timezone | string | No | Huso horario  utilizado en notificaciones y mensajes
 title | string | No | Título de la verificación
-userIdInfo | string | Sí | Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento **solo aplica para las Identificaciones Peruanas**. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI
+userIdInfo | string | Sí | Información de identidad del firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento **solo aplica para las Identificaciones Peruanas**. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú, solo trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`. Apellidos, fecha de nacimiento, vigencia y dirección vienen en `null`.
 items | [ContractItem](#items-del-contrato)[] | No | Lista de pasos que sigue la verificación.
 idDocumentIntegrity | boolean | Sí | Configuración explícita solicitada al crear la identificación, cuando se envió. No es un resultado de validación. Si se omitió, puede estar ausente aunque el flujo herede integridad de la organización; su ausencia no equivale a `false`.
 
@@ -3320,7 +3320,7 @@ userFullName | string | Sí | Nombre completo de la persona
 userEmail | string | Sí | Email de la persona. Si se envía, no enviar el campo `userPhone` también.
 userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no enviar el campo `userEmail` también.
 reference | string | Sí | Campo útil para realizar búsquedas entre verificaciones creadas
-type | string | Sí | `selfie`, `video`, `smile` o `liveness`. `selfie` solo pide un selfie y valida esa imagen con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. `smile` solicita que se grabe un video sonriendo, y realiza una prueba de vida utilizando el video (BETA). `liveness` realiza una prueba de vida 3D.
+type | string | Sí | `selfie`, `video`, `smile`, `liveness` o `idperu`. `selfie` solo pide un selfie y valida esa imagen con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. `smile` solicita que se grabe un video sonriendo, y realiza una prueba de vida utilizando el video (BETA). `liveness` realiza una prueba de vida 3D. `idperu` solo verifica la identidad con ID Perú, la app de RENIEC: la persona valida su rostro en la app, sin foto del documento ni prueba de vida. Con `idperu`, `documentNumber` debe ser un DNI peruano de 8 dígitos y `documentType` se toma como `pe-dni`. Ver el [ejemplo](#ejemplo-de-identificacion-con-id-peru).
 disableInitialNotification | boolean | Sí | Opción para desactivar la notificación inicial que se envía a la persona.
 documentSide | `front` o `both` | Sí | SOLO PARA DNI DE PERÚ. Opción para indicar qué lados del DNI validar. Si no es enviado no se hará ninguna validación.
 documentScanVersion | number | Sí | La versión de escaneo del documento puede ser `1` para escaneo simple o `2` para escaneo 3D.
@@ -3331,10 +3331,105 @@ accountName | string | Sí | Nombre de cuenta que se usará al crear el proceso 
 addressMatchScore | number | Sí | Porcentaje de coincidencia (0-100) requerido entre la dirección extraída del documento escaneado y la obtenida de Reniec
 livenessLightChallenge | boolean | Sí | Activa (`true`) o desactiva (`false`) el reto de luces en la prueba de vida 3D. El valor enviado tiene prioridad sobre la configuración de la organización; si no se envía, se usa la configuración de la organización. Solo tiene efecto en verificaciones con prueba de vida 3D
 idDocumentIntegrity | boolean | Sí | Activa (`true`) o desactiva (`false`) la [integridad del documento de identidad](#integridad-del-documento-de-identidad). El valor enviado tiene prioridad sobre la configuración de la organización; si se omite, la hereda y, si no existe configuración, queda desactivada. Requiere captura documental y procesamiento compatibles; no agrega captura ni liveness por sí solo. No acepta strings, números ni `null`.
+reniecIdaas | boolean | Sí | SOLO PARA DNI DE PERÚ (`pe-dni`). Si es `true`, la identidad se verifica con ID Perú, la app de RENIEC, en lugar de la consulta a RENIEC. La persona necesita la app ID Perú en su celular. Se usa con `type` `selfie`, `video` o `liveness`. Con `selfie` o `video` es obligatorio enviar `documentSide`. No se combina con `type: "idperu"`.
 
 ### Combinaciones no soportadas por defecto
 
 Por ahora los paises que soportamos para `selfie` y `video` son `sv-dui`, `mx-ife`, `cl-cedula`, `pe-dni`, `br-denatran` y `co-cedula`. En caso se cree una identificación con `selfie` o `video` con algún país que no esté en esta lista, automáticamente se considerará el documento como `global`. La lista completa sí está soportada con el type `liveness`.
+
+### Ejemplo de identificación con ID Perú
+
+Este ejemplo crea una identificación que solo verifica a la persona con ID Perú, la app de RENIEC. La persona ve su DNI ya cargado, abre ID Perú y valida su rostro en la app. No sube foto del documento ni hace prueba de vida.
+
+Al terminar, `userIdInfo` trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`. ID Perú no entrega apellidos, fecha de nacimiento, vigencia ni dirección, así que esos campos vienen en `null`.
+
+```shell
+curl --location --request PUT 'https://api.keynua.com/identity-verification/v1' \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'Content-Type: application/json' \
+  --data-raw '{
+    "title": "Identification with ID Peru",
+    "documentNumber": "12345678",
+    "type": "idperu",
+    "userEmail": "user_email@gmail.com"
+  }'
+```
+
+```ruby
+require "uri"
+require "net/http"
+require "json"
+
+url = URI("https://api.keynua.com/identity-verification/v1")
+https = Net::HTTP.new(url.host, url.port)
+https.use_ssl = true
+
+request = Net::HTTP::Put.new(url)
+request["x-api-key"] = "YOUR-API-KEY-HERE"
+request["authorization"] = "YOUR-API-TOKEN-HERE"
+request["Content-Type"] = "application/json"
+request.body = JSON.generate({
+  title: "Identification with ID Peru",
+  documentNumber: "12345678",
+  type: "idperu",
+  userEmail: "user_email@gmail.com"
+})
+
+response = https.request(request)
+puts response.read_body
+```
+
+```python
+import http.client
+import json
+
+conn = http.client.HTTPSConnection("api.keynua.com")
+payload = json.dumps({
+    "title": "Identification with ID Peru",
+    "documentNumber": "12345678",
+    "type": "idperu",
+    "userEmail": "user_email@gmail.com",
+})
+headers = {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    "authorization": "YOUR-API-TOKEN-HERE",
+    "Content-Type": "application/json",
+}
+conn.request("PUT", "/identity-verification/v1", payload, headers)
+res = conn.getresponse()
+print(res.read().decode("utf-8"))
+```
+
+```javascript
+const https = require("https");
+
+const options = {
+  method: "PUT",
+  hostname: "api.keynua.com",
+  path: "/identity-verification/v1",
+  headers: {
+    "x-api-key": "YOUR-API-KEY-HERE",
+    authorization: "YOUR-API-TOKEN-HERE",
+    "Content-Type": "application/json"
+  }
+};
+
+const payload = JSON.stringify({
+  title: "Identification with ID Peru",
+  documentNumber: "12345678",
+  type: "idperu",
+  userEmail: "user_email@gmail.com"
+});
+
+const req = https.request(options, function (res) {
+  const chunks = [];
+  res.on("data", (chunk) => chunks.push(chunk));
+  res.on("end", () => console.log(Buffer.concat(chunks).toString()));
+});
+req.on("error", (error) => console.error(error));
+req.end(payload);
+```
 
 ### Ejemplo de identificación con integridad documental
 
@@ -5061,7 +5156,7 @@ title | string | Título de la verificación
 userEmail | string | Email del verificante en el cual recibirá el link de inicio del proceso
 userPhone | string | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
 userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
-userIdInfo | string | Información obtenida del OCR del documento enviado por el firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI
+userIdInfo | string | Información de identidad del firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú, solo trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`. Apellidos, fecha de nacimiento, vigencia y dirección vienen en `null`.
 alerts | array | Arreglo de [Alertas](#propiedades-de-una-alerta) de la identificación.
 
 ### Propiedades de IdentityVerificationItemUpdated
