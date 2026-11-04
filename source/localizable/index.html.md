@@ -3322,7 +3322,7 @@ userPhone | string | Sí | Teléfono celular de la persona. Si se envía, no env
 reference | string | Sí | Campo útil para realizar búsquedas entre verificaciones creadas
 type | string | Sí | `selfie`, `video`, `smile`, `liveness` o `idperu`. `selfie` solo pide un selfie y valida esa imagen con RENIEC. `video` además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. `smile` solicita que se grabe un video sonriendo, y realiza una prueba de vida utilizando el video (BETA). `liveness` realiza una prueba de vida 3D. `idperu` solo verifica la identidad con ID Perú, la app de RENIEC: la persona valida su rostro en la app, sin foto del documento ni prueba de vida. Con `idperu`, `documentNumber` debe ser un DNI peruano de 8 dígitos y `documentType` se toma como `pe-dni`. Ver el [ejemplo](#ejemplo-de-identificacion-con-id-peru).
 disableInitialNotification | boolean | Sí | Opción para desactivar la notificación inicial que se envía a la persona.
-documentSide | `front` o `both` | Sí | SOLO PARA DNI DE PERÚ. Opción para indicar qué lados del DNI validar. Si no es enviado no se hará ninguna validación.
+documentSide | `front` o `both` | Sí | SOLO PARA DNI DE PERÚ. Opción para indicar qué lados del DNI validar. Si no es enviado, Keynua puede pedir la foto frontal del DNI.
 documentScanVersion | number | Sí | La versión de escaneo del documento puede ser `1` para escaneo simple o `2` para escaneo 3D.
 countries | array | Sí | Indica los países cuyos documentos de identidad son aceptados. Solo disponible para OCR 3D. Los valores permitidos deben cumplir con la convención **ISO 3166-1 alpha-3**.
 idTypes | array | Sí | Indica los tipos de documentos aceptados. Solo disponible para OCR 3D. Los valores permitidos son: `ID Card`, `Driver License`, `Passport`.
@@ -3340,6 +3340,8 @@ Por ahora los paises que soportamos para `selfie` y `video` son `sv-dui`, `mx-if
 ### Ejemplo de identificación con ID Perú
 
 Este ejemplo crea una identificación que solo verifica a la persona con ID Perú, la app de RENIEC. La persona ve su DNI ya cargado, abre ID Perú y valida su rostro en la app. No sube foto del documento ni hace prueba de vida.
+
+Con `type: "idperu"`, Keynua no envía el enlace por correo ni por SMS. Arma el enlace con el `userToken` de la respuesta, `https://sign.keynua.com/index.html?token={userToken}`, y hazlo llegar a la persona.
 
 Al terminar, `userIdInfo` trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`. ID Perú no entrega apellidos, fecha de nacimiento, vigencia ni dirección, así que esos campos vienen en `null`.
 
