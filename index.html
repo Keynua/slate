@@ -867,7 +867,7 @@ Producción: https://api.keynua.com
 <tr>
 <td>idInfo</td>
 <td>string</td>
-<td>Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI</td>
+<td>Información de identidad del firmante. Esta información se devolverá solamente cuando el contrato haya finalizado y de momento aplica solamente para las Identificaciones con DNI Peruano. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú, solo trae <code>type: &quot;pe-id&quot;</code>, el DNI confirmado en <code>idNumber</code> y el nombre que devuelve RENIEC en <code>names</code>. Apellidos, fecha de nacimiento, vigencia y dirección vienen en <code>null</code>. La dirección que lee el OCR en un escaneo 3D no llega en este campo, sino en <code>ocrData</code> del item, como en <a href="#ocr-y-prueba-de-vida-3d">OCR y Prueba de vida 3D</a>.</td>
 </tr>
 <tr>
 <td>customFieldsInfo</td>
@@ -2882,7 +2882,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 </tr>
 <tr>
 <td>ocrData.address</td>
-<td>string</td>
+<td>array</td>
 <td>Dirección actual</td>
 </tr>
 <tr>
@@ -2940,6 +2940,11 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <td>ocrData.issueDate</td>
 <td>string</td>
 <td>Fecha de expiración, formato: MMMM-MM-DD</td>
+</tr>
+<tr>
+<td>ocrData.address</td>
+<td>array</td>
+<td>Dirección. Solo viene si se escanea la parte trasera del DNI</td>
 </tr>
 </tbody></table>
 
@@ -4366,7 +4371,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <tr>
 <td>signatureTypes</td>
 <td>array</td>
-<td>Indica los tipos de firma. Puede ser <code>selfie</code>, <code>video-signature</code>, <code>draw</code> y <code>digital-signature</code></td>
+<td>Indica los tipos de firma. Puede ser <code>selfie</code>, <code>video-signature</code>, <code>draw</code>, <code>digital-signature</code> y <code>reniec-idaas</code>. <code>reniec-idaas</code> verifica al firmante con ID Perú, la app de RENIEC: el firmante escribe su DNI y valida su rostro en la app. Solo con <code>documentType</code> <code>pe-dni</code> o <code>pe-dni-ce</code>. Si el firmante elige carné de extranjería, el paso se omite. No se combina con <code>reniec</code> en <code>facematch</code> ni con <code>verify-content-reniec</code> en <code>documentValidations</code></td>
 </tr>
 <tr>
 <td>facematch</td>
@@ -5729,24 +5734,7 @@ Deceval para registrar la firma del participante.</li>
     </span><span class="nl">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Perez Alvarez"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"birthDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1992-11-20"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"expirationDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-03-17"</span><span class="w">
-    </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some address"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"reniecInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"names"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Juan"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"lastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Garcia"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"mothersLastName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Perez"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"marriedLastName"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"sex"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w"> </span><span class="err">//</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span><span class="w"> </span><span class="err">Masculino</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="err">:</span><span class="w"> </span><span class="err">Femenino</span><span class="w">
-        </span><span class="nl">"civilStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1"</span><span class="p">,</span><span class="w"> </span><span class="err">//</span><span class="w"> </span><span class="mi">1</span><span class="err">:</span><span class="w"> </span><span class="err">Soltero</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="err">:</span><span class="w"> </span><span class="err">Casado</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="err">:</span><span class="w"> </span><span class="err">Viudo</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="err">:</span><span class="w"> </span><span class="err">Divorciado</span><span class="w">
-        </span><span class="nl">"birthplace"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"140133"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LIMA"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"province"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LIMA"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"district"</span><span class="p">:</span><span class="w"> </span><span class="s2">"JESUS MARIA"</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="nl">"department"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LIMA"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"province"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LIMA"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"district"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LIMA"</span><span class="w">
-      </span><span class="p">}</span><span class="w">
+    </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some address"</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="err">ContractItem</span><span class="p">[]</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -5901,7 +5889,7 @@ Deceval para registrar la firma del participante.</li>
 <td>userIdInfo</td>
 <td>string</td>
 <td>Sí</td>
-<td>Información obtenida del OCR del documento enviado por el firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento <strong>solo aplica para las Identificaciones Peruanas</strong>. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI</td>
+<td>Información de identidad del firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento <strong>solo aplica para las Identificaciones Peruanas</strong>. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú, solo trae <code>type: &quot;pe-id&quot;</code>, el DNI confirmado en <code>idNumber</code> y el nombre que devuelve RENIEC en <code>names</code>. Apellidos, fecha de nacimiento, vigencia y dirección vienen en <code>null</code>. La dirección que lee el OCR en un escaneo 3D no llega en este campo, sino en <code>ocrData</code> del item, como en <a href="#ocr-y-prueba-de-vida-3d">OCR y Prueba de vida 3D</a>.</td>
 </tr>
 <tr>
 <td>items</td>
@@ -6151,7 +6139,7 @@ Deceval para registrar la firma del participante.</li>
 <td>type</td>
 <td>string</td>
 <td>Sí</td>
-<td><code>selfie</code>, <code>video</code>, <code>smile</code> o <code>liveness</code>. <code>selfie</code> solo pide un selfie y valida esa imagen con RENIEC. <code>video</code> además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. <code>smile</code> solicita que se grabe un video sonriendo, y realiza una prueba de vida utilizando el video (BETA). <code>liveness</code> realiza una prueba de vida 3D.</td>
+<td><code>selfie</code>, <code>video</code>, <code>smile</code>, <code>liveness</code> o <code>idperu</code>. <code>selfie</code> solo pide un selfie y valida esa imagen con RENIEC. <code>video</code> además de lo anterior, solicita que se grabe un video diciendo un código de 6 dígitos, y realiza una prueba de vida utilizando el video. <code>smile</code> solicita que se grabe un video sonriendo, y realiza una prueba de vida utilizando el video (BETA). <code>liveness</code> realiza una prueba de vida 3D. <code>idperu</code> solo verifica la identidad con ID Perú, la app de RENIEC: la persona valida su rostro en la app, sin foto del documento ni prueba de vida. Con <code>idperu</code>, <code>documentNumber</code> debe ser un DNI peruano de 8 dígitos. No hace falta enviar <code>documentType</code>. Ver el <a href="#ejemplo-de-identificacion-con-id-peru">ejemplo</a>.</td>
 </tr>
 <tr>
 <td>disableInitialNotification</td>
@@ -6163,7 +6151,7 @@ Deceval para registrar la firma del participante.</li>
 <td>documentSide</td>
 <td><code>front</code> o <code>both</code></td>
 <td>Sí</td>
-<td>SOLO PARA DNI DE PERÚ. Opción para indicar qué lados del DNI validar. Si no es enviado no se hará ninguna validación.</td>
+<td>SOLO PARA DNI DE PERÚ. Opción para indicar qué lados del DNI validar. Si no es enviado, Keynua puede pedir la foto frontal del DNI.</td>
 </tr>
 <tr>
 <td>documentScanVersion</td>
@@ -6213,10 +6201,98 @@ Deceval para registrar la firma del participante.</li>
 <td>Sí</td>
 <td>Activa (<code>true</code>) o desactiva (<code>false</code>) la <a href="#integridad-del-documento-de-identidad">integridad del documento de identidad</a>. El valor enviado tiene prioridad sobre la configuración de la organización; si se omite, la hereda y, si no existe configuración, queda desactivada. Requiere captura documental y procesamiento compatibles; no agrega captura ni liveness por sí solo. No acepta strings, números ni <code>null</code>.</td>
 </tr>
+<tr>
+<td>reniecIdaas</td>
+<td>boolean</td>
+<td>Sí</td>
+<td>SOLO PARA DNI DE PERÚ (<code>pe-dni</code>). Si es <code>true</code>, la identidad se verifica con ID Perú, la app de RENIEC, en lugar de la consulta a RENIEC. La persona necesita la app ID Perú en su celular. Se usa con <code>type</code> <code>selfie</code>, <code>video</code> o <code>liveness</code>. Con <code>selfie</code> o <code>video</code> es obligatorio enviar <code>documentSide</code>. No se combina con <code>type: &quot;idperu&quot;</code>.</td>
+</tr>
 </tbody></table>
 <h3 id='combinaciones-no-soportadas-por-defecto'>Combinaciones no soportadas por defecto</h3>
 <p>Por ahora los paises que soportamos para <code>selfie</code> y <code>video</code> son <code>sv-dui</code>, <code>mx-ife</code>, <code>cl-cedula</code>, <code>pe-dni</code>, <code>br-denatran</code> y <code>co-cedula</code>. En caso se cree una identificación con <code>selfie</code> o <code>video</code> con algún país que no esté en esta lista, automáticamente se considerará el documento como <code>global</code>. La lista completa sí está soportada con el type <code>liveness</code>.</p>
-<h3 id='ejemplo-de-identificacion-con-integridad-documental'>Ejemplo de identificación con integridad documental</h3>
+<h3 id='ejemplo-de-identificacion-con-id-peru'>Ejemplo de identificación con ID Perú</h3>
+<p>Este ejemplo crea una identificación que solo verifica a la persona con ID Perú, la app de RENIEC. La persona ve su DNI ya cargado, abre ID Perú y valida su rostro en la app. No sube foto del documento ni hace prueba de vida.</p>
+
+<p>Con <code>type: &quot;idperu&quot;</code>, Keynua no envía el enlace por correo ni por SMS. Arma el enlace con el <code>userToken</code> de la respuesta, <code>https://sign.keynua.com/index.html?token={userToken}</code>, y hazlo llegar a la persona.</p>
+
+<p>Al terminar, <code>userIdInfo</code> trae <code>type: &quot;pe-id&quot;</code>, el DNI confirmado en <code>idNumber</code> y el nombre que devuelve RENIEC en <code>names</code>. ID Perú no entrega apellidos, fecha de nacimiento, vigencia ni dirección, así que esos campos vienen en <code>null</code>.</p>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> PUT <span class="s1">'https://api.keynua.com/identity-verification/v1'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'authorization: YOUR-API-TOKEN-HERE'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--data-raw</span> <span class="s1">'{
+    "title": "Identification with ID Peru",
+    "documentNumber": "12345678",
+    "type": "idperu",
+    "userEmail": "user_email@gmail.com"
+  }'</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s2">"uri"</span>
+<span class="nb">require</span> <span class="s2">"net/http"</span>
+<span class="nb">require</span> <span class="s2">"json"</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="no">URI</span><span class="p">(</span><span class="s2">"https://api.keynua.com/identity-verification/v1"</span><span class="p">)</span>
+<span class="n">https</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">.</span><span class="nf">host</span><span class="p">,</span> <span class="n">url</span><span class="p">.</span><span class="nf">port</span><span class="p">)</span>
+<span class="n">https</span><span class="p">.</span><span class="nf">use_ssl</span> <span class="o">=</span> <span class="kp">true</span>
+
+<span class="n">request</span> <span class="o">=</span> <span class="no">Net</span><span class="o">::</span><span class="no">HTTP</span><span class="o">::</span><span class="no">Put</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"x-api-key"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"YOUR-API-KEY-HERE"</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"authorization"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"YOUR-API-TOKEN-HERE"</span>
+<span class="n">request</span><span class="p">[</span><span class="s2">"Content-Type"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"application/json"</span>
+<span class="n">request</span><span class="p">.</span><span class="nf">body</span> <span class="o">=</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">generate</span><span class="p">({</span>
+  <span class="ss">title: </span><span class="s2">"Identification with ID Peru"</span><span class="p">,</span>
+  <span class="ss">documentNumber: </span><span class="s2">"12345678"</span><span class="p">,</span>
+  <span class="ss">type: </span><span class="s2">"idperu"</span><span class="p">,</span>
+  <span class="ss">userEmail: </span><span class="s2">"user_email@gmail.com"</span>
+<span class="p">})</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">https</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="n">response</span><span class="p">.</span><span class="nf">read_body</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">http.client</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">http</span><span class="p">.</span><span class="n">client</span><span class="p">.</span><span class="n">HTTPSConnection</span><span class="p">(</span><span class="s">"api.keynua.com"</span><span class="p">)</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">({</span>
+    <span class="s">"title"</span><span class="p">:</span> <span class="s">"Identification with ID Peru"</span><span class="p">,</span>
+    <span class="s">"documentNumber"</span><span class="p">:</span> <span class="s">"12345678"</span><span class="p">,</span>
+    <span class="s">"type"</span><span class="p">:</span> <span class="s">"idperu"</span><span class="p">,</span>
+    <span class="s">"userEmail"</span><span class="p">:</span> <span class="s">"user_email@gmail.com"</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">"x-api-key"</span><span class="p">:</span> <span class="s">"YOUR-API-KEY-HERE"</span><span class="p">,</span>
+    <span class="s">"authorization"</span><span class="p">:</span> <span class="s">"YOUR-API-TOKEN-HERE"</span><span class="p">,</span>
+    <span class="s">"Content-Type"</span><span class="p">:</span> <span class="s">"application/json"</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">conn</span><span class="p">.</span><span class="n">request</span><span class="p">(</span><span class="s">"PUT"</span><span class="p">,</span> <span class="s">"/identity-verification/v1"</span><span class="p">,</span> <span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">conn</span><span class="p">.</span><span class="n">getresponse</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="n">read</span><span class="p">().</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">https</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">https</span><span class="dl">"</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">PUT</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">hostname</span><span class="p">:</span> <span class="dl">"</span><span class="s2">api.keynua.com</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">path</span><span class="p">:</span> <span class="dl">"</span><span class="s2">/identity-verification/v1</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-KEY-HERE</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">authorization</span><span class="p">:</span> <span class="dl">"</span><span class="s2">YOUR-API-TOKEN-HERE</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+  <span class="na">title</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Identification with ID Peru</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">documentNumber</span><span class="p">:</span> <span class="dl">"</span><span class="s2">12345678</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">idperu</span><span class="dl">"</span><span class="p">,</span>
+  <span class="na">userEmail</span><span class="p">:</span> <span class="dl">"</span><span class="s2">user_email@gmail.com</span><span class="dl">"</span>
+<span class="p">});</span>
+
+<span class="kd">const</span> <span class="nx">req</span> <span class="o">=</span> <span class="nx">https</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">options</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">chunks</span> <span class="o">=</span> <span class="p">[];</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">data</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">chunk</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">chunks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">chunk</span><span class="p">));</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">end</span><span class="dl">"</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">(</span><span class="nx">chunks</span><span class="p">).</span><span class="nx">toString</span><span class="p">()));</span>
+<span class="p">});</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">error</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">));</span>
+<span class="nx">req</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">payload</span><span class="p">);</span>
+</code></pre></div><h3 id='ejemplo-de-identificacion-con-integridad-documental'>Ejemplo de identificación con integridad documental</h3>
 <p>Este ejemplo crea una identificación con liveness, captura del anverso y reverso del DNI peruano, e integridad documental activada. Requiere que el ambiente tenga habilitado el procesamiento compatible descrito en <a href="#integridad-del-documento-de-identidad">Integridad del documento de identidad</a>. La respuesta de creación no es el resultado de la evaluación de las imágenes.</p>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> PUT <span class="s1">'https://api.keynua.com/identity-verification/v1'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
@@ -9043,7 +9119,7 @@ Deceval para registrar la firma del participante.</li>
 <tr>
 <td>userIdInfo</td>
 <td>string</td>
-<td>Información obtenida del OCR del documento enviado por el firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI</td>
+<td>Información de identidad del firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú, solo trae <code>type: &quot;pe-id&quot;</code>, el DNI confirmado en <code>idNumber</code> y el nombre que devuelve RENIEC en <code>names</code>. Apellidos, fecha de nacimiento, vigencia y dirección vienen en <code>null</code>. La dirección que lee el OCR en un escaneo 3D no llega en este campo, sino en <code>ocrData</code> del item, como en <a href="#ocr-y-prueba-de-vida-3d">OCR y Prueba de vida 3D</a>.</td>
 </tr>
 <tr>
 <td>alerts</td>
