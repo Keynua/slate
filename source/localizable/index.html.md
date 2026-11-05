@@ -3069,24 +3069,7 @@ Un liveness aprobado puede coexistir con un rechazo del documento. Los [errores 
 	"lastName": "Perez Alvarez",
 	"birthDate": "1992-11-20",
 	"expirationDate": "2026-03-17"
-	"address": "Some address",
-	"reniecInfo": {
-        "names": "Juan",
-        "lastName": "Garcia",
-        "mothersLastName": "Perez",
-        "marriedLastName": null,
-        "sex": "1", // 1: Masculino, 2: Femenino
-        "civilStatus": "1", // 1: Soltero, 2: Casado, 3: Viudo, 4: Divorciado
-        "birthplace": {
-          "code": "140133",
-          "department": "LIMA",
-          "province": "LIMA",
-          "district": "JESUS MARIA"
-        },
-        "department": "LIMA",
-        "province": "LIMA",
-        "district": "LIMA"
-      }
+	"address": "Some address"
   },
   "items": ContractItem[]
 }
