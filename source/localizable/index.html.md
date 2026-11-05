@@ -3100,7 +3100,7 @@ userFullName | string | Sí | Nombre completo de la persona
 accountName | string | No | Nombre de la cuenta que creó la verificación
 timezone | string | No | Huso horario  utilizado en notificaciones y mensajes
 title | string | No | Título de la verificación
-userIdInfo | string | Sí | Información de identidad del firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento **solo aplica para las Identificaciones Peruanas**. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú, solo trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`. Apellidos, fecha de nacimiento, vigencia y dirección vienen en `null`.
+userIdInfo | string | Sí | Información de identidad del firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento **solo aplica para las Identificaciones Peruanas**. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú, solo trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`. Apellidos, fecha de nacimiento, vigencia y dirección vienen en `null`. La dirección que lee el OCR en un escaneo 3D no llega en este campo, sino en `ocrData` del item, como en [OCR y Prueba de vida 3D](#ocr-y-prueba-de-vida-3d).
 items | [ContractItem](#items-del-contrato)[] | No | Lista de pasos que sigue la verificación.
 idDocumentIntegrity | boolean | Sí | Configuración explícita solicitada al crear la identificación, cuando se envió. No es un resultado de validación. Si se omitió, puede estar ausente aunque el flujo herede integridad de la organización; su ausencia no equivale a `false`.
 
@@ -5141,7 +5141,7 @@ title | string | Título de la verificación
 userEmail | string | Email del verificante en el cual recibirá el link de inicio del proceso
 userPhone | string | Teléfono celular del verificante en el cual recibirá el link de inicio del proceso
 userToken | string | Token con el cual se puede armar el link donde se realizará la verificación. Por ejemplo: https://sign.keynua.com/index.html?token={token}
-userIdInfo | string | Información de identidad del firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú, solo trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`. Apellidos, fecha de nacimiento, vigencia y dirección vienen en `null`.
+userIdInfo | string | Información de identidad del firmante. De momento, esta información se devolverá solamente para Identificaciones Peruanas. La información de la dirección (address) se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú, solo trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el primer nombre en `names`. Apellidos, fecha de nacimiento, vigencia y dirección vienen en `null`. La dirección que lee el OCR en un escaneo 3D no llega en este campo, sino en `ocrData` del item, como en [OCR y Prueba de vida 3D](#ocr-y-prueba-de-vida-3d).
 alerts | array | Arreglo de [Alertas](#propiedades-de-una-alerta) de la identificación.
 
 ### Propiedades de IdentityVerificationItemUpdated
