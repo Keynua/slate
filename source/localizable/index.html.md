@@ -13,6 +13,7 @@ toc_footers:
 
 includes:
   - custom_fields
+  - labels
   - otp
   - errors
 
@@ -115,6 +116,13 @@ El API de Contratos permite crear, ver y eliminar un contrato
 	"groups":Group[],
 	"documents":Document[],
 	"items":Item[],
+	"labels":[
+		{
+			"id":"11111111-1111-1111-1111-111111111111",
+			"name":"Legal",
+			"color":"#E5534B"
+		}
+	],
 	"status":"pending_input"
 }
 ```
@@ -143,6 +151,7 @@ documents | array | [Documentos](#propiedades-de-un-documento) del contrato
 items | array | [Items](#items-del-contrato) del contrato
 status | string | [Estado del contrato](#estados-del-contrato) actual
 alerts | array | Arreglo de [Alertas](#propiedades-de-una-alerta) del contrato
+labels | array | `optional` [Etiquetas](#etiquetas) asignadas. Cada elemento es un snapshot `{ id, name, color }` congelado al crear o actualizar el contrato. Si no hay etiquetas, el campo no aparece.
 
 ### Estados del Contrato
 
@@ -490,6 +499,10 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 Para adjuntar <a href="#campos-personalizados">campos personalizados</a> a un firmante, copia el JSON desde <a href="https://app.stg.keynua.com/profile/organization/custom-fields" target="_blank">Organización → Campos personalizados</a> con <code>Copiar para API</code> y pégalo en <code>users[].customFieldsInfo</code>. <strong>Solo completa cada <code>value</code></strong>: el <code>id</code>, el <code>name</code>, las claves y cada <code>label</code> ya vienen listos.
 </aside>
 
+<aside class="notice">
+Para clasificar el contrato, envía <code>labelIds</code> con los ids copiados desde <a href="https://app.stg.keynua.com/profile/organization/labels" target="_blank">Organización → Etiquetas</a>. El detalle está en <a href="#etiquetas">Etiquetas</a>.
+</aside>
+
 ### Headers
 
 Key | Value
@@ -518,6 +531,7 @@ users | array | Arreglo de los usuarios que firmarán el contrato. El email es o
 metadata | object | `optional` Metadata del contrato. Puedes enviar información en este campo como key-value para poder identificar el contrato creado por Keynua con algún Identificador interno de tu sistema.
 flags | object | `optional` Se podrá enviar información adicional para crear un contrato. Por ejemplo para configurar un canal de comunicación o enviar la información de [Cavali](#cavali). Para crear un contrato con Pagaré Electrónico, se enviará el key `cavaliData`. Puedes ver el detalle de las configuraciones posibles en la sección [Flags del contrato](#flags-del-contrato)
 templateOptions | object | `optional` [Configuración dinámica del template](#configuracion-dinamica-del-template) del contrato, si mandas este campo se omite el templateId
+labelIds | array | `optional` Ids de [etiquetas](#etiquetas) activas de la organización. El campo es un arreglo para poder aceptar más adelante; hoy solo se acepta un id. Si se omite o se envía vacío, el contrato queda sin etiqueta. Dos ids responden `InvalidInput`.
 
 ### Flags del contrato
 
@@ -681,7 +695,7 @@ req.end();
 
 > Si el contrato fue obtenido satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de [Contratos](#contratos)
 
-Este API obtiene un contrato específico. Si un firmante tenía [campos personalizados](#campos-personalizados) al crear el contrato, `users[].customFieldsInfo` trae el snapshot guardado (`id`, `name`, `fields`).
+Este API obtiene un contrato específico. Si un firmante tenía [campos personalizados](#campos-personalizados) al crear el contrato, `users[].customFieldsInfo` trae el snapshot guardado (`id`, `name`, `fields`). Si el contrato tiene [etiquetas](#etiquetas), `labels` trae el snapshot `{ id, name, color }`. Si no tiene, el campo no aparece.
 
 ### HTTP Request
 
@@ -3062,6 +3076,13 @@ Un liveness aprobado puede coexistir con un rechazo del documento. Los [errores 
   "accountName": "Patrick Star",
   "timezone": "America/Lima",
   "title": "Identification 123456789",
+  "labels": [
+    {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "name": "Legal",
+      "color": "#E5534B"
+    }
+  ],
   "userIdInfo": {
 	"type": "pe-id",
 	"idNumber": "12345678",
@@ -3104,6 +3125,7 @@ title | string | No | Título de la verificación
 userIdInfo | string | Sí | Información de identidad del firmante. Esta información se devolverá solamente cuando la Identificación haya finalizado y de momento **solo aplica para las Identificaciones Peruanas**. Toda información referente a la dirección y ubigeo, se devolverá solamente si el usuario también envía la parte trasera del DNI. Con ID Perú, solo trae `type: "pe-id"`, el DNI confirmado en `idNumber` y el nombre que devuelve RENIEC en `names`. Apellidos, fecha de nacimiento, vigencia y dirección vienen en `null`. La dirección que lee el OCR en un escaneo 3D no llega en este campo, sino en `ocrData` del item, como en [OCR y Prueba de vida 3D](#ocr-y-prueba-de-vida-3d).
 items | [ContractItem](#items-del-contrato)[] | No | Lista de pasos que sigue la verificación.
 idDocumentIntegrity | boolean | Sí | Configuración explícita solicitada al crear la identificación, cuando se envió. No es un resultado de validación. Si se omitió, puede estar ausente aunque el flujo herede integridad de la organización; su ausencia no equivale a `false`.
+labels | array | Sí | [Etiquetas](#etiquetas) asignadas al crearla. Cada elemento es un snapshot `{ id, name, color }`. Si no hay etiquetas, el campo no aparece. El listado no lo devuelve.
 
 ## Crear verificación de identidad
 
@@ -3244,6 +3266,13 @@ req.end();
   "accountName": "Patrick Star",
   "timezone": "America/Lima",
   "title": "Identification 123456789",
+  "labels": [
+    {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "name": "Legal",
+      "color": "#E5534B"
+    }
+  ],
   "items": [
     {
       "id": 0,
@@ -3315,6 +3344,7 @@ accountName | string | Sí | Nombre de cuenta que se usará al crear el proceso 
 addressMatchScore | number | Sí | Porcentaje de coincidencia (0-100) requerido entre la dirección extraída del documento escaneado y la obtenida de Reniec
 livenessLightChallenge | boolean | Sí | Activa (`true`) o desactiva (`false`) el reto de luces en la prueba de vida 3D. El valor enviado tiene prioridad sobre la configuración de la organización; si no se envía, se usa la configuración de la organización. Solo tiene efecto en verificaciones con prueba de vida 3D
 idDocumentIntegrity | boolean | Sí | Activa (`true`) o desactiva (`false`) la [integridad del documento de identidad](#integridad-del-documento-de-identidad). El valor enviado tiene prioridad sobre la configuración de la organización; si se omite, la hereda y, si no existe configuración, queda desactivada. Requiere captura documental y procesamiento compatibles; no agrega captura ni liveness por sí solo. No acepta strings, números ni `null`.
+labelIds | array | Sí | Ids de [etiquetas](#etiquetas) activas de la organización. El campo es un arreglo para poder aceptar más adelante; hoy solo se acepta un id. Si se omite o se envía vacío, la identificación queda sin etiqueta. Dos ids responden `InvalidInput`. La respuesta trae el snapshot en `labels`, no este arreglo.
 reniecIdaas | boolean | Sí | SOLO PARA DNI DE PERÚ (`pe-dni`). Si es `true`, la identidad se verifica con ID Perú, la app de RENIEC, en lugar de la consulta a RENIEC. La persona necesita la app ID Perú en su celular. Se usa con `type` `selfie`, `video` o `liveness`. Con `selfie` o `video` es obligatorio enviar `documentSide`. No se combina con `type: "idperu"`.
 
 ### Combinaciones no soportadas por defecto
@@ -3621,7 +3651,7 @@ req.end();
 }
 ```
 
-Permite obtener una lista de verificaciones de identidad creadas.
+Permite obtener una lista de verificaciones de identidad creadas. Este listado, tanto `list` como `list-org`, no incluye `labels`. Para ver las [etiquetas](#etiquetas) consulta una verificación por su id.
 
 ### HTTP Request
 
@@ -3768,6 +3798,13 @@ req.end();
   "accountName": "Patrick Star",
   "timezone": "America/Lima",
   "title": "Identification 123456789",
+  "labels": [
+    {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "name": "Legal",
+      "color": "#E5534B"
+    }
+  ],
   "userIdInfo": {
 	"type": "pe-id",
 	"idNumber": "12345678",
@@ -4409,6 +4446,8 @@ Atributo | Tipo | Descripción
 type | string | Nombre del [tipo de evento](#tipos-de-eventos-webhook) emitido. Puede ser `ContractCreated`, `ContractStarted`, `ContractItemUpdated`, `ContractUserUpdated`, `ContractFinished`, `ContractDeleted`, `IdentityVerificationCreated`, `IdentityVerificationStarted`, `IdentityVerificationUserUpdated`, `IdentityVerificationFinished`, `IdentityVerificationItemUpdated`, o `OTPCreated`
 accountId | string | Codigo de la cuenta propietaria del webhook
 payload | object | Datos del evento que varian segun el valor de [type](#tipos-de-eventos-webhook)
+
+Si el contrato o la verificación tiene [etiquetas](#etiquetas), `payload.labels` trae el snapshot `{ id, name, color }`. Solo aparece cuando hay al menos una. Llega en `ContractCreated`, `ContractStarted`, `ContractFinished`, `ContractDeleted`, `ContractInputProvided`, `ContractItemUpdated`, `ContractUserUpdated` y en los equivalentes `IdentityVerificationCreated`, `IdentityVerificationStarted`, `IdentityVerificationFinished`, `IdentityVerificationDeleted`, `IdentityVerificationInputProvided`, `IdentityVerificationItemUpdated` e `IdentityVerificationUserUpdated`. `OTPCreated` no lo incluye.
 
 ## Tipos de Eventos Webhook
 Keynua enviará un request a tu API configurado por cada Evento registrado. En esta tabla podrás ver la relación que existe entre cada evento registrado y los tipos de eventos disponibles
