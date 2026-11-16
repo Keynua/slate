@@ -504,6 +504,20 @@
               </ul>
           </li>
           <li>
+            <a href="#etiquetas" class="toc-h1 toc-link" data-title="Etiquetas">Etiquetas</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#como-obtener-el-id" class="toc-h2 toc-link" data-title="Cómo obtener el id">Cómo obtener el id</a>
+                  </li>
+                  <li>
+                    <a href="#que-enviar" class="toc-h2 toc-link" data-title="Qué enviar">Qué enviar</a>
+                  </li>
+                  <li>
+                    <a href="#que-recibes" class="toc-h2 toc-link" data-title="Qué recibes">Qué recibes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#otp" class="toc-h1 toc-link" data-title="OTP">OTP</a>
               <ul class="toc-list-h2">
                   <li>
@@ -632,6 +646,13 @@ Producción: https://api.keynua.com
     </span><span class="nl">"groups"</span><span class="p">:</span><span class="err">Group</span><span class="p">[],</span><span class="w">
     </span><span class="nl">"documents"</span><span class="p">:</span><span class="err">Document</span><span class="p">[],</span><span class="w">
     </span><span class="nl">"items"</span><span class="p">:</span><span class="err">Item</span><span class="p">[],</span><span class="w">
+    </span><span class="nl">"labels"</span><span class="p">:[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="s2">"Legal"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"color"</span><span class="p">:</span><span class="s2">"#E5534B"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
     </span><span class="nl">"status"</span><span class="p">:</span><span class="s2">"pending_input"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -751,6 +772,11 @@ Producción: https://api.keynua.com
 <td>alerts</td>
 <td>array</td>
 <td>Arreglo de <a href="#propiedades-de-una-alerta">Alertas</a> del contrato</td>
+</tr>
+<tr>
+<td>labels</td>
+<td>array</td>
+<td><code>optional</code> <a href="#etiquetas">Etiquetas</a> asignadas. Cada elemento es un snapshot <code>{ id, name, color }</code> congelado al crear o actualizar el contrato. Si no hay etiquetas, el campo no aparece.</td>
 </tr>
 </tbody></table>
 <h3 id='estados-del-contrato'>Estados del Contrato</h3>
@@ -1356,6 +1382,10 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <aside class="notice">
 Para adjuntar <a href="#campos-personalizados">campos personalizados</a> a un firmante, copia el JSON desde <a href="https://app.stg.keynua.com/profile/organization/custom-fields" target="_blank">Organización → Campos personalizados</a> con <code>Copiar para API</code> y pégalo en <code>users[].customFieldsInfo</code>. <strong>Solo completa cada <code>value</code></strong>: el <code>id</code>, el <code>name</code>, las claves y cada <code>label</code> ya vienen listos.
 </aside>
+
+<aside class="notice">
+Para clasificar el contrato, envía <code>labelIds</code> con los ids copiados desde <a href="https://app.stg.keynua.com/profile/organization/labels" target="_blank">Organización → Etiquetas</a>. El detalle está en <a href="#etiquetas">Etiquetas</a>.
+</aside>
 <h3 id='headers'>Headers</h3>
 <table><thead>
 <tr>
@@ -1455,6 +1485,11 @@ Para adjuntar <a href="#campos-personalizados">campos personalizados</a> a un fi
 <td>templateOptions</td>
 <td>object</td>
 <td><code>optional</code> <a href="#configuracion-dinamica-del-template">Configuración dinámica del template</a> del contrato, si mandas este campo se omite el templateId</td>
+</tr>
+<tr>
+<td>labelIds</td>
+<td>array</td>
+<td><code>optional</code> Ids de <a href="#etiquetas">etiquetas</a> activas de la organización. El campo es un arreglo para poder aceptar más adelante; hoy solo se acepta un id. Si se omite o se envía vacío, el contrato queda sin etiqueta. Dos ids responden <code>InvalidInput</code>.</td>
 </tr>
 </tbody></table>
 <h3 id='flags-del-contrato'>Flags del contrato</h3>
@@ -1646,7 +1681,7 @@ Recuerda — En el <a href="https://app.stg.keynua.com/developers/" target=”_b
 <p>Si el contrato fue obtenido satisfactoriamente, el API retorna un Json estructurado como aparece en la sección de <a href="#contratos">Contratos</a></p>
 </blockquote>
 
-<p>Este API obtiene un contrato específico. Si un firmante tenía <a href="#campos-personalizados">campos personalizados</a> al crear el contrato, <code>users[].customFieldsInfo</code> trae el snapshot guardado (<code>id</code>, <code>name</code>, <code>fields</code>).</p>
+<p>Este API obtiene un contrato específico. Si un firmante tenía <a href="#campos-personalizados">campos personalizados</a> al crear el contrato, <code>users[].customFieldsInfo</code> trae el snapshot guardado (<code>id</code>, <code>name</code>, <code>fields</code>). Si el contrato tiene <a href="#etiquetas">etiquetas</a>, <code>labels</code> trae el snapshot <code>{ id, name, color }</code>. Si no tiene, el campo no aparece.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
 <p><code>GET /contracts/v1/{contractId}</code></p>
 <h3 id='url-parameters'>URL Parameters</h3>
@@ -5726,6 +5761,13 @@ Deceval para registrar la firma del participante.</li>
   </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/Lima"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identification 123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"labels"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Legal"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#E5534B"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
   </span><span class="nl">"userIdInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pe-id"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"idNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
@@ -5903,6 +5945,12 @@ Deceval para registrar la firma del participante.</li>
 <td>Sí</td>
 <td>Configuración explícita solicitada al crear la identificación, cuando se envió. No es un resultado de validación. Si se omitió, puede estar ausente aunque el flujo herede integridad de la organización; su ausencia no equivale a <code>false</code>.</td>
 </tr>
+<tr>
+<td>labels</td>
+<td>array</td>
+<td>Sí</td>
+<td><a href="#etiquetas">Etiquetas</a> asignadas al crearla. Cada elemento es un snapshot <code>{ id, name, color }</code>. Si no hay etiquetas, el campo no aparece. El listado no lo devuelve.</td>
+</tr>
 </tbody></table>
 <h2 id='crear-verificacion-de-identidad'>Crear verificación de identidad</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> PUT <span class="s1">'https://api.keynua.com/identity-verification/v1'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'x-api-key: YOUR-API-KEY-HERE'</span> <span class="se">\</span>
@@ -6030,6 +6078,13 @@ Deceval para registrar la firma del participante.</li>
   </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/Lima"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identification 123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"labels"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Legal"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#E5534B"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
   </span><span class="nl">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
       </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
@@ -6200,6 +6255,12 @@ Deceval para registrar la firma del participante.</li>
 <td>boolean</td>
 <td>Sí</td>
 <td>Activa (<code>true</code>) o desactiva (<code>false</code>) la <a href="#integridad-del-documento-de-identidad">integridad del documento de identidad</a>. El valor enviado tiene prioridad sobre la configuración de la organización; si se omite, la hereda y, si no existe configuración, queda desactivada. Requiere captura documental y procesamiento compatibles; no agrega captura ni liveness por sí solo. No acepta strings, números ni <code>null</code>.</td>
+</tr>
+<tr>
+<td>labelIds</td>
+<td>array</td>
+<td>Sí</td>
+<td>Ids de <a href="#etiquetas">etiquetas</a> activas de la organización. El campo es un arreglo para poder aceptar más adelante; hoy solo se acepta un id. Si se omite o se envía vacío, la identificación queda sin etiqueta. Dos ids responden <code>InvalidInput</code>. La respuesta trae el snapshot en <code>labels</code>, no este arreglo.</td>
 </tr>
 <tr>
 <td>reniecIdaas</td>
@@ -6466,7 +6527,7 @@ Deceval para registrar la firma del participante.</li>
   </span><span class="nl">"next"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eyJhY2NvdW50SWQi...jIwMjEtMDQtMjRUMDA6MTA6NTAuMjM3WiJ9"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Permite obtener una lista de verificaciones de identidad creadas.</p>
+<p>Permite obtener una lista de verificaciones de identidad creadas. Este listado, tanto <code>list</code> como <code>list-org</code>, no incluye <code>labels</code>. Para ver las <a href="#etiquetas">etiquetas</a> consulta una verificación por su id.</p>
 <h3 id='http-request-14'>HTTP Request</h3>
 <p><code>GET /identity-verification/v1/list</code> obtiene las de tu cuenta</p>
 
@@ -6733,6 +6794,13 @@ Deceval para registrar la firma del participante.</li>
   </span><span class="nl">"accountName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Patrick Star"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"timezone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"America/Lima"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Identification 123456789"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"labels"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Legal"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#E5534B"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
   </span><span class="nl">"userIdInfo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pe-id"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"idNumber"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12345678"</span><span class="p">,</span><span class="w">
@@ -7642,6 +7710,8 @@ Deceval para registrar la firma del participante.</li>
 <td>Datos del evento que varian segun el valor de <a href="#tipos-de-eventos-webhook">type</a></td>
 </tr>
 </tbody></table>
+
+<p>Si el contrato o la verificación tiene <a href="#etiquetas">etiquetas</a>, <code>payload.labels</code> trae el snapshot <code>{ id, name, color }</code>. Solo aparece cuando hay al menos una. Llega en <code>ContractCreated</code>, <code>ContractStarted</code>, <code>ContractFinished</code>, <code>ContractDeleted</code>, <code>ContractInputProvided</code>, <code>ContractItemUpdated</code>, <code>ContractUserUpdated</code> y en los equivalentes <code>IdentityVerificationCreated</code>, <code>IdentityVerificationStarted</code>, <code>IdentityVerificationFinished</code>, <code>IdentityVerificationDeleted</code>, <code>IdentityVerificationInputProvided</code>, <code>IdentityVerificationItemUpdated</code> e <code>IdentityVerificationUserUpdated</code>. <code>OTPCreated</code> no lo incluye.</p>
 <h2 id='tipos-de-eventos-webhook'>Tipos de Eventos Webhook</h2>
 <p>Keynua enviará un request a tu API configurado por cada Evento registrado. En esta tabla podrás ver la relación que existe entre cada evento registrado y los tipos de eventos disponibles</p>
 
@@ -9927,6 +9997,67 @@ Recuerda — En <a href="https://app.stg.keynua.com/profile/organization/custom-
 </span></code></pre></div>
 <aside class="notice">
 La forma de <code>customFieldsInfo</code> es la misma en el GET y en los webhooks: es el snapshot guardado al crear el contrato, no el catálogo actual del portal.
+</aside>
+<h1 id='etiquetas'>Etiquetas</h1>
+<p>Las etiquetas clasifican un contrato o una verificación de identidad. El catálogo se administra en el portal de Keynua. El API <strong>no crea, lista, edita ni archiva etiquetas</strong>: solo recibe sus ids y devuelve el snapshot que quedó guardado.</p>
+
+<p>No las confundas con los items <code>detectlabels</code> y <code>checklabels</code>. Esos validan el documento de identidad. Una etiqueta es un dato de clasificación que eliges tú.</p>
+<h2 id='como-obtener-el-id'>Cómo obtener el id</h2>
+<p>No existe un listado público de etiquetas con API Key.</p>
+
+<ol>
+<li>Entra a <a href="https://app.stg.keynua.com/profile/organization/labels">Organización → Etiquetas</a>.</li>
+<li>En la fila de la etiqueta, usa <strong>Copiar id</strong>.</li>
+</ol>
+
+<p>Ese valor es el que envías dentro de <code>labelIds</code>. Los ids pertenecen al catálogo de la organización de la API key. Si creas el contrato o la identificación con <code>onBehalfOf</code>, el catálogo sigue siendo el de la organización: no cambia al de la cuenta hija.</p>
+<h2 id='que-enviar'>Qué enviar</h2>
+<p><code>labelIds</code> es opcional. Es un arreglo de ids activos de esa organización.</p>
+
+<ul>
+<li>El campo es un arreglo para poder aceptar más de una más adelante. Hoy solo se acepta un id.</li>
+<li>Sin duplicados y sin strings vacíos.</li>
+<li>Si lo omites o envías <code>[]</code>, el recurso queda sin etiqueta.</li>
+</ul>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="nl">"labelIds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">]</span><span class="w">
+</span></code></pre></div>
+<p>Un id que no existe o que ya fue archivado responde <code>400</code> con código <code>InvalidLabels</code>. Un arreglo inválido (dos ids, duplicados o un id vacío) responde <code>400</code> con código <code>InvalidInput</code>.</p>
+<h2 id='que-recibes'>Qué recibes</h2>
+<p>La respuesta no repite <code>labelIds</code>. Guarda un snapshot congelado al asignar:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="nl">"labels"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Legal"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"color"</span><span class="p">:</span><span class="w"> </span><span class="s2">"#E5534B"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div>
+<table><thead>
+<tr>
+<th>Atributo</th>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>Id de la etiqueta en el catálogo</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>Nombre al momento de asignarla</td>
+</tr>
+<tr>
+<td>color</td>
+<td>string</td>
+<td>Color <code>#RRGGBB</code> al momento de asignarla</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+Renombrar o archivar la etiqueta en el portal no cambia lo ya asignado. Si no hay etiquetas, el campo no aparece.
 </aside>
 <h1 id='otp'>OTP</h1>
 <p>Conjunto de APIs que permiten enviar, verificar y revisar códigos de un solo
