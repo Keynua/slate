@@ -89,6 +89,1021 @@ authorization | Token único de autorización. **Debes usar el valor Secret, NO 
 
 <aside class="notice">Si ya estás listo para integrar en producción, por favor contacta al equipo de <code>Keynua</code></aside>
 
+# Entorno de pruebas
+
+En el ambiente de pruebas puedes recorrer un contrato o una verificación de identidad con un resultado ya definido. No envías un flag para activarlo: usas un número de documento del catálogo. La plantilla se arma completa y cada paso que exista responde según ese número.
+
+La URL de pruebas es `https://api.stg.keynua.com`. En producción (`https://api.keynua.com`) el mismo número se procesa como un documento real.
+
+<aside class="notice">
+Hay dos formas de probar y no se combinan. <code>templateOptions.mock: true</code> es la forma anterior: al armar la plantilla se omiten los pasos de validación. El entorno de esta sección hace lo contrario: deja esos pasos y simula su resultado. Si envías <code>mock: true</code> junto con un número de esta guía, los pasos que quieres observar no existen.
+</aside>
+
+## Cómo funciona
+
+
+<div></div>
+
+### La forma anterior: `templateOptions.mock`
+
+`mock` es un booleano opcional de `templateOptions`. El valor por defecto es `false`.
+
+Con `mock: true`, al crear el contrato la plantilla queda sin los pasos de validación de identidad. No se crean la invitación ni los recordatorios, RENIEC, ID Perú, el OCR y su aprobación manual, las validaciones de número, vencimiento, nacimiento y contenido, la identidad nacional, DENATRAN, la transcripción del video, la prueba de vida de ese video ni las comparaciones faciales. Sí se crean los pasos de captura y de firma: número de documento, fotos, video, captura 3D, términos, documentos, firma dibujada y PDF. Esos pasos se ejecutan de verdad. No hay un resultado simulado de RENIEC o de comparación facial, porque esos pasos no están en el flujo.
+
+Un grupo masivo (`bulk`), una firma digital o una firma digital local responden `NotSupported`.
+
+En una verificación de identidad, `mock: true` omite el mismo bloque de validación y también FICO, empleo y PLD. Si esa verificación necesita consultar la identidad nacional, la creación falla porque ese paso no se armó. En identidad inteligente la excepción es estrecha: solo se omiten la invitación y los términos. Las validaciones sí se crean.
+
+
+<div></div>
+
+### La forma actual: un número del catálogo
+
+No agregues `mock`. Crea el flujo con los pasos que quieras probar y usa un número de esta guía.
+
+* Basta con que un firmante tenga un número del catálogo. Si va prellenado al crear, el contrato o la verificación queda marcado por completo. Si el firmante lo escribe durante el flujo, el entorno de prueba aplica a ese firmante.
+* El firmante ve este aviso: **Entorno de pruebas: este flujo es simulado en base a los parámetros de prueba enviados**. En ese flujo no se aplican el límite de intentos, la espera entre sesiones ni los bloqueos por IP o reputación de dispositivo. Un bloqueo ya registrado sobre el firmante sigue vigente.
+* El rostro y las fotos se guardan tal como se capturaron. El número, los nombres y el resultado de cada validación salen del escenario. Las consultas simuladas (RENIEC, comparación facial, identidad, INE, FICO, PLD y empleo) llegan unos 5 segundos después. Esos pasos se cobran igual que una verificación real.
+* El nombre del firmante puede ser cualquiera. Si todavía no hay nombre, se usa `USUARIO PRUEBA SANDBOX`. Los escenarios que comparan nombres usan otro nombre en el documento a propósito.
+* Un escenario solo aparece si el flujo incluye ese paso. Un fallo de RENIEC no se ve en una plantilla sin RENIEC.
+* En las capturas 3D de estos ejemplos envía `"livenessVariant": "spark"`.
+* Perú: un DNI de 8 dígitos que empieza por `99999`. México: una CURP de 18 caracteres que empieza por `SAND900115HDF`. El caso mexicano lo deciden los primeros 16 caracteres. Los dos últimos no cambian el escenario.
+* Un número dentro de ese prefijo que no está en el catálogo se rechaza con HTTP `400` y código `UnknownSandboxDocumentNumber`: "El número de documento de prueba no existe. Revisa la tabla de números de prueba."
+
+El OTP de correo o SMS, cuando el flujo lo pide, sigue siendo real. Los errores del formulario de domicilio (`PersonInfoInvalid`, `InvalidFicoInput`) dependen de lo que se escribe ahí y no del número. ID Perú no se puede completar en la app de RENIEC con un DNI `99999`. En el widget, ese paso muestra un botón para continuar con el resultado de prueba, como se indica más abajo.
+
+
+<div></div>
+
+### Primer request
+
+```shell
+curl --request PUT \
+  --url https://api.stg.keynua.com/contracts/v1 \
+  --header 'x-api-key: YOUR-API-KEY-HERE' \
+  --header 'authorization: YOUR-API-TOKEN-HERE' \
+  --header 'content-type: application/json' \
+  --data '{
+  "title": "Prueba de vida aprobada",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "ana.perez@ejemplo.com",
+    "groups": ["Firmantes"],
+    "prefilledItems": [{ "target": "documentNumber", "value": { "text": "99999000" } }]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "pe-dni",
+        "liveness3D": true,
+        "documentProvider": "3d",
+        "livenessVariant": "spark",
+        "documentValidations": ["verify-id-number", "expiration-date"],
+        "prefilledActive": true,
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}'
+```
+
+```javascript
+const data = JSON.stringify({
+  title: "Prueba de vida aprobada",
+  language: "es",
+  start: true,
+  documents: [{ name: "Contrato.pdf", base64: "<PDF_BASE64>" }],
+  users: [{
+    name: "ANA PEREZ LOPEZ",
+    email: "ana.perez@ejemplo.com",
+    groups: ["Firmantes"],
+    prefilledItems: [{ target: "documentNumber", value: { text: "99999000" } }]
+  }],
+  templateOptions: {
+    stages: [{
+      groups: [{
+        name: "Firmantes",
+        type: "signers",
+        documentType: "pe-dni",
+        liveness3D: true,
+        documentProvider: "3d",
+        livenessVariant: "spark",
+        documentValidations: ["verify-id-number", "expiration-date"],
+        prefilledActive: true,
+        disableNotification: true,
+        disableTerms: true
+      }]
+    }]
+  }
+});
+```
+
+Con `99999000` la captura y la validación del número aprueban. Cambia solo el número a `99999101` y la prueba de vida responde `NotPassed`. El resto de esta guía funciona igual: eliges el request del paso que quieres ver y cambias el número de su tabla.
+
+Reemplaza `<PDF_BASE64>` por un PDF. Este A4 de una página en blanco es válido:
+
+```text
+JVBERi0xLjQKMSAwIG9iajw8L1R5cGUvQ2F0YWxvZy9QYWdlcyAyIDAgUj4+ZW5kb2JqCjIgMCBvYmo8PC9UeXBlL1BhZ2VzL0NvdW50IDEvS2lkc1szIDAgUl0+PmVuZG9iagozIDAgb2JqPDwvVHlwZS9QYWdlL1BhcmVudCAyIDAgUi9NZWRpYUJveFswIDAgNTk1IDg0Ml0+PmVuZG9iagp4cmVmCjAgNAowMDAwMDAwMDAwIDY1NTM1IGYgCjAwMDAwMDAwMDkgMDAwMDAgbiAKMDAwMDAwMDA1MiAwMDAwMCBuIAowMDAwMDAwMTAxIDAwMDAwIG4gCnRyYWlsZXI8PC9TaXplIDQvUm9vdCAxIDAgUj4+CnN0YXJ0eHJlZgoxNjQKJSVFT0Y=
+```
+
+Usar `templateOptions` exige el permiso de plantillas dinámicas. Si el token no lo tiene, la API responde `NotAllowedUsingDynamicTemplates`.
+
+`disableNotification` y `disableTerms` solo acortan la prueba: no se envía la invitación y no aparece el paso de términos. `prefilledActive` deja el número fijo. Si quieres escribirlo en el flujo, quita `prefilledActive` y `prefilledItems`.
+
+## Escenarios para Contratos
+
+`PUT https://api.stg.keynua.com/contracts/v1`
+
+En cada bloque, el JSON de la derecha es el request. La tabla de la izquierda indica qué número poner en `prefilledItems` y qué resultado esperar. El código es el que ves en el ítem de la respuesta y en el webhook.
+
+
+<div></div>
+
+### Perú: captura 3D, número y vencimiento
+
+Captura el rostro y el DNI, y compara el número y el vencimiento con el valor prellenado. No consulta RENIEC.
+
+```json
+{
+  "title": "Sandbox PE captura",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "ana.perez@ejemplo.com",
+    "groups": ["Firmantes"],
+    "prefilledItems": [{ "target": "documentNumber", "value": { "text": "99999000" } }]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "pe-dni",
+        "liveness3D": true,
+        "documentProvider": "3d",
+        "livenessVariant": "spark",
+        "documentValidations": ["verify-id-number", "expiration-date"],
+        "prefilledActive": true,
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}
+```
+
+DNI | Qué ocurre | Código
+--------- | ----------- | -----------
+`99999000` | La captura y la validación aprueban | éxito
+`99999101` | La prueba de vida no pasa | `livenessinput`: `NotPassed`
+`99999102` | El rostro no coincide con el retrato del DNI | `livenessinput`: `NotAMatch`
+`99999103` | El documento es una fotocopia | `livenessinput`: `NotPassed` (`photocopy`)
+`99999104` | El documento es ilegible | `livenessinput`: `InvalidIdInfo`
+`99999105` | La foto es de una pantalla | `livenessinput`: `NotPassed` (`screen_replay`)
+`99999106` | El documento no se ve completo | `livenessinput`: `NotPassed` (`document_incomplete`)
+`99999107` | El retrato del documento fue reemplazado | `livenessinput`: `NotPassed` (`portrait_replaced`)
+`99999108` | Los datos impresos fueron alterados | `livenessinput`: `NotPassed` (`labels_modified`)
+`99999111` | La captura simula un pasaporte sobre un flujo de DNI | `livenessinput`: `InvalidDocumentInfo`
+`99999112` | La captura simula una cédula de otro país | `livenessinput`: `InvalidDocumentInfo`
+`99999201` | El número leído no coincide con el prellenado | `checklabels`: `unmatchedInputText`
+`99999203` | El documento está vencido | `checklabels`: `NotValidExpirationDateInIdCard`
+`99999207` | El documento no trae fecha de vencimiento | `checklabels`: `ExpirationDateNotDetected`
+`99999901` | El primer intento no pasa la prueba de vida. El segundo aprueba, con el mismo número | `livenessinput`: `NotPassed`, luego éxito
+`99999902` | El primer intento es una foto de pantalla. El segundo aprueba, con el mismo número | `livenessinput`: `NotPassed` (`screen_replay`), luego éxito
+
+Para ver `InvalidIdType` con `99999111`, agrega `"idTypes": ["ID Card"]` al grupo. Para ver `InvalidCountry` con `99999112`, agrega `"countries": ["PER"]`. Sin ese filtro, ambos responden `InvalidDocumentInfo`.
+
+`99999103` y `99999105` a `99999108` rechazan la captura con el motivo de integridad aunque la cuenta no tenga esa evaluación activada. `idDocumentIntegrity` no cambia ese resultado.
+
+
+<div></div>
+
+### Perú: captura 3D, RENIEC y comparación facial
+
+Consulta RENIEC, cruza el contenido del DNI y compara el rostro con la foto de RENIEC.
+
+```json
+{
+  "title": "Sandbox PE RENIEC",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "ana.perez@ejemplo.com",
+    "groups": ["Firmantes"],
+    "prefilledItems": [{ "target": "documentNumber", "value": { "text": "99999000" } }]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "pe-dni",
+        "liveness3D": true,
+        "documentProvider": "3d",
+        "livenessVariant": "spark",
+        "documentValidations": ["verify-id-number", "verify-content-reniec", "expiration-date"],
+        "facematch": ["reniec", "liveness"],
+        "prefilledActive": true,
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}
+```
+
+DNI | Qué ocurre | Código
+--------- | ----------- | -----------
+`99999000` | Captura, RENIEC, contenido y comparación facial aprueban | éxito
+`99999202` | Los nombres leídos en el DNI no coinciden con RENIEC | `checklabels`: `IdNamesDoNotMatch`
+`99999301` | El DNI no existe en RENIEC | `reniec`: `ReniecFailed`
+`99999302` | El DNI está cancelado | `reniec`: `NotAllowedCancellation`
+`99999303` | El grado de instrucción no está permitido | `reniec`: `InvalidInstructionGrade`
+`99999304` | El DNI tiene una restricción | `reniec`: `NotAllowedRestriction`
+`99999401` | El rostro no coincide con la foto de RENIEC | `facematch`: `NotAMatch`
+`99999402` | No hay rostro en la foto de RENIEC | `facematch`: `SourceFaceNotFound`
+`99999403` | No hay rostro en la captura | `facematch`: `TargetFaceNotFound`
+`99999404` | Se detecta una mascarilla | `facematch`: `FacemasksDetected`
+`99999405` | La comparación queda marcada como fraude y no pide una nueva captura hasta que se descarte el fraude | `facematch`: `MarkedAsFraud`
+`99999406` | La comparación facial responde un error | `facematch`: `FaceMatchError`
+
+`99999305` aprueba con este request, porque el contrato permite observaciones. Para rechazarla, agrega en el usuario `"metadata": { "keynuaAllowObservation": false }` y usa el DNI `99999305`. El ítem `reniec` responde `NotAllowedObservation`.
+
+Si pruebas `99999201` o `99999203` con este request, la comparación es contra RENIEC y los códigos pasan a `IdNumberDoesNotMatch` e `IdExpirationDateDoesNotMatch`.
+
+
+<div></div>
+
+### Perú: fecha de nacimiento contra RENIEC
+
+```json
+{
+  "title": "Sandbox PE nacimiento",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "ana.perez@ejemplo.com",
+    "groups": ["Firmantes"],
+    "prefilledItems": [{ "target": "documentNumber", "value": { "text": "99999204" } }]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "pe-dni",
+        "liveness3D": true,
+        "documentProvider": "3d",
+        "livenessVariant": "spark",
+        "documentValidations": ["verify-id-number", "verify-content-reniec", "birth-date"],
+        "prefilledActive": true,
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}
+```
+
+DNI | Qué ocurre | Código
+--------- | ----------- | -----------
+`99999204` | La fecha de nacimiento del DNI no coincide con RENIEC | `checklabels`: `IdBirthDateDoesNotMatch`
+`99999205` | El DNI no trae fecha de nacimiento | `checklabels`: `BirthDateNotDetected`
+
+
+<div></div>
+
+### Perú: edad mínima sin RENIEC
+
+No actives `birth-date` en este request. Esa validación corre antes y cambia el código de `99999205`.
+
+```json
+{
+  "title": "Sandbox PE edad minima",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "ana.perez@ejemplo.com",
+    "groups": ["Firmantes"],
+    "prefilledItems": [{ "target": "documentNumber", "value": { "text": "99999206" } }]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "pe-dni",
+        "liveness3D": true,
+        "documentProvider": "3d",
+        "livenessVariant": "spark",
+        "documentValidations": ["verify-id-number"],
+        "validateMinAge": 18,
+        "prefilledActive": true,
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}
+```
+
+DNI | Qué ocurre | Código
+--------- | ----------- | -----------
+`99999206` | La fecha simulada corresponde a un menor de edad | `checklabels`: `NotValidMinAge`
+`99999205` | El documento no trae fecha de nacimiento para calcular la edad | `checklabels`: `BirthDayNotDetected`
+
+
+<div></div>
+
+### Perú: ID Perú
+
+Un DNI `99999` no existe en la app de RENIEC, así que ese paso no se completa en la app. En el widget, el paso explica que el documento es simulado y muestra el botón **Continuar con el resultado de prueba**. Al pulsarlo se envía el resultado que corresponde a ese DNI.
+
+Solo ID Perú, sin captura del DNI. Cubre `99999000` y `99999502` a `99999514`. ID Perú más la captura del DNI sirve para `99999501`: la sesión aprueba con otros nombres y, al terminar la captura, el cruce responde `checklabels`: `IdNamesDoNotMatch`.
+
+```json
+{
+  "title": "Sandbox ID Peru",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "ana.perez@ejemplo.com",
+    "groups": ["Firmantes"],
+    "prefilledItems": [{ "target": "documentNumber", "value": { "text": "99999506" } }]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "pe-dni",
+        "documentSides": "none",
+        "signatureTypes": ["reniec-idaas"],
+        "prefilledActive": true,
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}
+```
+
+```json
+{
+  "title": "Sandbox ID Peru nombres",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "ana.perez@ejemplo.com",
+    "groups": ["Firmantes"],
+    "prefilledItems": [{ "target": "documentNumber", "value": { "text": "99999501" } }]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "pe-dni",
+        "liveness3D": true,
+        "documentProvider": "3d",
+        "livenessVariant": "spark",
+        "signatureTypes": ["reniec-idaas"],
+        "prefilledActive": true,
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}
+```
+
+DNI | Qué ocurre al continuar | Código
+--------- | ----------- | -----------
+`99999000` | La sesión aprueba | `reniec-idaas`: éxito
+`99999502` | El DNI de la sesión no es el escrito | `reniec-idaas`: `InvalidSessionData`
+`99999503` | La sesión no pertenece a este contrato | `reniec-idaas`: `InvalidSessionData`
+`99999504` | La verificación todavía no empieza | `reniec-idaas`: `InvalidSessionData`
+`99999505` | La verificación sigue en proceso | `reniec-idaas`: `InvalidSessionData`
+`99999506` | La verificación fue cancelada o rechazada | `reniec-idaas`: `InvalidSessionData`
+`99999507` | Falló el canje del token | `reniec-idaas`: `InvalidSessionData`
+`99999508` | El token no se pudo validar | `reniec-idaas`: `InvalidSessionData`
+`99999509` | No se obtuvo la información de la persona | `reniec-idaas`: `InvalidSessionData`
+`99999510` | RENIEC informa que el DNI verificado no coincide | `reniec-idaas`: `InvalidSessionData`
+`99999511` | La verificación expiró | `reniec-idaas`: `InvalidSessionData`
+`99999512` | Falló el procesamiento de la respuesta | `reniec-idaas`: `InvalidSessionData`
+`99999513` | No se pudo consultar ID Perú | `reniec-idaas`: `InternalError`
+`99999514` | El primer intento queda cancelado. El segundo aprueba | `reniec-idaas`: `InvalidSessionData`, luego éxito
+
+
+<div></div>
+
+### México: captura 3D de INE, CURP y vencimiento
+
+```json
+{
+  "title": "Sandbox MX captura",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "ana.perez@ejemplo.com",
+    "groups": ["Firmantes"],
+    "prefilledItems": [{ "target": "documentNumber", "value": { "text": "SAND900115HDFBBB12" } }]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "mx-ife",
+        "liveness3D": true,
+        "documentProvider": "3d",
+        "livenessVariant": "spark",
+        "documentValidations": ["verify-id-number", "expiration-date"],
+        "prefilledActive": true,
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBBB12` | La captura y la validación aprueban | éxito
+`SAND900115HDFBCD12` | La prueba de vida no pasa | `livenessinput`: `NotPassed`
+`SAND900115HDFBCF16` | El rostro no coincide con el retrato de la INE | `livenessinput`: `NotAMatch`
+`SAND900115HDFBCH10` | El documento es ilegible | `livenessinput`: `InvalidIdInfo`
+`SAND900115HDFBCJ14` | La captura simula un documento de otro país | `livenessinput`: `InvalidDocumentInfo`
+`SAND900115HDFBCL18` | El número leído no coincide con la CURP prellenada | `checklabels`: `unmatchedInputText`
+`SAND900115HDFBCV15` | El primer intento no pasa la prueba de vida. El segundo aprueba | `livenessinput`: `NotPassed`, luego éxito
+`SAND900115HDFBCX19` | El documento está vencido | `checklabels`: `NotValidExpirationDateInIdCard`
+`SAND900115HDFBCZ13` | El documento es una fotocopia | `livenessinput`: `NotPassed` (`photocopy`)
+`SAND900115HDFBGJ18` | La captura simula una licencia de conducir | `livenessinput`: `InvalidDocumentInfo`
+
+Para ver `InvalidCountry` con `SAND900115HDFBCJ14`, cambia `documentType` a `global` y agrega `"countries": ["MEX"]`.
+
+
+<div></div>
+
+### México: captura 3D e identidad nacional
+
+Consulta la CURP y cruza los nombres. El nombre del usuario es obligatorio en un contrato, así que `SAND900115HDFBCN12` se prueba con este mismo request.
+
+```json
+{
+  "title": "Sandbox MX identidad",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "ana.perez@ejemplo.com",
+    "groups": ["Firmantes"],
+    "prefilledItems": [{ "target": "documentNumber", "value": { "text": "SAND900115HDFBBB12" } }]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "mx-ife",
+        "liveness3D": true,
+        "documentProvider": "3d",
+        "livenessVariant": "spark",
+        "officialIdentitySource": "mx-id",
+        "documentValidations": ["verify-id-number", "verify-content-nat-id", "expiration-date"],
+        "prefilledActive": true,
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBBB12` | Captura e identidad aprueban | éxito
+`SAND900115HDFBCN12` | Los nombres leídos no coinciden con el nombre del firmante | `nationalidentities`: `DifferentSignerName`
+`SAND900115HDFBCX19` | El documento está vencido | `checklabels`: `NotValidExpirationDateInIdCard`
+`SAND900115HDFBDB14` | La CURP no se puede validar | `nationalidentities`: `InvalidCurp`
+`SAND900115HDFBDF12` | Los nombres de la identidad no coinciden con el documento | `checklabels`: `IdNamesDoNotMatch`
+`SAND900115HDFBDH16` | La consulta de identidad falla | `nationalidentities`: `ServiceError`
+
+
+<div></div>
+
+### México: validación de INE
+
+```json
+{
+  "title": "Sandbox MX INE",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "ana.perez@ejemplo.com",
+    "groups": ["Firmantes"],
+    "prefilledItems": [{ "target": "documentNumber", "value": { "text": "SAND900115HDFBFJ12" } }]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "mx-ife",
+        "liveness3D": true,
+        "documentProvider": "3d",
+        "livenessVariant": "spark",
+        "documentValidations": ["verify-id-number"],
+        "ineValidation": { "enabled": true },
+        "prefilledActive": true,
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBCP13` | La INE se leyó sin código QR | `livenessinput`: `IneQrNotDetected`
+`SAND900115HDFBCR17` | El tipo de credencial no se puede validar. El ítem termina en éxito con `success: false` | `inevalidation`: `InvalidINE`
+`SAND900115HDFBCT11` | Faltan datos de la credencial. Con `continueOnError: true` el paso se salta con `IneSkipped` | `inevalidation`: `MissingData`
+`SAND900115HDFBFJ12` | La credencial no está vigente. El ítem termina en éxito | `inevalidation`: éxito, `verified: false`
+`SAND900115HDFBFL16` | La credencial no está en el padrón. Con `continueOnError: true` el ítem termina en éxito y `success` queda en `false` | `inevalidation`: `NotFound`
+`SAND900115HDFBFN10` | El proveedor principal no responde y el respaldo verifica la credencial | `inevalidation`: éxito, `fallbackUsed: true`
+`SAND900115HDFBFP11` | Los dos proveedores no responden. Con `continueOnError: true` el ítem termina en éxito y `success` queda en `false` | `inevalidation`: `ServiceError`
+
+
+<div></div>
+
+### México: FICO Score
+
+El formulario pide un OTP real al correo de `users[0].email`. Usa la misma CURP en el prellenado y en el formulario. El score simulado de `SAND900115HDFBDJ10` es 300, por eso `minScore` va en 400.
+
+Si solo quieres probar FICO, puedes quitar la captura 3D y dejar `documentType`, `documentSides: "none"`, `ficoScore`, `prefilledActive`, `disableNotification` y `disableTerms`.
+
+```json
+{
+  "title": "Sandbox MX FICO",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "tu-correo@ejemplo.com",
+    "groups": ["Firmantes"],
+    "prefilledItems": [{ "target": "documentNumber", "value": { "text": "SAND900115HDFBDJ10" } }]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "mx-ife",
+        "liveness3D": true,
+        "documentProvider": "3d",
+        "livenessVariant": "spark",
+        "officialIdentitySource": "mx-id",
+        "documentValidations": ["verify-id-number", "verify-content-nat-id"],
+        "ficoScore": { "minScore": 400 },
+        "prefilledActive": true,
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBDJ10` | El score es 300, por debajo de `minScore` | `ficoscore`: `FicoScoreInvalid`
+`SAND900115HDFBDL14` | La consulta falla. Con `"maxSkipAttempts": 1` el reintento salta el paso | `ficoscore`: `FicoScoreFailed` o `MaxAttemptsReached`
+`SAND900115HDFBDN18` | El primer envío falla. El segundo aprueba con score 720 | `ficoscore`: `FicoScoreFailed`, luego éxito
+
+
+<div></div>
+
+### México: documento distinto de la INE
+
+La persona se identifica con un DNI peruano, un pasaporte, un carné de extranjería o una tarjeta de residente, y valida la CURP. No uses `prefilledActive` junto con `skipDocumentNumberInput`. La CURP se escribe en el campo del flujo.
+
+```json
+{
+  "title": "Sandbox MX global",
+  "language": "es",
+  "start": true,
+  "documents": [{ "name": "Contrato.pdf", "base64": "<PDF_BASE64>" }],
+  "users": [{
+    "name": "ANA PEREZ LOPEZ",
+    "email": "ana.perez@ejemplo.com",
+    "groups": ["Firmantes"]
+  }],
+  "templateOptions": {
+    "stages": [{
+      "groups": [{
+        "name": "Firmantes",
+        "type": "signers",
+        "documentType": "global",
+        "liveness3D": true,
+        "documentProvider": "3d",
+        "livenessVariant": "spark",
+        "countries": ["MEX", "PER"],
+        "idTypes": ["ID Card", "Passport", "Foreign ID"],
+        "officialIdentitySource": "mx-id",
+        "skipDocumentNumberInput": true,
+        "documentValidations": ["verify-content-nat-id"],
+        "disableNotification": true,
+        "disableTerms": true
+      }]
+    }]
+  }
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBGB12` | La captura simula un DNI peruano y la CURP aprueba | éxito
+`SAND900115HDFBGD16` | La captura simula un pasaporte y la CURP aprueba | éxito
+`SAND900115HDFBGF10` | La captura simula un carné de extranjería y la CURP aprueba | éxito
+`SAND900115HDFBGH14` | La captura simula una tarjeta de residente en México y la CURP aprueba | éxito
+`SAND900115HDFBGJ18` | La captura simula una licencia de conducir, que no está en `idTypes` | `livenessinput`: `InvalidIdType`
+`SAND900115HDFBGL12` | El documento pasa y la CURP pertenece a otra persona | `checklabels`: `IdNamesDoNotMatch`
+`SAND900115HDFBGN16` | El primer intento rechaza la CURP. El segundo, reenviando documento y CURP, aprueba | `nationalidentities`: `InvalidCurp`, luego éxito
+
+Si también envías `"ineValidation": { "enabled": true, "continueOnError": true }`, la validación de INE se salta con `IneSkipped` cuando el documento capturado no es una INE.
+
+Listas PLD y verificación de empleo no se arman en un contrato. Esas siete CURP están en [Escenarios para Verificación de identidad](#escenarios-para-verificacion-de-identidad).
+
+## Escenarios para Verificación de identidad
+
+`PUT https://api.stg.keynua.com/identity-verification/v1`
+
+El número va en `documentNumber`, salvo cuando el flujo pide escribir la CURP durante la captura. `disableInitialNotification: true` evita el correo de inicio. No envíes `disableTerms` salvo que tu cuenta permita omitir los términos: si no, la API responde `400`.
+
+`ficoScore`, `getPldCheck` y `employmentVerification` piden `userEmail` o `userPhone`, porque el OTP sigue siendo real.
+
+
+<div></div>
+
+### Perú: rostro 3D, RENIEC y comparación facial
+
+Pide la prueba de vida, consulta RENIEC y compara el rostro con la foto de RENIEC. No pide la foto del DNI.
+
+```json
+{
+  "title": "Sandbox PE-1",
+  "type": "liveness",
+  "documentType": "pe-dni",
+  "livenessVariant": "spark",
+  "documentNumber": "99999000",
+  "disableInitialNotification": true
+}
+```
+
+DNI | Qué ocurre | Código
+--------- | ----------- | -----------
+`99999000` | Rostro, RENIEC y comparación facial aprueban | éxito
+`99999101` | La prueba de vida no pasa | `livenessinput`: `NotPassed`
+`99999901` | El primer intento no pasa la prueba de vida. El segundo aprueba | `livenessinput`: `NotPassed`, luego éxito
+`99999301` | El DNI no existe en RENIEC | `reniec`: `ReniecFailed`
+`99999302` | El DNI está cancelado | `reniec`: `NotAllowedCancellation`
+`99999401` | El rostro no coincide con la foto de RENIEC | `facematch`: `NotAMatch`
+`99999402` | No hay rostro en la foto de RENIEC | `facematch`: `SourceFaceNotFound`
+`99999403` | No hay rostro en la captura | `facematch`: `TargetFaceNotFound`
+`99999404` | Se detecta una mascarilla | `facematch`: `FacemasksDetected`
+`99999405` | La comparación queda marcada como fraude y no pide una nueva captura hasta que se descarte el fraude | `facematch`: `MarkedAsFraud`
+`99999406` | La comparación facial responde un error | `facematch`: `FaceMatchError`
+
+`99999303` también usa este request y responde `reniec`: `InvalidInstructionGrade` cuando la cuenta tiene activa la validación de grado de instrucción. Si esa validación está apagada, el DNI aprueba.
+
+
+<div></div>
+
+### Perú: captura 3D del DNI sin RENIEC
+
+`disableReniec: true` omite RENIEC y pide la foto del DNI. Valida el número y el vencimiento contra `documentNumber`.
+
+```json
+{
+  "title": "Sandbox PE-2",
+  "type": "liveness",
+  "documentType": "pe-dni",
+  "livenessVariant": "spark",
+  "documentNumber": "99999000",
+  "disableReniec": true,
+  "disableInitialNotification": true
+}
+```
+
+DNI | Qué ocurre | Código
+--------- | ----------- | -----------
+`99999000` | La captura y la validación aprueban | éxito
+`99999102` | El rostro no coincide con el retrato del DNI | `livenessinput`: `NotAMatch`
+`99999103` | El documento es una fotocopia | `livenessinput`: `NotPassed` (`photocopy`)
+`99999104` | El documento es ilegible | `livenessinput`: `InvalidIdInfo`
+`99999105` | La foto es de una pantalla | `livenessinput`: `NotPassed` (`screen_replay`)
+`99999106` | El documento no se ve completo | `livenessinput`: `NotPassed` (`document_incomplete`)
+`99999107` | El retrato del documento fue reemplazado | `livenessinput`: `NotPassed` (`portrait_replaced`)
+`99999108` | Los datos impresos fueron alterados | `livenessinput`: `NotPassed` (`labels_modified`)
+`99999111` | La captura simula un pasaporte | `livenessinput`: `InvalidDocumentInfo`
+`99999112` | La captura simula una cédula de otro país | `livenessinput`: `InvalidDocumentInfo`
+`99999201` | El número leído no coincide con `documentNumber` | `checklabels`: `unmatchedInputText`
+`99999203` | El documento está vencido | `checklabels`: `NotValidExpirationDateInIdCard`
+`99999207` | El documento no trae fecha de vencimiento | `checklabels`: `ExpirationDateNotDetected`
+`99999902` | El primer intento es una foto de pantalla. El segundo aprueba | `livenessinput`: `NotPassed` (`screen_replay`), luego éxito
+
+Agrega `"idTypes": ["ID Card"]` con `99999111` para obtener `InvalidIdType`. Agrega `"countries": ["PER"]` con `99999112` para obtener `InvalidCountry`. Los rechazos de integridad (`99999103`, `99999105` a `99999108`) salen de la captura simulada; `idDocumentIntegrity` no cambia ese resultado.
+
+
+<div></div>
+
+### Perú: captura 3D del DNI con RENIEC
+
+`validateDocument: true` pide la foto del DNI y la compara con RENIEC. `99999202` es el caso de nombres distintos.
+
+```json
+{
+  "title": "Sandbox PE-3",
+  "type": "liveness",
+  "documentType": "pe-dni",
+  "livenessVariant": "spark",
+  "documentNumber": "99999202",
+  "validateDocument": true,
+  "disableInitialNotification": true
+}
+```
+
+DNI | Qué ocurre | Código
+--------- | ----------- | -----------
+`99999202` | Los nombres leídos no coinciden con RENIEC | `checklabels`: `IdNamesDoNotMatch`
+
+Con este mismo request, `99999201` compara el número contra RENIEC y responde `IdNumberDoesNotMatch`.
+
+
+<div></div>
+
+### Perú: ID Perú
+
+Igual que en contratos, la app de RENIEC no acepta un DNI `99999`. En el widget, la persona continúa con el botón de resultado de prueba. Los resultados son los de [Perú: ID Perú en contratos](#peru-id-peru).
+
+Solo ID Perú. Cubre `99999000` y `99999502` a `99999514`.
+
+```json
+{
+  "title": "Sandbox ID Peru",
+  "type": "idperu",
+  "documentType": "pe-dni",
+  "documentNumber": "99999506",
+  "disableInitialNotification": true
+}
+```
+
+ID Perú más la captura del DNI. `99999501` aprueba la sesión con otros nombres y el cruce responde `checklabels`: `IdNamesDoNotMatch`.
+
+```json
+{
+  "title": "Sandbox ID Peru nombres",
+  "type": "liveness",
+  "documentType": "pe-dni",
+  "livenessVariant": "spark",
+  "documentNumber": "99999501",
+  "reniecIdaas": true,
+  "disableInitialNotification": true
+}
+```
+
+Estos cinco DNI existen en el catálogo y aprueban en una verificación de identidad, porque este endpoint no arma esa validación. Pruébalos en [Escenarios para Contratos](#escenarios-para-contratos): `99999204`, `99999205`, `99999206`, `99999304` y `99999305`.
+
+
+<div></div>
+
+### México: captura 3D de INE sin consulta de CURP
+
+Este es el request que dispara `SAND900115HDFBCL18`. Si activas la identidad nacional, el número deja de compararse contra el texto prellenado.
+
+```json
+{
+  "title": "Sandbox MX-1",
+  "type": "liveness",
+  "documentType": "mx-ife",
+  "livenessVariant": "spark",
+  "documentNumber": "SAND900115HDFBBB12",
+  "disableInitialNotification": true
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBBB12` | La captura y la validación aprueban | éxito
+`SAND900115HDFBCD12` | La prueba de vida no pasa | `livenessinput`: `NotPassed`
+`SAND900115HDFBCF16` | El rostro no coincide con el retrato de la INE | `livenessinput`: `NotAMatch`
+`SAND900115HDFBCH10` | El documento es ilegible | `livenessinput`: `InvalidIdInfo`
+`SAND900115HDFBCJ14` | La captura simula un documento de otro país | `livenessinput`: `InvalidDocumentInfo`
+`SAND900115HDFBCL18` | El número leído no coincide con `documentNumber` | `checklabels`: `unmatchedInputText`
+`SAND900115HDFBCV15` | El primer intento no pasa la prueba de vida. El segundo aprueba | `livenessinput`: `NotPassed`, luego éxito
+`SAND900115HDFBCZ13` | El documento es una fotocopia | `livenessinput`: `NotPassed` (`photocopy`)
+`SAND900115HDFBGJ18` | La captura simula una licencia de conducir | `livenessinput`: `InvalidDocumentInfo`
+
+Para `InvalidCountry`, cambia `documentType` a `global`, agrega `"countries": ["MEX"]` y usa `SAND900115HDFBCJ14`. Para el vencimiento sin consulta de CURP, agrega `"documentExpirationDate": true` y usa `SAND900115HDFBCX19`. El código es `checklabels`: `NotValidExpirationDateInIdCard`.
+
+
+<div></div>
+
+### México: identidad nacional
+
+`officialIdentitySource: "mx-id"` consulta la CURP. Puedes enviarla en `documentNumber` o escribirla durante la captura.
+
+```json
+{
+  "title": "Sandbox MX-2",
+  "type": "liveness",
+  "documentType": "mx-ife",
+  "livenessVariant": "spark",
+  "officialIdentitySource": "mx-id",
+  "disableInitialNotification": true
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBBB12` | Captura e identidad aprueban | éxito
+`SAND900115HDFBCX19` | El documento está vencido | `checklabels`: `NotValidExpirationDateInIdCard`
+`SAND900115HDFBDB14` | La CURP no se puede validar | `nationalidentities`: `InvalidCurp`
+`SAND900115HDFBDF12` | Los nombres de la identidad no coinciden con el documento | `checklabels`: `IdNamesDoNotMatch`
+`SAND900115HDFBDH16` | La consulta de identidad falla | `nationalidentities`: `ServiceError`
+
+`SAND900115HDFBCN12` compara los nombres del documento con el nombre de la persona. Agrega `"userFullName": "ANA PEREZ LOPEZ"` a este request. Sin ese nombre, la comparación no corre. El código es `nationalidentities`: `DifferentSignerName`.
+
+
+<div></div>
+
+### México: validación de INE
+
+```json
+{
+  "title": "Sandbox MX-3",
+  "type": "liveness",
+  "documentType": "mx-ife",
+  "livenessVariant": "spark",
+  "documentNumber": "SAND900115HDFBFJ12",
+  "ineValidation": { "enabled": true },
+  "disableInitialNotification": true
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBCP13` | La INE se leyó sin código QR | `livenessinput`: `IneQrNotDetected`
+`SAND900115HDFBCR17` | El tipo de credencial no se puede validar | `inevalidation`: `InvalidINE`
+`SAND900115HDFBCT11` | Faltan datos de la credencial. Con `continueOnError: true` el paso se salta con `IneSkipped` | `inevalidation`: `MissingData`
+`SAND900115HDFBFJ12` | La credencial no está vigente. El ítem termina en éxito | `inevalidation`: éxito, `verified: false`
+`SAND900115HDFBFL16` | La credencial no está en el padrón. Con `continueOnError: true` el ítem termina en éxito y `success` queda en `false` | `inevalidation`: `NotFound`
+`SAND900115HDFBFN10` | El proveedor principal no responde y el respaldo verifica la credencial | `inevalidation`: éxito, `fallbackUsed: true`
+`SAND900115HDFBFP11` | Los dos proveedores no responden. Con `continueOnError: true` el ítem termina en éxito y `success` queda en `false` | `inevalidation`: `ServiceError`
+
+
+<div></div>
+
+### México: FICO Score
+
+El OTP del correo es real. Usa la misma CURP en el formulario.
+
+```json
+{
+  "title": "Sandbox MX-4",
+  "type": "liveness",
+  "documentType": "mx-ife",
+  "livenessVariant": "spark",
+  "officialIdentitySource": "mx-id",
+  "userEmail": "tu-correo@ejemplo.com",
+  "ficoScore": { "minScore": 400 },
+  "disableInitialNotification": true
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBDJ10` | El score es 300, por debajo de `minScore` | `ficoscore`: `FicoScoreInvalid`
+`SAND900115HDFBDL14` | La consulta falla. Con `"maxSkipAttempts": 1` el reintento salta el paso | `ficoscore`: `FicoScoreFailed` o `MaxAttemptsReached`
+`SAND900115HDFBDN18` | El primer envío falla. El segundo aprueba con score 720 | `ficoscore`: `FicoScoreFailed`, luego éxito
+
+
+<div></div>
+
+### México: listas PLD
+
+El OTP del correo es real. Una coincidencia no detiene la verificación.
+
+```json
+{
+  "title": "Sandbox MX-5",
+  "type": "liveness",
+  "documentType": "mx-ife",
+  "livenessVariant": "spark",
+  "officialIdentitySource": "mx-id",
+  "userEmail": "tu-correo@ejemplo.com",
+  "getPldCheck": {},
+  "disableInitialNotification": true
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBFB16` | Hay una coincidencia en una lista. El paso termina en éxito y el flujo sigue | `getpldcheck`: éxito, con coincidencia
+`SAND900115HDFBFD10` | El proveedor responde un error de negocio y el paso se salta | `getpldcheck`: `FetchFailed`
+`SAND900115HDFBFF14` | El proveedor principal no responde y el respaldo responde sin coincidencia | `getpldcheck`: éxito, `fallbackUsed: true`
+`SAND900115HDFBFH18` | Los dos proveedores no responden y el paso se salta | `getpldcheck`: `FetchFailed`
+
+
+<div></div>
+
+### México: verificación de empleo
+
+El OTP del correo es real.
+
+```json
+{
+  "title": "Sandbox MX-6",
+  "type": "liveness",
+  "documentType": "mx-ife",
+  "livenessVariant": "spark",
+  "officialIdentitySource": "mx-id",
+  "userEmail": "tu-correo@ejemplo.com",
+  "employmentVerification": { "minutesTimeout": 1 },
+  "disableInitialNotification": true
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBDR13` | La persona no tiene un empleo activo. El paso termina en éxito | `employmentverification`: éxito
+`SAND900115HDFBDT17` | La consulta falla | `employmentverification`: `EmploymentVerificationError`
+`SAND900115HDFBDV11` | La consulta expira y el paso se salta | `employmentverification`: `Timeout`
+
+
+<div></div>
+
+### México: documento distinto de la INE
+
+La CURP se escribe durante la captura o se envía en `documentNumber`.
+
+```json
+{
+  "title": "Sandbox MX-7",
+  "type": "liveness",
+  "documentType": "global",
+  "livenessVariant": "spark",
+  "countries": ["MEX", "PER"],
+  "idTypes": ["ID Card", "Passport", "Foreign ID"],
+  "officialIdentitySource": "mx-id",
+  "disableInitialNotification": true
+}
+```
+
+CURP | Qué ocurre | Código
+--------- | ----------- | -----------
+`SAND900115HDFBGB12` | La captura simula un DNI peruano y la CURP aprueba | éxito
+`SAND900115HDFBGD16` | La captura simula un pasaporte y la CURP aprueba | éxito
+`SAND900115HDFBGF10` | La captura simula un carné de extranjería y la CURP aprueba | éxito
+`SAND900115HDFBGH14` | La captura simula una tarjeta de residente en México y la CURP aprueba | éxito
+`SAND900115HDFBGJ18` | La captura simula una licencia de conducir, que no está en `idTypes` | `livenessinput`: `InvalidIdType`
+`SAND900115HDFBGL12` | El documento pasa y la CURP pertenece a otra persona | `checklabels`: `IdNamesDoNotMatch`
+`SAND900115HDFBGN16` | El primer intento rechaza la CURP. El segundo aprueba | `nationalidentities`: `InvalidCurp`, luego éxito
+
+Si también envías `"ineValidation": { "enabled": true, "continueOnError": true }`, la validación de INE se salta con `IneSkipped` cuando el documento capturado no es una INE.
+
+## Límites
+
+* El OTP y los errores del formulario de domicilio se comportan como en un flujo real.
+* Estos números no producen `NotValidMaxAge`, `SourceIsTooSmall`, `BackRequired` en un DNI peruano ni `InvalidVerificationDigit`.
+* PLD y empleo solo se disparan en una verificación de identidad. Fecha de nacimiento, edad mínima, restricción y observación de RENIEC solo se disparan en un contrato, con el request indicado arriba.
+
 # Contratos
 El API de Contratos permite crear, ver y eliminar un contrato
 ## Propiedades de un Contrato
@@ -2086,7 +3101,6 @@ curl --request PUT \
   "language": "es",
   "userEmailNotifications": true,
   "templateOptions": {
-		"mock": true,
 		"classesId": "custom-classes-v2",
 		"stages": [
 		   {
@@ -2193,7 +3207,6 @@ const data = JSON.stringify({
   language: 'es',
   userEmailNotifications: true,
   templateOptions: {
-		"mock": true,
 		"classesId": "custom-classes-v2",
 		"stages": [
 		   {
@@ -2327,7 +3340,7 @@ Describe las opciones que podemos enviar en el atributo `templateOptions` al cre
 
 Atributo | Tipo | Descripción
 --------- | ----------- | -----------
-mock | boolean | Default "false" Indica si es un flujo de prueba, se remueven del flujo las validaciones de identidad
+mock | boolean | Default `false`. Forma anterior de probar: al armar la plantilla se omiten los pasos de validación de identidad. No simula resultados. El detalle y la forma actual, por número de documento, están en [Entorno de pruebas](#entorno-de-pruebas)
 classesId | string | Id del registro de `Custom Classes`
 global | objeto | [Configuraciones globales](#configuraciones-globales) del template
 stages | array | Contiene las [estapas](#stages) del template
