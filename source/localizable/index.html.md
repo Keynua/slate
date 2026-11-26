@@ -130,7 +130,7 @@ No agregues `mock`. Crea el flujo con los pasos que quieras probar y usa un núm
 * Perú: un DNI de 8 dígitos que empieza por `99999`. México: una CURP de 18 caracteres que empieza por `SAND900115HDF`. El caso mexicano lo deciden los primeros 16 caracteres. Los dos últimos no cambian el escenario.
 * Un número dentro de ese prefijo que no está en el catálogo se rechaza con HTTP `400` y código `UnknownSandboxDocumentNumber`: "El número de documento de prueba no existe. Revisa la tabla de números de prueba."
 
-El OTP de correo o SMS, cuando el flujo lo pide, sigue siendo real. Los errores del formulario de domicilio (`PersonInfoInvalid`, `InvalidFicoInput`) dependen de lo que se escribe ahí y no del número. ID Perú no se puede completar en la app de RENIEC con un DNI `99999`: esos casos se prueban enviando un `sessionId` por API, como se indica más abajo.
+El OTP de correo o SMS, cuando el flujo lo pide, sigue siendo real. Los errores del formulario de domicilio (`PersonInfoInvalid`, `InvalidFicoInput`) dependen de lo que se escribe ahí y no del número. ID Perú no se puede completar en la app de RENIEC con un DNI `99999`. En el widget, ese paso muestra un botón para continuar con el resultado de prueba, como se indica más abajo.
 
 
 <div></div>
@@ -429,24 +429,9 @@ DNI | Qué ocurre | Código
 
 <div></div>
 
-### Perú: ID Perú por API
+### Perú: ID Perú
 
-Un DNI `99999` no existe en la app de RENIEC, así que el popup de ID Perú no se puede completar en el navegador. Crea el contrato y envía cualquier `sessionId` al ítem `reniec-idaas` con [Enviar información de firma](#enviar-informacion-de-firma):
-
-```json
-{
-  "token": "USER-TOKEN",
-  "items": [{
-    "itemId": 2,
-    "version": 0,
-    "value": { "sessionId": "00000000-0000-4000-8000-000000000001" }
-  }]
-}
-```
-
-`PUT https://api.stg.keynua.com/contracts/v2/sign/batch`
-
-`itemId` es el id del ítem `reniec-idaas` del contrato. `version` es la versión actual de ese ítem.
+Un DNI `99999` no existe en la app de RENIEC, así que ese paso no se completa en la app. En el widget, el paso explica que el documento es simulado y muestra el botón **Continuar con el resultado de prueba**. Al pulsarlo se envía el resultado que corresponde a ese DNI.
 
 Solo ID Perú, sin captura del DNI. Cubre `99999000` y `99999502` a `99999514`. ID Perú más la captura del DNI sirve para `99999501`: la sesión aprueba con otros nombres y, al terminar la captura, el cruce responde `checklabels`: `IdNamesDoNotMatch`.
 
@@ -510,7 +495,7 @@ Solo ID Perú, sin captura del DNI. Cubre `99999000` y `99999502` a `99999514`. 
 }
 ```
 
-DNI | Qué ocurre al enviar `sessionId` | Código
+DNI | Qué ocurre al continuar | Código
 --------- | ----------- | -----------
 `99999000` | La sesión aprueba | `reniec-idaas`: éxito
 `99999502` | El DNI de la sesión no es el escrito | `reniec-idaas`: `InvalidSessionData`
@@ -525,7 +510,7 @@ DNI | Qué ocurre al enviar `sessionId` | Código
 `99999511` | La verificación expiró | `reniec-idaas`: `InvalidSessionData`
 `99999512` | Falló el procesamiento de la respuesta | `reniec-idaas`: `InvalidSessionData`
 `99999513` | No se pudo consultar ID Perú | `reniec-idaas`: `InternalError`
-`99999514` | El primer `sessionId` queda cancelado. El segundo aprueba | `reniec-idaas`: `InvalidSessionData`, luego éxito
+`99999514` | El primer intento queda cancelado. El segundo aprueba | `reniec-idaas`: `InvalidSessionData`, luego éxito
 
 
 <div></div>
@@ -883,11 +868,11 @@ Con este mismo request, `99999201` compara el número contra RENIEC y responde `
 
 <div></div>
 
-### Perú: ID Perú por API
+### Perú: ID Perú
 
-Igual que en contratos, el popup de la app no acepta un DNI `99999`. Después de crear la verificación, envía cualquier `sessionId` al ítem `reniec-idaas` con `PUT /contracts/v2/sign/batch`, como en [ID Perú por API de contratos](#peru-id-peru-por-api).
+Igual que en contratos, la app de RENIEC no acepta un DNI `99999`. En el widget, la persona continúa con el botón de resultado de prueba. Los resultados son los de [Perú: ID Perú en contratos](#peru-id-peru).
 
-Solo ID Perú. Cubre `99999000` y `99999502` a `99999514`. Los resultados son los de la tabla de contratos.
+Solo ID Perú. Cubre `99999000` y `99999502` a `99999514`.
 
 ```json
 {
@@ -1116,7 +1101,6 @@ Si también envías `"ineValidation": { "enabled": true, "continueOnError": true
 ## Límites
 
 * El OTP y los errores del formulario de domicilio se comportan como en un flujo real.
-* ID Perú con un DNI `99999` se prueba enviando `sessionId` por `PUT /contracts/v2/sign/batch`. La app de RENIEC no reconoce ese DNI.
 * Estos números no producen `NotValidMaxAge`, `SourceIsTooSmall`, `BackRequired` en un DNI peruano ni `InvalidVerificationDigit`.
 * PLD y empleo solo se disparan en una verificación de identidad. Fecha de nacimiento, edad mínima, restricción y observación de RENIEC solo se disparan en un contrato, con el request indicado arriba.
 
